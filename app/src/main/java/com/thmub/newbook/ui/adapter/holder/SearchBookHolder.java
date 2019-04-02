@@ -39,7 +39,7 @@ public class SearchBookHolder extends ViewHolderImpl<BookSearchBean> {
         Glide.with(getContext()).load(data.getCover()).into(itemSearchIvCover);
         itemSearchTvTitle.setText(data.getTitle());
         itemSearchTvAuthor.setText(data.getAuthor());
-        itemSearchTvInfo.setText(data.getShortIntro());
+        itemSearchTvInfo.setText(data.getDesc());
         itemSearchTvSource.setText("共("+data.getSourceUrls().size()+")源："+data.getSourceUrls());
     }
 }

@@ -1,12 +1,9 @@
 <resources>
-    <string name="app_name">览阅</string>
+    <string name="app_name">搜书神器</string>
     <string name="app_name_en">Reader</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <!--title-->
-    <string name="title_main">搜书神器</string>
 
     <!--string_array start-->
 
@@ -23,7 +20,7 @@
         <item>月榜</item>
         <item>总榜</item>
     </string-array>
-    
+
     <!--CollBook的长按点击-->
     <string-array name="menu_net_book">
         <item>@string/menu_action_top</item>
@@ -31,7 +28,7 @@
         <item>@string/menu_action_delete</item>
         <item>@string/menu_action_batch_manage</item>
     </string-array>
-    
+
     <string-array name="menu_local_book">
         <item>@string/menu_action_top</item>
         <item>@string/menu_action_delete</item>
@@ -39,37 +36,22 @@
     </string-array>
 
     <!--string_array end-->
-    
+
     <!--通用-->
     <string name="common_tip">提示</string>
     <string name="common_sure">确定</string>
     <string name="common_cancel">取消</string>
-    
+
     <!--网络相关-->
-    
+
     <string name="net_error_tip">似乎没有网络哦</string>
-    
+
     <!--fragment_title:主页的名字-->
     <string name="fragment_title_bookshelf">书架</string>
     <string name="fragment_title_store">书城</string>
     <string name="fragment_title_find">发现</string>
     <string name="fragment_title_community">社区</string>
 
-    <!--fragment 主题书单-->
-    <string name="fragment_book_list_hot">本周最热</string>
-    <string name="fragment_book_list_newest">最新发布</string>
-    <string name="fragment_book_list_collect">最多收藏</string>
-    <string name="fragment_book_list_message">共%1$d本书 |&#160; %2$d人收藏</string>
-
-    <!--feature 书城-->
-    <string name="fragment_node_nsrm">男生热门</string>
-    <string name="fragment_node_nsza">女生最爱</string>
-    <string name="fragment_node_nswb">男生完本</string>
-    <string name="fragment_node_nswj">女生完结</string>
-    <string name="fragment_node_nsdsq">男生大神区</string>
-    <string name="fragment_node_nshwq">女生红文区</string>
-    <string name="fragment_node_npxm">男频推荐</string>
-    <string name="fragment_node_nvpxm">女频推荐</string>
 
     <!--discover 发现-->
     <string name="fragment_discover_top">排行榜</string>
@@ -81,7 +63,7 @@
     <string name="dialog_text_choose_tip">--请选择你的喜好--</string>
     <string name="dialog_text_boy_story">男生小说</string>
     <string name="dialog_text_girl_story">女生小说</string>
-    
+
     <!--menu 菜单-->
     <string name="menu_action_search">搜索</string>
     <string name="menu_action_login">请登录</string>
@@ -94,12 +76,12 @@
     <string name="menu_action_about">关于</string>
     <string name="menu_action_night_mode">夜间模式</string>
     <string name="menu_action_setting">设置</string>
-    
+
     <string name="menu_action_top">置顶</string>
     <string name="menu_action_cache">缓存</string>
     <string name="menu_action_delete">删除</string>
     <string name="menu_action_batch_manage">批量管理</string>
-    
+
     <!--Splash-->
     <string name="splash_skip">跳过</string>
 
@@ -111,7 +93,7 @@
 
     <!--sort:每类的书-->
     <string name="sort_book_count">%1$d 本</string>
-    
+
     <!--tag: 标签-->
     <string name="tag_all">全部</string>
     <string name="tag_sex">性别</string>
@@ -137,7 +119,7 @@
     <string name="download_load_all">已缓存全部章节</string>
     <string name="download_progress">%1$d/%2$d</string>
     <string name="download_chapter_scope">(%1$d-%2$d章)</string>
-    
+
     <string name="download_start">继续</string>
     <string name="download_pause">暂停</string>
     <string name="download_wait">等待</string>
@@ -149,11 +131,11 @@
     <string name="download_pausing">暂停中</string>
     <string name="download_complete">已完成</string>
     <string name="download_source_error">资源或网络错误</string>
-    
+
     <!--mode-->
     <string name="mode_night">夜间</string>
     <string name="mode_light">日间</string>
-    
+
     <!--read-->
     <string name="read_song">朗诵</string>
     <string name="read_brief">简介</string>
@@ -167,14 +149,14 @@
     <string name="read_aloud_s">点击打开阅读界面</string>
     <string name="read_aloud_pause">朗读暂停</string>
     <string name="read_aloud_timer">正在朗读(还剩%d分钟)</string>
-    
+
     <!--file system-->
     <string name="file_sub_count">%1$d 项</string>
     <string name="file_path">存储卡:%1$s</string>
     <string name="file_add_shelf">加入书架</string>
     <string name="file_add_shelves">加入书架(%1$d)</string>
     <string name="file_add_succeed">成功添加%1$d本书</string>
-    
+
     <!--search-->
     <string name="search_book_brief">%1$d人在追 | %2$s读者留存 | %3$s著</string>
 
@@ -222,26 +204,4 @@
         并提供身份证明、权属证明及详细侵权情况证明。 览阅在收到上述法律文件后，将会依法尽快断开相关链接内容。
     </string>
 
-    <string name="about_open_source">
-        \n com.android.support:appcompat-v7:25.+
-        \n com.android.support:design:25.+
-        \n com.android.support:support-v4:25.+
-        \n com.android.support:cardview-v7:25.+
-        \n com.jakewharton:butterknife:8.5.1
-        \n com.jakewharton:butterknife-compiler:8.5.1
-        \n io.reactivex.rxjava2:rxandroid:2.0.1
-        \n io.reactivex.rxjava2:rxjava:2.0.1
-        \n com.squareup.okhttp3:okhttp:3.6.0
-        \n com.squareup.okio:okio:1.11.0
-        \n com.squareup.retrofit2:retrofit:2.2.0
-        \n com.squareup.retrofit2:converter-gson:2.2.0
-        \n com.squareup.retrofit2:adapter-rxjava2:2.2.0
-        \n cn.bmob.android:bmob-sdk:3.5.5
-        \n com.github.bumptech.glide:glide:3.7.0
-        \n org.greenrobot:greendao:3.2.0
-        \n org.greenrobot:eventbus:3.0.0
-        \n me.imid.swipebacklayout.lib:library:1.1.0
-        \n me.gujun.android.taggroup:library:1.4@aar
-        \n com.youth.banner:banner:1.4.10
-        \n org.glassfish:javax.annotation:10.0-b28</string>
 </resources>

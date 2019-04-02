@@ -165,7 +165,7 @@ public abstract class PageLoader {
      */
     private void initData() {
         // 获取配置参数
-        //hideStatusBar = readBookControl.getHideStatusBar();
+        hideStatusBar = readBookControl.getHideStatusBar();
         showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
         mPageMode = PageAnimation.Mode.getPageMode(readBookControl.getPageMode());
         // 初始化参数
@@ -646,17 +646,20 @@ public abstract class PageLoader {
     /**
      * 章节数据是否存在
      */
-    protected abstract boolean noChapterData(BookChapterBean chapter);
+    protected abstract boolean hasChapterData(BookChapterBean chapter);
 
     /**
      * 打开当前章节指定页
      */
     void openChapter(int pagePos) {
         mCurPagePos = pagePos;
+
+        //阅读页面没有准备好
         if (!mPageView.isPrepare()) {
             return;
         }
 
+        //当前章节为空
         if (mCurChapter == null) {
             mCurChapter = new TxtChapter(mCurChapterPos);
             reSetPage();

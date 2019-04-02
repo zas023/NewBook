@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/item_search_iv_cover"
+            android:id="@+id/item_shelf_iv_cover"
             android:layout_width="75dp"
             android:layout_height="100dp"
             android:padding="@dimen/padding_normal" />
@@ -23,7 +23,7 @@
             android:padding="@dimen/padding_normal">
 
             <TextView
-                android:id="@+id/item_search_tv_title"
+                android:id="@+id/item_shelf_tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="神墓"
@@ -31,7 +31,7 @@
                 android:textSize="@dimen/text_large" />
 
             <TextView
-                android:id="@+id/item_search_tv_author"
+                android:id="@+id/item_shelf_tv_author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="辰东"
@@ -39,7 +39,7 @@
                 android:textSize="@dimen/text_normal" />
 
             <TextView
-                android:id="@+id/item_search_tv_info"
+                android:id="@+id/item_shelf_tv_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -49,7 +49,7 @@
                 android:textSize="@dimen/text_small" />
 
             <TextView
-                android:id="@+id/item_search_tv_source"
+                android:id="@+id/item_shelf_tv_source"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"

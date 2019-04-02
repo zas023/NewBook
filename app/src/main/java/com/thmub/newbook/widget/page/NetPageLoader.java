@@ -1,14 +1,13 @@
 package com.thmub.newbook.widget.page;
 
-import android.annotation.SuppressLint;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.BookContentBean;
 import com.thmub.newbook.bean.ShelfBookBean;
-import com.thmub.newbook.constant.Constant;
+import com.thmub.newbook.manager.BookManager;
 import com.thmub.newbook.model.SourceModel;
-import com.thmub.newbook.utils.BookShelfUtils;
 import com.thmub.newbook.utils.FileUtils;
 import com.thmub.newbook.utils.NetworkUtil;
 
@@ -105,19 +104,13 @@ public class NetPageLoader extends PageLoader {
      * @param chapterIndex
      */
     private synchronized void loadChapterContent(final int chapterIndex) {
-        if (downloadingChapterList.size() >= 20) return;
-        if (dealDownloadingList(listHandle.CHECK, bookShelfBean.getChapter(chapterIndex).getChapterLink()))
-            return;
+//        if (downloadingChapterList.size() >= 20) return;
+//        if (dealDownloadingList(listHandle.CHECK, bookShelfBean.getChapter(chapterIndex).getChapterLink()))
+//            return;
         if (null != bookShelfBean && bookShelfBean.getBookChapterListSize() > 0) {
-            Observable.create((ObservableOnSubscribe<Integer>) e -> {
-                if (shouldRequestChapter(chapterIndex)) {
-                    dealDownloadingList(listHandle.ADD, bookShelfBean.getChapter(chapterIndex).getChapterLink());
-                    e.onNext(chapterIndex);
-                }
-                e.onComplete();
-            })
-                    .flatMap(index -> SourceModel.getInstance(bookShelfBean.getSource())
-                            .parseContent(bookShelfBean.getChapter(chapterIndex)))
+
+            SourceModel.getInstance(bookShelfBean.getSource())
+                    .parseContent(bookShelfBean.getChapter(chapterIndex))
                     .timeout(30, TimeUnit.SECONDS)
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -127,20 +120,20 @@ public class NetPageLoader extends PageLoader {
                             compositeDisposable.add(d);
                         }
 
-                        @SuppressLint("DefaultLocale")
                         @Override
                         public void onNext(BookContentBean bookContentBean) {
-                            BookShelfUtils.saveChapterInfo(bookShelfBean.getTitle() + "-" + bookShelfBean.getSource()
-                                    , bookShelfBean.getChapter(chapterIndex).getChapterIndex()
-                                    , bookShelfBean.getChapter(chapterIndex).getChapterTitle()
-                                    , bookContentBean.getChapterContent());
-                            dealDownloadingList(listHandle.REMOVE, bookContentBean.getChapterLink());
+                            BookManager.getInstance()
+                                    .saveChapter(bookShelfBean.getTitle() + "-" + bookShelfBean.getSource()
+                                            , bookShelfBean.getChapter(chapterIndex).getChapterIndex()
+                                            , bookShelfBean.getChapter(chapterIndex).getChapterTitle()
+                                            , bookContentBean.getChapterContent());
+//                            dealDownloadingList(listHandle.REMOVE, bookContentBean.getChapterLink());
                             finishContent(bookContentBean.getChapterIndex());
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            dealDownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getChapterLink());
+                            //dealDownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getChapterLink());
                             if (chapterIndex == mCurChapterPos) {
                                 showChapterError(e.getMessage());
                             }
@@ -150,6 +143,48 @@ public class NetPageLoader extends PageLoader {
                         public void onComplete() {
                         }
                     });
+//
+//            Observable.create((ObservableOnSubscribe<Integer>) e -> {
+//                if (shouldRequestChapter(chapterIndex)) {
+//                    dealDownloadingList(listHandle.ADD, bookShelfBean.getChapter(chapterIndex).getChapterLink());
+//                    e.onNext(chapterIndex);
+//                }
+//                e.onComplete();
+//            })
+//                    .flatMap(index -> SourceModel.getInstance(bookShelfBean.getSource())
+//                            .parseContent(bookShelfBean.getChapter(chapterIndex)))
+//                    .timeout(30, TimeUnit.SECONDS)
+//                    .subscribeOn(scheduler)
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new Observer<BookContentBean>() {
+//                        @Override
+//                        public void onSubscribe(Disposable d) {
+//                            compositeDisposable.add(d);
+//                        }
+//
+//                        @Override
+//                        public void onNext(BookContentBean bookContentBean) {
+//                            BookManager.getInstance()
+//                                    .saveChapter(bookShelfBean.getTitle() + "-" + bookShelfBean.getSource()
+//                                            , bookShelfBean.getChapter(chapterIndex).getChapterIndex()
+//                                            , bookShelfBean.getChapter(chapterIndex).getChapterTitle()
+//                                            , bookContentBean.getChapterContent());
+//                            dealDownloadingList(listHandle.REMOVE, bookContentBean.getChapterLink());
+//                            finishContent(bookContentBean.getChapterIndex());
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            dealDownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getChapterLink());
+//                            if (chapterIndex == mCurChapterPos) {
+//                                showChapterError(e.getMessage());
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onComplete() {
+//                        }
+//                    });
         }
     }
 
@@ -186,24 +221,22 @@ public class NetPageLoader extends PageLoader {
     @Override
     protected String getChapterContent(BookChapterBean chapter) throws Exception {
 
-        File file = BookShelfUtils.getBookFile(bookShelfBean.getTitle() + "-" + bookShelfBean.getSource(),
-                chapter.getChapterIndex(), chapter.getChapterTitle());
+        File file = BookManager.getBookFile(bookShelfBean.getTitle() + "-" + bookShelfBean.getSource(),
+                BookManager.formatFileName(chapter.getChapterIndex(), chapter.getChapterTitle()));
+        Log.i(TAG, String.valueOf(file.exists()));
         if (!file.exists()) return null;
         byte[] contentByte = FileUtils.getBytes(file);
         return new String(contentByte, StandardCharsets.UTF_8);
     }
 
     @Override
-    protected boolean noChapterData(BookChapterBean chapter) {
-        File file = new File(Constant.BOOK_CACHE_PATH +File.separator
-                + bookShelfBean.getTitle() + "-" + bookShelfBean.getSource() + File.separator
-                + BookShelfUtils.formatFileName(chapter.getChapterIndex(),chapter.getChapterTitle())
-                + FileUtils.SUFFIX_CB);
-        return !file.exists();
+    protected boolean hasChapterData(BookChapterBean chapter) {
+        return BookManager.isChapterCached(bookShelfBean.getTitle() + "-" + bookShelfBean.getSource(),
+                BookManager.formatFileName(chapter.getChapterIndex(), chapter.getChapterTitle()));
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
-        return NetworkUtil.isNetWorkAvailable() && noChapterData(bookShelfBean.getChapter(chapterIndex));
+        return NetworkUtil.isNetWorkAvailable() && hasChapterData(bookShelfBean.getChapter(chapterIndex));
     }
 
     // 装载上一章节的内容

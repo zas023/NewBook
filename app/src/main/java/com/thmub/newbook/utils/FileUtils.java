@@ -31,7 +31,13 @@ public class FileUtils {
     public static final String SUFFIX_EPUB = ".epub";
     public static final String SUFFIX_PDF = ".pdf";
 
-    //获取文件夹
+    /**
+     * 获取文件夹
+     * 不存在则创建
+     *
+     * @param filePath
+     * @return
+     */
     public static File getFolder(String filePath) {
         File file = new File(filePath);
         //如果文件夹不存在，就创建它
@@ -41,7 +47,13 @@ public class FileUtils {
         return file;
     }
 
-    //获取文件
+    /**
+     * 获取文件
+     * 如果文件不存在，则创建文件
+     *
+     * @param filePath
+     * @return
+     */
     public static synchronized File getFile(String filePath) {
         File file = new File(filePath);
         try {
@@ -144,7 +156,11 @@ public class FileUtils {
         return sb.toString();
     }
 
-    //判断是否挂载了SD卡
+    /**
+     * 判断是否挂载了SD卡
+     *
+     * @return
+     */
     public static boolean isSdCardExist() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return true;
@@ -152,7 +168,11 @@ public class FileUtils {
         return false;
     }
 
-    //递归删除文件夹下的数据
+    /**
+     * 递归删除文件夹下的数据
+     *
+     * @param filePath
+     */
     public static synchronized void deleteFile(String filePath) {
         File file = new File(filePath);
         if (!file.exists()) return;
@@ -170,7 +190,12 @@ public class FileUtils {
 
     //由于递归的耗时问题，取巧只遍历内部三层
 
-    //获取txt文件
+    /**
+     * 获取txt文件
+     * @param filePath
+     * @param layer
+     * @return
+     */
     public static List<File> getTxtFiles(String filePath, int layer) {
         List txtFiles = new ArrayList();
         File file = new File(filePath);

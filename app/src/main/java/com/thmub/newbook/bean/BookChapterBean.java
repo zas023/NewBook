@@ -40,6 +40,10 @@ public class BookChapterBean implements Parcelable {
     public BookChapterBean() {
     }
 
+    public BookChapterBean(String title) {
+        this.chapterTitle=title;
+    }
+
     public String getBookLink() {
         return bookLink;
     }

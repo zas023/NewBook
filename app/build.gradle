@@ -8,7 +8,7 @@ android {
     //兼容Android6.0系统所需
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        applicationId "com.thmub.cocobook"
+        applicationId "com.thmub.newbook"
         minSdkVersion 21
         targetSdkVersion 28
         multiDexEnabled true
@@ -30,7 +30,7 @@ android {
 
 greendao{
     schemaVersion 1
-    daoPackage 'com.thmub.cocobook.model.dao'
+    daoPackage 'com.thmub.newbook.model.dao'
     targetGenDir 'src/main/java'
 }
 

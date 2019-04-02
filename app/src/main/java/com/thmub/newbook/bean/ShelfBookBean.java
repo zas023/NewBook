@@ -309,13 +309,6 @@ public class ShelfBookBean implements Parcelable {
         myDao.update(this);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 53859549)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getShelfBookBeanDao() : null;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -346,5 +339,12 @@ public class ShelfBookBean implements Parcelable {
         dest.writeByte((byte) (isUpdate ? 1 : 0));
         dest.writeByte((byte) (isLocal ? 1 : 0));
         dest.writeTypedList(bookChapterList);
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 53859549)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getShelfBookBeanDao() : null;
     }
 }

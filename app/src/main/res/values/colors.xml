@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">@color/md_green_500</color>
-    <color name="colorPrimaryDark">@color/md_green_600</color>
+    <color name="colorPrimary">@color/md_green_700</color>
+    <color name="colorPrimaryDark">@color/md_green_800</color>
     <color name="colorAccent">@color/md_grey_900</color>
     <!--界面底色-->
     <color name="colorBackground">@color/md_grey_100</color>

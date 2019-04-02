@@ -36,6 +36,7 @@ class ChapterProvider {
         String content;
         try {
             content = pageLoader.getChapterContent(chapter);
+            Log.i(TAG, content);
         } catch (Exception e) {
             txtChapter.setStatus(TxtChapter.Status.ERROR);
             txtChapter.setMsg("读取内容出错\n" + e.getLocalizedMessage());

@@ -100,7 +100,7 @@ public class SourceModel extends ISourceModel {
                 else
                     bean.setLink(bookSourceBean.getRootLink() + bookUrl);
                 bean.setAuthor(rsAuthors.get(i).toString());
-                bean.setShortIntro(rsDescs.get(i).toString());
+                bean.setDesc(rsDescs.get(i).toString());
                 bean.setSource(bookSourceBean.getSourceName());
                 bookList.add(bean);
                 Log.i("BookSourceMode", "Book:    " + bean.toString());
@@ -174,9 +174,12 @@ public class SourceModel extends ISourceModel {
             String content = "";
             for (int i = 0, size = rsContents.size(); i < size; i++) {
                 content = content + rsContents.get(i).toString()
-                        .replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")  // 替换特定标签为换行符
-                        .replaceAll("<[script>]*.*?>|&nbsp;", "")               // 删除script标签对和空格转义符
-                        .replaceAll("\\s*\\n+\\s*", "\n　　");                   // 移除空行,并增加段前缩进2个汉字
+                        // 替换特定标签为换行符
+                        .replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")
+                        // 删除script标签对和空格转义符
+                        .replaceAll("<[script>]*.*?>|&nbsp;", "")
+                        // 移除空行,并增加段前缩进2个汉字
+                        .replaceAll("\\s*\\n+\\s*", "\n　　");
             }
             Log.i("BookSourceMode", "Content:    " + content);
             bookContent.setBookLink(chapter.getBookLink());

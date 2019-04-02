@@ -136,11 +136,11 @@ public abstract class BaseActivity extends SwipeBackActivity {
         //左滑手势
         setSwipeBackEnable(initSwipeBackEnable());
         //状态栏
-        ImmersionBar.with(this)
-                .statusBarColor(R.color.colorPrimary)
-                .autoStatusBarDarkModeEnable(true,0.2f) //自动状态栏字体变色
-                .fitsSystemWindows(true) //解决状态栏和布局重叠问题
-                .init();
+//        ImmersionBar.with(this)
+//                .statusBarColor(R.color.colorPrimary)
+//                .autoStatusBarDarkModeEnable(true,0.2f) //自动状态栏字体变色
+//                .fitsSystemWindows(true) //解决状态栏和布局重叠问题
+//                .init();
         //init
         initData(savedInstanceState);
         initToolbar();

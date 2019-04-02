@@ -3,7 +3,10 @@ package com.thmub.newbook.manager;
 import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.utils.FileUtils;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +19,8 @@ public class BookManager {
 
     private static final String TAG = "BookManager";
 
+    private String folderName;
     private String chapterName;
-    private String bookId;
     private long chapterLen;
     private long position;
     private Map<String, Cache> cacheMap = new HashMap<>();
@@ -34,8 +37,8 @@ public class BookManager {
         return sInstance;
     }
 
-    public boolean openChapter(String bookId, String chapterName) {
-        return openChapter(bookId, chapterName, 0);
+    public boolean openChapter(String folderName, String chapterName) {
+        return openChapter(folderName, chapterName, 0);
     }
 
     public boolean openChapter(String folderName, String chapterName, long position) {
@@ -45,7 +48,7 @@ public class BookManager {
         if (!file.exists()) {
             return false;
         }
-        this.bookId = bookId;
+        this.folderName = folderName;
         this.chapterName = chapterName;
         this.position = position;
         createCache();
@@ -56,7 +59,7 @@ public class BookManager {
         //创建Cache
         if (!cacheMap.containsKey(chapterName)) {
             Cache cache = new Cache();
-            File file = getBookFile(bookId, chapterName);
+            File file = getBookFile(folderName, chapterName);
             //TODO:数据加载默认utf-8(以后会增加判断),FileUtils采用Reader获取数据的，可能用byte会更好一点
             char[] array = FileUtils.getFileContent(file).toCharArray();
             WeakReference<char[]> charReference = new WeakReference<char[]>(array);
@@ -78,73 +81,6 @@ public class BookManager {
         return position;
     }
 
-    //获取上一段
-    public String getPrevPara() {
-        //首先判断是否Position已经达到起始位置，已经越界
-        if (position < 0) {
-            return null;
-        }
-
-        //初始化从后向前获取的起始点,终止点,文本
-        int end = (int) position;
-        int begin = end;
-        char[] array = getContent();
-
-        while (begin >= 0) { //判断指针是否达到章节的起始位置
-            char character = array[begin]; //获取当前指针下的字符
-
-            //判断当前字符是否为换行，如果为换行，就代表获取到了一个段落，并退出。
-            //有可能发生初始指针指的就是换行符的情况。
-            if ((character + "").equals("\n") && begin != end) {
-                position = begin;
-                //当当前指针指向换行符的时候向后退一步
-                begin++;
-                break;
-            }
-            //向前进一步
-            begin--;
-        }
-        //最后end获取到段落的起始点，begin是段落的终止点。
-
-        //当越界的时候，保证begin在章节内
-        if (begin < 0) {
-            begin = 0;//在章节内
-            position = -1; //越界
-        }
-        int size = end + 1 - begin;
-        return new String(array, begin, size);
-    }
-
-    //获取下一段
-    public String getNextPara() {
-        //首先判断是否Position已经达到终点位置
-        if (position >= chapterLen) {
-            return null;
-        }
-
-        //初始化起始点，终止点。
-        int begin = (int) position;
-        int end = begin;
-        char[] array = getContent();
-
-        while (end < chapterLen) { //判断指针是否在章节的末尾位置
-            char character = array[end]; //获取当前指针下的字符
-            //判断当前字符是否为换行，如果为换行，就代表获取到了一个段落，并退出。
-            //有可能发生初始指针指的就是换行符的情况。
-            //这里当遇到\n的时候，不需要回退
-            if ((character + "").equals("\n") && begin != end) {
-                ++end;//指向下一字段
-                position = end;
-                break;
-            }
-            //指向下一字段
-            end++;
-        }
-        //所要获取的字段的长度
-        int size = end - begin;
-        return new String(array, begin, size);
-    }
-
     //获取章节的内容
     public char[] getContent() {
         if (cacheMap.size() == 0) {
@@ -152,7 +88,7 @@ public class BookManager {
         }
         char[] block = cacheMap.get(chapterName).getData().get();
         if (block == null) {
-            File file = getBookFile(bookId, chapterName);
+            File file = getBookFile(folderName, chapterName);
             block = FileUtils.getFileContent(file).toCharArray();
             Cache cache = cacheMap.get(chapterName);
             cache.data = new WeakReference<char[]>(block);
@@ -171,6 +107,27 @@ public class BookManager {
     }
 
     /**
+     * 存储章节内容到本地文件
+     */
+    public boolean saveChapter(String folderName, int index, String fileName, String content) {
+        if (content == null) {
+            return false;
+        }
+        File file = getBookFile(folderName, formatFileName(index, fileName));
+        //获取流并存储
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(fileName + "\n\n");
+            writer.write(content);
+            writer.write("\n\n");
+            writer.flush();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * 创建或获取存储文件
      *
      * @param folderName
@@ -182,7 +139,23 @@ public class BookManager {
                 + File.separator + fileName + FileUtils.SUFFIX_CB);
     }
 
-    public static long getBookSize(String folderName) {
+    public static String formatFileName(int index, String fileName) {
+        return String.format("%05d-%s", index, formatFolderName(fileName));
+    }
+
+    public static String formatFolderName(String folderName) {
+        return folderName.replace("/", "")
+                .replace(":", "")
+                .replace(".", "");
+    }
+
+    /**
+     * 获取章节大小
+     *
+     * @param folderName
+     * @return
+     */
+    public static long getBookChapterSize(String folderName) {
         return FileUtils.getDirSize(FileUtils.getFolder(Constant.BOOK_CACHE_PATH + folderName));
     }
 
@@ -200,6 +173,7 @@ public class BookManager {
         return file.exists();
     }
 
+    /*******************************InterClass************************************/
     public class Cache {
         private long size;
         private WeakReference<char[]> data;

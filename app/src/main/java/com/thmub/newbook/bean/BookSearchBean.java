@@ -51,11 +51,11 @@ public class BookSearchBean implements Parcelable {
         this.author = author;
     }
 
-    public String getShortIntro() {
+    public String getDesc() {
         return desc;
     }
 
-    public void setShortIntro(String shortIntro) {
+    public void setDesc(String shortIntro) {
         this.desc = shortIntro;
     }
 
@@ -106,6 +106,7 @@ public class BookSearchBean implements Parcelable {
         shelfBookBean.setTitle(title);
         shelfBookBean.setAuthor(author);
         shelfBookBean.setCover(cover);
+        shelfBookBean.setDesc(desc);
         shelfBookBean.setSource(source);
         return shelfBookBean;
     }

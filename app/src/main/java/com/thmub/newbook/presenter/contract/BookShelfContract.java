@@ -1,27 +1,23 @@
 package com.thmub.newbook.presenter.contract;
 
 import com.thmub.newbook.base.BaseContract;
-import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 
 import java.util.List;
 
 /**
- * Created by Zhouas666 on 2019-03-28
+ * Created by Zhouas666 on 2019-04-02
  * Github: https://github.com/zas023
  */
-public interface BookDetailContract {
+public interface BookShelfContract {
 
     interface View extends BaseContract.BaseView {
-        void finishLoadCatalogs(List<BookChapterBean> items);
-        void finishRemoveBook(Integer i);
+        void finishLoadShelfBook(List<ShelfBookBean> items);
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {
-        //移出书架
-        void removeShelfBook(ShelfBookBean bookBean);
         //加载目录
-        void loadCatalogs(ShelfBookBean bookBean);
+        void loadShelfBook();
     }
 
 }
