@@ -1,0 +1,160 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="BaseAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <!--<item name="android:textColorSecondary">@color/textSecondary</item>-->
+        <!--<item name="android:windowTranslucentStatus">false</item>-->
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
+    </style>
+
+    <style name="AppTheme" parent="BaseAppTheme" />
+
+    <!--Toolbar-->
+    <style name="Theme.ToolBar" parent="Base.Widget.AppCompat.Toolbar">
+        <!-- 设置-弹窗的背景-颜色-->
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <!-- 字体的颜色-->
+        <item name="android:textColor">@color/textAssist</item>
+        <!-- 字体大小-->
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Theme.ToolBar.Menu" parent="Base.Widget.AppCompat.Toolbar">
+        <!-- 设置-弹窗的背景-颜色-->
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <!-- 字体的颜色-->
+        <item name="android:textColor">@color/textAssist</item>
+        <!-- 字体大小-->
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <!-- 阴影-->
+        <item name="android:elevation">0dp</item>
+        <!-- 内容距离返回箭头距离-->
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+        <!-- 用于替换菜单的三个小白点，换成自已的图片-->
+        <!--<item name="actionOverflowButtonStyle">@style/ActionButton.Overflow.Menu</item>-->
+        <!--用于控制menu弹出的位置，位于toolbar的下面，而不是上面-->
+        <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
+        <!-- 用于修改item默认的分割线-->
+        <!--<item name="android:dropDownListViewStyle">@style/DropDownStyle</item>-->
+        <!--<item name="dropDownListViewStyle">@style/DropDownStyle</item>-->
+    </style>
+    <!--<style name="ActionButton.Overflow.Menu" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">-->
+    <!--&lt;!&ndash;<item name="android:src">@mipmap/ic_menu_overflow</item>&ndash;&gt;-->
+    <!--</style>-->
+    <style name="OverflowMenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
+    </style>
+    <!--用于修改popmenu的分割线-->
+    <style name="DropDownStyle" parent="android:style/Widget.Holo.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selector_common_bg</item>
+        <item name="android:divider">@color/divider</item>
+        <item name="android:dividerHeight">@dimen/divider_line</item>
+    </style>
+
+
+    <!--BookDetail-->
+    <style name="BottomNavigationViewTheme" parent="AppTheme" />
+
+    <style name="BottomNavigation" />
+
+    <style name="BottomNavigation.GroupView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="BottomNavigation.ItemView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="BottomNavigation.ItemView.Icon" parent="">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_gravity">top|center_horizontal</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+    </style>
+
+    <style name="BottomNavigation.ItemView.Title" parent="">
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom|center_horizontal</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- TextAppearance:修改 -->
+    <style name="AppTheme.TextAppearance" />
+    <!--Common-->
+    <style name="AppTheme.TextAppearance.Common" />
+
+    <style name="AppTheme.TextAppearance.Common.SingleLine">
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <!--表示领域-->
+    <style name="AppTheme.TextAppearance.Billboard" />
+
+    <style name="AppTheme.TextAppearance.Billboard.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textSize">@dimen/text_large</item>
+    </style>
+
+    <!--书籍-->
+    <style name="AppTheme.TextAppearance.Book" />
+
+    <style name="AppTheme.TextAppearance.Book.Name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!--ReadActivity-->
+    <style name="AppTheme.TextAppearance.Read"></style>
+
+    <style name="AppTheme.TextAppearance.Read.TopMenu">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/read_menu_text</item>
+        <item name="android:textSize">@dimen/text_normal</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Read.BottomMenu">
+        <item name="android:textColor">@color/read_menu_text</item>
+        <item name="android:textSize">@dimen/text_small</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Read.BottomMenu.Button" parent="AppTheme.TextAppearance.Read.BottomMenu">
+        <item name="android:gravity">center_horizontal|bottom</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+</resources>

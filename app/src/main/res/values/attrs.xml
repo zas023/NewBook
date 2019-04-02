@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--圆形图片-->
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+        <attr name="border_overlay" format="boolean" />
+    </declare-styleable>
+
+    <!--通用 Item-->
+    <declare-styleable name="CommonItemLayout">
+        <attr name="cil_leftText" format="string"/>
+        <attr name="cil_leftImage" format="reference"/>
+        <attr name="cil_leftTextColor" format="color"/>
+        <attr name="cil_rightText" format="string"/>
+        <attr name="cil_rightTextColor" format="color"/>
+        <attr name="cil_rightImage" format="reference"/>
+    </declare-styleable>
+
+    <!--滑动刷新-->
+    <declare-styleable name="ScrollRefreshLayout">
+        <attr name="layout_scroll_empty" format="reference"/>
+        <attr name="text_error_tip" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="RefreshLayout">
+        <attr name="layout_refresh_empty" format="reference"/>
+        <attr name="layout_refresh_error" format="reference"/>
+        <attr name="layout_refresh_loading" format="reference"/>
+    </declare-styleable>
+
+    <!--BookText-->
+    <declare-styleable name="BookTextView">
+        <attr name="bookColor" format="reference"/>
+    </declare-styleable>
+    
+    <declare-styleable name="EasyRatingBar">
+        <attr name="rateNum" format="integer"/>
+        <attr name="rating" format="integer"/>
+        <attr name="rateNormal" format="reference"/>
+        <attr name="rateSelect" format="reference"/>
+        <attr name="rateInterval" format="dimension"/>
+        <attr name="isIndicator" format="boolean"/>
+    </declare-styleable>
+</resources>

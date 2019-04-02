@@ -1,0 +1,247 @@
+<resources>
+    <string name="app_name">览阅</string>
+    <string name="app_name_en">Reader</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!--title-->
+    <string name="title_main">搜书神器</string>
+
+    <!--string_array start-->
+
+    <!--首页fragment-->
+    <string-array name="fragment_title">
+        <item>@string/fragment_title_bookshelf</item>
+        <item>@string/fragment_title_store</item>
+        <item>@string/fragment_title_find</item>
+    </string-array>
+
+    <!--榜单分类-->
+    <string-array name="fragment_bill_book">
+        <item>周榜</item>
+        <item>月榜</item>
+        <item>总榜</item>
+    </string-array>
+    
+    <!--CollBook的长按点击-->
+    <string-array name="menu_net_book">
+        <item>@string/menu_action_top</item>
+        <item>@string/menu_action_cache</item>
+        <item>@string/menu_action_delete</item>
+        <item>@string/menu_action_batch_manage</item>
+    </string-array>
+    
+    <string-array name="menu_local_book">
+        <item>@string/menu_action_top</item>
+        <item>@string/menu_action_delete</item>
+        <item>@string/menu_action_batch_manage</item>
+    </string-array>
+
+    <!--string_array end-->
+    
+    <!--通用-->
+    <string name="common_tip">提示</string>
+    <string name="common_sure">确定</string>
+    <string name="common_cancel">取消</string>
+    
+    <!--网络相关-->
+    
+    <string name="net_error_tip">似乎没有网络哦</string>
+    
+    <!--fragment_title:主页的名字-->
+    <string name="fragment_title_bookshelf">书架</string>
+    <string name="fragment_title_store">书城</string>
+    <string name="fragment_title_find">发现</string>
+    <string name="fragment_title_community">社区</string>
+
+    <!--fragment 主题书单-->
+    <string name="fragment_book_list_hot">本周最热</string>
+    <string name="fragment_book_list_newest">最新发布</string>
+    <string name="fragment_book_list_collect">最多收藏</string>
+    <string name="fragment_book_list_message">共%1$d本书 |&#160; %2$d人收藏</string>
+
+    <!--feature 书城-->
+    <string name="fragment_node_nsrm">男生热门</string>
+    <string name="fragment_node_nsza">女生最爱</string>
+    <string name="fragment_node_nswb">男生完本</string>
+    <string name="fragment_node_nswj">女生完结</string>
+    <string name="fragment_node_nsdsq">男生大神区</string>
+    <string name="fragment_node_nshwq">女生红文区</string>
+    <string name="fragment_node_npxm">男频推荐</string>
+    <string name="fragment_node_nvpxm">女频推荐</string>
+
+    <!--discover 发现-->
+    <string name="fragment_discover_top">排行榜</string>
+    <string name="fragment_discover_topic">主题书单</string>
+    <string name="fragment_discover_sort">分类</string>
+
+    <!--dialog 对话框-->
+    <string name="dialog_text_introduce">我们会根据您的喜好\n推荐相对应的小说</string>
+    <string name="dialog_text_choose_tip">--请选择你的喜好--</string>
+    <string name="dialog_text_boy_story">男生小说</string>
+    <string name="dialog_text_girl_story">女生小说</string>
+    
+    <!--menu 菜单-->
+    <string name="menu_action_search">搜索</string>
+    <string name="menu_action_login">请登录</string>
+    <string name="menu_action_message">我的消息</string>
+    <string name="menu_action_download">下载列表</string>
+    <string name="menu_action_sync">同步书架</string>
+    <string name="menu_action_scan">扫描本地书籍</string>
+    <string name="menu_action_transfer">WIFI传书</string>
+    <string name="menu_action_feedback">意见反馈</string>
+    <string name="menu_action_about">关于</string>
+    <string name="menu_action_night_mode">夜间模式</string>
+    <string name="menu_action_setting">设置</string>
+    
+    <string name="menu_action_top">置顶</string>
+    <string name="menu_action_cache">缓存</string>
+    <string name="menu_action_delete">删除</string>
+    <string name="menu_action_batch_manage">批量管理</string>
+    
+    <!--Splash-->
+    <string name="splash_skip">跳过</string>
+
+    <!--book:书籍的信息-->
+    <string name="book_type">[%1$s]</string>
+    <string name="book_recommend">%1$d 人推荐</string>
+    <string name="book_message">%1$d人加入书架 |&#160; %2$s%%读者留存</string>
+    <string name="book_word_count">%1$d&#160;万字</string>
+
+    <!--sort:每类的书-->
+    <string name="sort_book_count">%1$d 本</string>
+    
+    <!--tag: 标签-->
+    <string name="tag_all">全部</string>
+    <string name="tag_sex">性别</string>
+    <string name="tag_boy">男生</string>
+    <string name="tag_girl">女生</string>
+
+    <!--load:加载-->
+    <string name="load_msg">正在加载</string>
+
+    <!--book_detail : -->
+    <string name="book_detail_last_chapter">最新章</string>
+    <string name="book_detail_recommend_books">推荐书籍</string>
+    <string name="book_detail_recommend_book_list">推荐书单</string>
+    <string name="book_detail_open_book">打开阅读</string>
+    <string name="book_detail_go_on">继续阅读</string>
+    <string name="book_detail_give_up">移出书架</string>
+    <string name="book_detail_add_bookcase">加入书架</string>
+    <string name="book_detail_download_book">缓存全本</string>
+
+    <!--DownloadTask:书籍下载-->
+    <string name="download_add_succeed">成功添加到下载列表</string>
+    <string name="download_exist">该任务已存在</string>
+    <string name="download_load_all">已缓存全部章节</string>
+    <string name="download_progress">%1$d/%2$d</string>
+    <string name="download_chapter_scope">(%1$d-%2$d章)</string>
+    
+    <string name="download_start">继续</string>
+    <string name="download_pause">暂停</string>
+    <string name="download_wait">等待</string>
+    <string name="download_error">错误</string>
+    <string name="download_finish">完成</string>
+
+    <string name="download_loading">下载中</string>
+    <string name="download_waiting">等待中</string>
+    <string name="download_pausing">暂停中</string>
+    <string name="download_complete">已完成</string>
+    <string name="download_source_error">资源或网络错误</string>
+    
+    <!--mode-->
+    <string name="mode_night">夜间</string>
+    <string name="mode_light">日间</string>
+    
+    <!--read-->
+    <string name="read_song">朗诵</string>
+    <string name="read_brief">简介</string>
+    <string name="read_setting">设置</string>
+    <string name="read_download">缓存</string>'
+    <string name="read_category">目录</string>
+    <string name="read_no_chapter">第 %1$d 章(%2$d)</string>
+
+    <string name="read_aloud">朗读</string>
+    <string name="read_aloud_t">正在朗读</string>
+    <string name="read_aloud_s">点击打开阅读界面</string>
+    <string name="read_aloud_pause">朗读暂停</string>
+    <string name="read_aloud_timer">正在朗读(还剩%d分钟)</string>
+    
+    <!--file system-->
+    <string name="file_sub_count">%1$d 项</string>
+    <string name="file_path">存储卡:%1$s</string>
+    <string name="file_add_shelf">加入书架</string>
+    <string name="file_add_shelves">加入书架(%1$d)</string>
+    <string name="file_add_succeed">成功添加%1$d本书</string>
+    
+    <!--search-->
+    <string name="search_book_brief">%1$d人在追 | %2$s读者留存 | %3$s著</string>
+
+    <!--land-->
+    <string name="land_login">登陆</string>
+    <string name="land_register">注册</string>
+    <string name="land_forget">忘记密码?</string>
+    <string name="land_hint_name">请输入用户名</string>
+    <string name="land_hint_email">请输入注册邮箱</string>
+    <string name="land_hint_password">请输入密码</string>
+
+    <!--info-->
+    <string name="user_info_icon">头像</string>
+    <string name="user_info_username">用户名</string>
+    <string name="user_info_sex">性别</string>
+    <string name="user_info_phone">手机</string>
+    <string name="user_info_email">邮箱</string>
+    <string name="user_info_logout">退出</string>
+
+    <!--about-->
+    <string name="about_introduce">览阅致力于打造绿色健康、无广告的阅读平台，为广大读者提供优质健康的阅读服务。
+        \n\n数据内容来源于追书神器api和第三方网站，如有侵犯您的权益,请来信告知,我们将立即予以处理(联系方式：anshunzhou@outlook.com)。
+        \n\n项目采用MVP架构，使用流行的RxJava和Retrofit 框架等等，追求每个功能的最佳代码实现。
+        \n\n我的 GitHub: https://github.com/zas023
+        \n\n完全开源，最佳的源代码，最佳的学习软件，如果你觉得不错，可以帮忙分享给你更多的朋友，这是我们最大的动力和支持.
+    </string>
+
+    <string name="about_license">当您搜索一本书的时，览阅会将该书的书名以关键词的形式提交到各个第三方网络文学网站。
+        各第三方网站返回的内容与览阅无关，览阅对其概不负责，亦不承担任何法律责任。
+        任何通过使用览阅而链接到的第三方网页均系他人制作或提供，您可能从第三方网页上获得其他服务， 览阅对其合法性概不负责，
+        亦不承担任何法律责任。 第三方搜索引擎结果根据您提交的书名自动搜索获得并提供试读，
+        不代表览阅赞成或被搜索链接到的第三方网页上的内容或立场。 您应该对使用搜索引擎的结果自行承担风险。
+
+        \n\n览阅不做任何形式的保证：不保证第三方搜索引擎的搜索结果满足您的要求， 不保证搜索服务不中断，
+        不保证搜索结果的安全性、正确性、及时性、合法性。 因网络状况、通讯线路、第三方网站等任何原因而导致您不能正常使用览阅，
+        览阅不承担任何法律责任。览阅尊重并保护所有使用用户的个人隐私权， 您注册的用户名、电子邮件地址等个人资料，
+        非经您亲自许可或根据相关法律、法规的强制性规定， 览阅不会主动地泄露给第三方。
+
+        \n\n览阅致力于最大程度地减少网络文学阅读者在自行搜寻过程中的无意义的时间浪费，
+        通过专业搜索展示不同网站中网络文学的最新章节。 览阅在为广大小说爱好者提供方便、快捷舒适的试读体验的同时，
+        也使优秀网络文学得以迅速、更广泛的传播，从而达到了在一定程度促进网络文学充分繁荣发展之目的。
+
+        \n\n览阅鼓励广大小说爱好者通过览阅发现优秀网络小说及其提供商， 并建议购买和阅读正版图书。
+        任何单位或个人认为通过览阅搜索链接到的第三方网页内容可能涉嫌侵犯其信息网络传播权， 应该及时向览阅提出书面权力通知，
+        并提供身份证明、权属证明及详细侵权情况证明。 览阅在收到上述法律文件后，将会依法尽快断开相关链接内容。
+    </string>
+
+    <string name="about_open_source">
+        \n com.android.support:appcompat-v7:25.+
+        \n com.android.support:design:25.+
+        \n com.android.support:support-v4:25.+
+        \n com.android.support:cardview-v7:25.+
+        \n com.jakewharton:butterknife:8.5.1
+        \n com.jakewharton:butterknife-compiler:8.5.1
+        \n io.reactivex.rxjava2:rxandroid:2.0.1
+        \n io.reactivex.rxjava2:rxjava:2.0.1
+        \n com.squareup.okhttp3:okhttp:3.6.0
+        \n com.squareup.okio:okio:1.11.0
+        \n com.squareup.retrofit2:retrofit:2.2.0
+        \n com.squareup.retrofit2:converter-gson:2.2.0
+        \n com.squareup.retrofit2:adapter-rxjava2:2.2.0
+        \n cn.bmob.android:bmob-sdk:3.5.5
+        \n com.github.bumptech.glide:glide:3.7.0
+        \n org.greenrobot:greendao:3.2.0
+        \n org.greenrobot:eventbus:3.0.0
+        \n me.imid.swipebacklayout.lib:library:1.1.0
+        \n me.gujun.android.taggroup:library:1.4@aar
+        \n com.youth.banner:banner:1.4.10
+        \n org.glassfish:javax.annotation:10.0-b28</string>
+</resources>

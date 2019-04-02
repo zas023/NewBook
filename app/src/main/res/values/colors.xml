@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">@color/md_green_500</color>
+    <color name="colorPrimaryDark">@color/md_green_600</color>
+    <color name="colorAccent">@color/md_grey_900</color>
+    <!--界面底色-->
+    <color name="colorBackground">@color/md_grey_100</color>
+    <!--界面前景色-->
+    <color name="colorForeground">@color/md_white_1000</color>
+    <!-- 分割线颜色-->
+    <color name="colorDivider">#ffe0e0e0</color>
+
+    <!--text-->
+    <!--用于重要级文字信息，如标题，子模块功能文字等-->
+    <color name="textPrimary">#212121</color>
+    <!--用于普通级信息-->
+    <color name="textSecondary">#757575</color>
+    <!--用于普通级信息、引导词,如昵正文、弹层文案、查看更多之类-->
+    <color name="textAssist">#9e9e9e</color>
+    <!--用于辅助、次要的文字信息、普通按钮描边,如时间、来自等补充信息文案-->
+    <color name="textAssistSecondary">#B0B0B0</color>
+    <color name="textPrimaryInverted">#ffffff</color>
+    <color name="textSecondaryInverted">#c8ffffff</color>
+    <color name="textAssistInverted">#8affffff</color>
+
+    <color name="textError">#ffe7492e</color>
+    <color name="textTranslucent">#96ffffff</color>
+    
+    <!--list-->
+
+    <!--通用分割线-->
+    <color name="divider">#727272</color>
+    <color name="divider_dash">@color/colorDivider</color>
+    <!--通用分割线细-->
+    <color name="divider_narrow">@color/colorDivider</color>
+    <!--通用分割线粗-->
+    <color name="divider_wide">@color/colorDivider</color>
+
+    <!--性别选择颜色值-->
+    <color name="gender_select_boy_normal">#B0E2FF</color>
+    <color name="gender_select_boy_pressed">#B2DFEE</color>
+    <color name="gender_select_girl_normal">#EEA9B8</color>
+    <color name="gender_select_girl_pressed">#EEA2AD</color>
+
+    <!--scroll-->
+    <color name="scroll_refresh_tip">#88303F9F</color>
+
+    <!--downlaod-->
+    <color name="download_loading">#8bd715</color>
+    <color name="download_pause">#f3aa41</color>
+    <color name="download_wait">#afafad</color>
+    <color name="download_error">#e33a35</color>
+    <color name="download_finish">#8bd715</color>
+    
+    <!--read-->
+    <color name="read_bg_1">#CEC29C</color>
+    <color name="read_bg_2">#CCEBCC</color>
+    <color name="read_bg_3">#AAAAAA</color>
+    <color name="read_bg_4">#D1CEC5</color>
+    <color name="read_bg_5">#001C27</color>
+    <color name="read_bg_6">#FFC29C</color>
+
+    <color name="read_font_1">#2C2C2C</color>
+    <color name="read_font_2">#2F332D</color>
+    <color name="read_font_3">#92918C</color>
+    <color name="read_font_4">#383429</color>
+    <color name="read_font_5">#627176</color>
+    <color name="read_font_6">#727176</color>
+
+    <color name="read_bg_night">#000000</color>
+    <color name="read_font_night">#99ffffff</color>
+    
+    <color name="read_menu_bg">#191919</color>
+    <color name="read_menu_text">#CBCBCB</color>
+    <color name="read_bar_translucent">#88000000</color>
+
+    <!--button-->
+    <color name="widget_button_normal">@color/colorForeground</color>
+    <color name="widget_button_selected">@color/colorBackground</color>
+
+</resources>

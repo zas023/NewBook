@@ -1,0 +1,16 @@
+<?xml version ="1.0" encoding ="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_source_save"
+        android:icon="@mipmap/ic_menu_save"
+        android:title="保存书源"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_source_test"
+        android:title="测试书源" />
+    <item
+        android:id="@+id/action_source_rule"
+        android:title="书源规则" />
+</menu>

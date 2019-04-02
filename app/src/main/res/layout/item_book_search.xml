@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_normal"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/item_search_iv_cover"
+        android:layout_width="75dp"
+        android:layout_height="100dp"
+        android:padding="@dimen/padding_normal"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_normal">
+
+        <TextView
+            android:id="@+id/item_search_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="神墓"
+            android:textColor="@color/textPrimary"
+            android:textSize="@dimen/text_large"/>
+
+        <TextView
+            android:id="@+id/item_search_tv_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="辰东"
+            android:textColor="@color/textAssist"
+            android:textSize="@dimen/text_normal"/>
+        <TextView
+            android:id="@+id/item_search_tv_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="简介"
+            android:textColor="@color/textAssist"
+            android:textSize="@dimen/text_small"/>
+
+        <TextView
+            android:id="@+id/item_search_tv_source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="[棉花糖小说]"
+            android:textColor="@color/textAssist"
+            android:textSize="@dimen/text_small"/>
+
+    </LinearLayout>
+
+</LinearLayout>
