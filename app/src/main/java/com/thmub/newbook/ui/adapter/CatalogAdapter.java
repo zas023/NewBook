@@ -18,7 +18,7 @@ public class CatalogAdapter extends QuickAdapter<BookChapterBean> {
         return new CatalogHolder(currentSelected);
     }
 
-    public void setChapter(int pos){
+    public void setSelectedChapter(int pos){
         currentSelected = pos;
         notifyDataSetChanged();
     }

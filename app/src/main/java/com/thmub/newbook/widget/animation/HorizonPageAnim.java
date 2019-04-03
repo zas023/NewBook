@@ -142,7 +142,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
             case MotionEvent.ACTION_UP:
                 isRunning = false;
                 if (!isMove) {
-                    isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
+                    isNext = x > mScreenWidth / 2 || readSettingManager.getClickAllNext();
 
                     if (isNext) {
                         //判断是否下一页存在

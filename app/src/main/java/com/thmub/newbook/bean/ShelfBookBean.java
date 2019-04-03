@@ -57,18 +57,22 @@ public class ShelfBookBean implements Parcelable {
 
     @ToMany(referencedJoinProperty = "bookLink")
     private List<BookChapterBean> bookChapterList;
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 1521811562)
     private transient ShelfBookBeanDao myDao;
 
 
     @Generated(hash = 457399032)
     public ShelfBookBean(String link, String title, String author, String desc, String cover,
-            String source, String updated, String lastRead, Integer curChapter,
-            Integer curChapterPage, boolean isUpdate, boolean isLocal) {
+                         String source, String updated, String lastRead, Integer curChapter,
+                         Integer curChapterPage, boolean isUpdate, boolean isLocal) {
         this.link = link;
         this.title = title;
         this.author = author;
@@ -226,7 +230,7 @@ public class ShelfBookBean implements Parcelable {
     }
 
     public int getBookChapterListSize() {
-        return bookChapterList.size();
+        return getBookChapterList().size();
     }
 
     public BookChapterBean getChapter(int index) {
@@ -267,7 +271,9 @@ public class ShelfBookBean implements Parcelable {
         return bookChapterList;
     }
 
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    /**
+     * Resets a to-many relationship, making the next get call to query for a fresh result.
+     */
     @Generated(hash = 1077762221)
     public synchronized void resetBookChapterList() {
         bookChapterList = null;
@@ -341,7 +347,9 @@ public class ShelfBookBean implements Parcelable {
         dest.writeTypedList(bookChapterList);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 53859549)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;

@@ -61,7 +61,7 @@ public class ScrollPageAnim extends PageAnimation {
                 isRunning = false;
                 if (!isMove) {
                     //是否翻阅下一页。true表示翻到下一页，false表示上一页。
-                    boolean isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
+                    boolean isNext = x > mScreenWidth / 2 || readSettingManager.getClickAllNext();
                     if (isNext) {
                         startAnim(Direction.NEXT);
                     } else {

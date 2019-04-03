@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
-import com.thmub.newbook.manager.ReadBookControl;
+import com.thmub.newbook.manager.ReadSettingManager;
 import com.thmub.newbook.utils.BookShelfUtils;
 import com.thmub.newbook.utils.ScreenUtils;
 import com.thmub.newbook.utils.StringUtils;
@@ -78,12 +78,13 @@ public abstract class PageLoader {
     // 绘制结束的画笔
     private TextPaint mTextEndPaint;
     // 阅读器的配置选项
-    ReadBookControl readBookControl = ReadBookControl.getInstance();
+    ReadSettingManager readSettingManager = ReadSettingManager.getInstance();
     //缩进
     String indent;
 
     // 判断章节列表是否加载完成
     boolean isChapterListPrepare;
+    //是否关闭
     private boolean isClose;
     // 页面的翻页效果模式
     private PageAnimation.Mode mPageMode;
@@ -98,7 +99,9 @@ public abstract class PageLoader {
     private int mMarginBottom;
     private int mMarginLeft;
     private int mMarginRight;
+    //中间区域
     int contentMarginHeight;
+    //提示信息间距
     private int tipMarginTop;
     private int tipMarginBottom;
 
@@ -114,6 +117,7 @@ public abstract class PageLoader {
     //段落距离(基于行间距的额外距离)
     int mTextPara;
     int mTitlePara;
+    //排版
     private int textInterval;
     private int textPara;
     private int titleInterval;
@@ -125,9 +129,10 @@ public abstract class PageLoader {
     private float displayRightEnd;
     private float tipVisibleWidth;
 
+    //是否隐藏状态栏
     private boolean hideStatusBar;
+    //是否显示时间电池信息
     private boolean showTimeBattery;
-
     //电池的百分比
     private int mBatteryLevel;
 
@@ -165,11 +170,11 @@ public abstract class PageLoader {
      */
     private void initData() {
         // 获取配置参数
-        hideStatusBar = readBookControl.getHideStatusBar();
-        showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
-        mPageMode = PageAnimation.Mode.getPageMode(readBookControl.getPageMode());
+        hideStatusBar = readSettingManager.getHideStatusBar();
+        showTimeBattery = hideStatusBar && readSettingManager.getShowTimeBattery();
+        mPageMode = PageAnimation.Mode.getPageMode(readSettingManager.getPageMode());
         // 初始化参数
-        indent = StringUtils.repeat(StringUtils.halfToFull(" "), readBookControl.getIndent());
+        indent = StringUtils.repeat(StringUtils.halfToFull(" "), readSettingManager.getIndent());
         // 配置文字有关的参数
         setTextParams();
     }
@@ -180,19 +185,19 @@ public abstract class PageLoader {
     private void initPaint() {
         Typeface typeface;
         try {
-            if (!TextUtils.isEmpty(readBookControl.getFontPath())) {
-                typeface = Typeface.createFromFile(readBookControl.getFontPath());
+            if (!TextUtils.isEmpty(readSettingManager.getFontPath())) {
+                typeface = Typeface.createFromFile(readSettingManager.getFontPath());
             } else {
                 typeface = Typeface.SANS_SERIF;
             }
         } catch (Exception e) {
             Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
-            readBookControl.setReadBookFont(null);
+            readSettingManager.setReadBookFont(null);
             typeface = Typeface.SANS_SERIF;
         }
         // 绘制提示的画笔
         mTipPaint = new TextPaint();
-        mTipPaint.setColor(readBookControl.getTextColor());
+        mTipPaint.setColor(readSettingManager.getTextColor());
         mTipPaint.setTextAlign(Paint.Align.LEFT); // 绘制的起始点
         mTipPaint.setTextSize(ScreenUtils.spToPx(DEFAULT_TIP_SIZE)); // Tip默认的字体大小
         mTipPaint.setTypeface(Typeface.create(typeface, Typeface.NORMAL));
@@ -201,7 +206,7 @@ public abstract class PageLoader {
 
         // 绘制标题的画笔
         mTitlePaint = new TextPaint();
-        mTitlePaint.setColor(readBookControl.getTextColor());
+        mTitlePaint.setColor(readSettingManager.getTextColor());
         mTitlePaint.setTextSize(mTitleSize);
         mTitlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mTitlePaint.setTypeface(Typeface.create(typeface, Typeface.BOLD));
@@ -210,15 +215,15 @@ public abstract class PageLoader {
 
         // 绘制页面内容的画笔
         mTextPaint = new TextPaint();
-        mTextPaint.setColor(readBookControl.getTextColor());
+        mTextPaint.setColor(readSettingManager.getTextColor());
         mTextPaint.setTextSize(mTextSize);
-        int bold = readBookControl.getTextBold() ? Typeface.BOLD : Typeface.NORMAL;
+        int bold = readSettingManager.getTextBold() ? Typeface.BOLD : Typeface.NORMAL;
         mTextPaint.setTypeface(Typeface.create(typeface, bold));
         mTextPaint.setAntiAlias(true);
 
         // 绘制结束的画笔
         mTextEndPaint = new TextPaint();
-        mTextEndPaint.setColor(readBookControl.getTextColor());
+        mTextEndPaint.setColor(readSettingManager.getTextColor());
         mTextEndPaint.setTextSize(mTextEndSize);
         mTextEndPaint.setTypeface(Typeface.create(typeface, Typeface.NORMAL));
         mTextEndPaint.setAntiAlias(true);
@@ -245,14 +250,14 @@ public abstract class PageLoader {
 
         // 设置边距
         mMarginTop = hideStatusBar ?
-                ScreenUtils.dpToPx(readBookControl.getTipPaddingTop() + readBookControl.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
-                : ScreenUtils.dpToPx(readBookControl.getPaddingTop());
-        mMarginBottom = ScreenUtils.dpToPx(readBookControl.getTipPaddingBottom() + readBookControl.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
-        mMarginLeft = ScreenUtils.dpToPx(readBookControl.getPaddingLeft());
-        mMarginRight = ScreenUtils.dpToPx(readBookControl.getPaddingRight());
+                ScreenUtils.dpToPx(readSettingManager.getTipPaddingTop() + readSettingManager.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
+                : ScreenUtils.dpToPx(readSettingManager.getPaddingTop());
+        mMarginBottom = ScreenUtils.dpToPx(readSettingManager.getTipPaddingBottom() + readSettingManager.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
+        mMarginLeft = ScreenUtils.dpToPx(readSettingManager.getPaddingLeft());
+        mMarginRight = ScreenUtils.dpToPx(readSettingManager.getPaddingRight());
         contentMarginHeight = ScreenUtils.dpToPx(CONTENT_MARGIN_HEIGHT);
-        tipMarginTop = ScreenUtils.dpToPx(readBookControl.getTipPaddingTop() + DEFAULT_MARGIN_HEIGHT);
-        tipMarginBottom = ScreenUtils.dpToPx(readBookControl.getTipPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
+        tipMarginTop = ScreenUtils.dpToPx(readSettingManager.getTipPaddingTop() + DEFAULT_MARGIN_HEIGHT);
+        tipMarginBottom = ScreenUtils.dpToPx(readSettingManager.getTipPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
 
         Paint.FontMetrics fontMetrics = mTipPaint.getFontMetrics();
         float tipMarginTopHeight = (tipMarginTop + fontMetrics.top - fontMetrics.bottom) / 2;
@@ -260,14 +265,14 @@ public abstract class PageLoader {
         tipBottomTop = tipMarginTopHeight - fontMetrics.top;
         tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginBottomHeight;
         tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        tipMarginLeft = readBookControl.getTipPaddingLeft();
-        float tipMarginRight = readBookControl.getTipPaddingRight();
+        tipMarginLeft = readSettingManager.getTipPaddingLeft();
+        float tipMarginRight = readSettingManager.getTipPaddingRight();
         displayRightEnd = mDisplayWidth - tipMarginRight;
         tipVisibleWidth = mDisplayWidth - tipMarginLeft - tipMarginRight;
 
         // 获取内容显示位置的大小
         mVisibleWidth = mDisplayWidth - mMarginLeft - mMarginRight;
-        mVisibleHeight = readBookControl.getHideStatusBar()
+        mVisibleHeight = readSettingManager.getHideStatusBar()
                 ? mDisplayHeight - mMarginTop - mMarginBottom
                 : mDisplayHeight - mMarginTop - mMarginBottom - mPageView.getStatusBarHeight();
 
@@ -300,15 +305,15 @@ public abstract class PageLoader {
      */
     private void setTextParams() {
         // 文字大小
-        mTextSize = ScreenUtils.spToPx(readBookControl.getTextSize());
+        mTextSize = ScreenUtils.spToPx(readSettingManager.getTextSize());
         mTitleSize = mTextSize + ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
         mTextEndSize = mTextSize - ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
         // 行间距(大小为字体的一半)
-        mTextInterval = (int) (mTextSize * readBookControl.getLineMultiplier() / 2);
-        mTitleInterval = (int) (mTitleSize * readBookControl.getLineMultiplier() / 2);
+        mTextInterval = (int) (mTextSize * readSettingManager.getLineMultiplier() / 2);
+        mTitleInterval = (int) (mTitleSize * readSettingManager.getLineMultiplier() / 2);
         // 段落间距(大小为字体的高度)
-        mTextPara = (int) (mTextSize * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize() / 2);
-        mTitlePara = (int) (mTitleSize * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize() / 2);
+        mTextPara = (int) (mTextSize * readSettingManager.getLineMultiplier() * readSettingManager.getParagraphSize() / 2);
+        mTitlePara = (int) (mTitleSize * readSettingManager.getLineMultiplier() * readSettingManager.getParagraphSize() / 2);
     }
 
     /**
@@ -325,11 +330,11 @@ public abstract class PageLoader {
      * 设置页面样式
      */
     private void initPageStyle() {
-        mTipPaint.setColor(readBookControl.getTextColor());
-        mTitlePaint.setColor(readBookControl.getTextColor());
-        mTextPaint.setColor(readBookControl.getTextColor());
-        mBatteryPaint.setColor(readBookControl.getTextColor());
-        mTextEndPaint.setColor(readBookControl.getTextColor());
+        mTipPaint.setColor(readSettingManager.getTextColor());
+        mTitlePaint.setColor(readSettingManager.getTextColor());
+        mTextPaint.setColor(readSettingManager.getTextColor());
+        mBatteryPaint.setColor(readSettingManager.getTextColor());
+        mTextEndPaint.setColor(readSettingManager.getTextColor());
         mTipPaint.setAlpha(TIP_ALPHA);
         mBatteryPaint.setAlpha(TIP_ALPHA);
         mTextEndPaint.setAlpha(TIP_ALPHA);
@@ -496,7 +501,7 @@ public abstract class PageLoader {
      * 更新时间
      */
     public void updateTime() {
-        if (readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
+        if (readSettingManager.getHideStatusBar() && readSettingManager.getShowTimeBattery()) {
             if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawBackground(0);
             } else {
@@ -514,7 +519,7 @@ public abstract class PageLoader {
             return true;
         }
         mBatteryLevel = level;
-        if (readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
+        if (readSettingManager.getHideStatusBar() && readSettingManager.getShowTimeBattery()) {
             if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawBackground(0);
             } else if (mCurChapter != null) {
@@ -820,11 +825,11 @@ public abstract class PageLoader {
     private synchronized void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
-        if (!readBookControl.bgIsColor() && !readBookControl.bgBitmapIsNull()) {
+        if (!readSettingManager.bgIsColor() && !readSettingManager.bgBitmapIsNull()) {
             Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-            canvas.drawBitmap(readBookControl.getBgBitmap(), null, mDestRect, null);
+            canvas.drawBitmap(readSettingManager.getBgBitmap(), null, mDestRect, null);
         } else {
-            canvas.drawColor(readBookControl.getBgColor());
+            canvas.drawColor(readSettingManager.getBgColor());
         }
         drawBackground(canvas, txtChapter, txtPage);
     }
@@ -866,7 +871,7 @@ public abstract class PageLoader {
                     title = TextUtils.ellipsize(title, mTipPaint, tipLeft - tipDistance, TextUtils.TruncateAt.END).toString();
                     canvas.drawText(title, tipMarginLeft, tipBottomBot, mTipPaint);
                 }
-                if (readBookControl.getShowLine()) {
+                if (readSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = mDisplayHeight - tipMarginBottom;
                     canvas.drawRect(tipMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
@@ -890,7 +895,7 @@ public abstract class PageLoader {
                     float progressTipBottom = showTimeBattery ? tipBottomTop : tipBottomBot;
                     canvas.drawText(progress, progressTipLeft, progressTipBottom, mTipPaint);
                 }
-                if (readBookControl.getShowLine()) {
+                if (readSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = tipMarginTop - 2;
                     canvas.drawRect(tipMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
@@ -1094,8 +1099,8 @@ public abstract class PageLoader {
             float topi = top;
             int strLength = 0;
 //            isLight = ReadAloudService.running && readAloudParagraph == 0;
-//            mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
-            mTitlePaint.setColor(readBookControl.getTextColor());
+//            mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readSettingManager.getTextColor());
+            mTitlePaint.setColor(readSettingManager.getTextColor());
             for (int i = 0; i < page.titleLines; i++) {
                 if (top > totalHeight) {
                     break;
@@ -1123,8 +1128,8 @@ public abstract class PageLoader {
                 strLength = strLength + str.length();
                 int paragraphLength = page.position == 0 ? strLength : chapter.getPageLength(page.position - 1) + strLength;
 //                isLight = ReadAloudService.running && readAloudParagraph == chapter.getParagraphIndex(paragraphLength);
-//                mTextPaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
-                mTextPaint.setColor(readBookControl.getTextColor());
+//                mTextPaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readSettingManager.getTextColor());
+                mTextPaint.setColor(readSettingManager.getTextColor());
                 if (top > totalHeight) {
                     break;
                 } else if (top > startHeight) {
@@ -1276,7 +1281,7 @@ public abstract class PageLoader {
         } else {
             float top = contentMarginHeight - fontMetrics.ascent;
             if (mPageMode != PageAnimation.Mode.SCROLL) {
-                top += readBookControl.getHideStatusBar() ? mMarginTop : mPageView.getStatusBarHeight() + mMarginTop;
+                top += readSettingManager.getHideStatusBar() ? mMarginTop : mPageView.getStatusBarHeight() + mMarginTop;
             }
 
             //对标题进行绘制
@@ -1287,8 +1292,8 @@ public abstract class PageLoader {
                 str = txtPage.lines.get(i);
                 strLength = strLength + str.length();
 //                isLight = ReadAloudService.running && readAloudParagraph == 0;
-//                mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
-                mTitlePaint.setColor(readBookControl.getTextColor());
+//                mTitlePaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readSettingManager.getTextColor());
+                mTitlePaint.setColor(readSettingManager.getTextColor());
 
                 //进行绘制
                 canvas.drawText(str, mDisplayWidth / 2f, top, mTitlePaint);
@@ -1311,8 +1316,8 @@ public abstract class PageLoader {
                 strLength = strLength + str.length();
                 int paragraphLength = txtPage.position == 0 ? strLength : txtChapter.getPageLength(txtPage.position - 1) + strLength;
 //                isLight = ReadAloudService.running && readAloudParagraph == txtChapter.getParagraphIndex(paragraphLength);
-//                mTextPaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readBookControl.getTextColor());
-                mTitlePaint.setColor(readBookControl.getTextColor());
+//                mTextPaint.setColor(isLight ? ThemeStore.accentColor(mContext) : readSettingManager.getTextColor());
+                mTitlePaint.setColor(readSettingManager.getTextColor());
                 Layout tempLayout = new StaticLayout(str, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
                 float width = StaticLayout.getDesiredWidth(str, tempLayout.getLineStart(0), tempLayout.getLineEnd(0), mTextPaint);
                 if (needScale(str)) {
@@ -1494,7 +1499,6 @@ public abstract class PageLoader {
     private void updateTextChapter(TxtChapter txtChapter) {
         Log.i(TAG, "--------------------------------updateTextChapter   " + txtChapter.getPosition() + "  " + mCurChapterPos);
         if (txtChapter.getPosition() == mCurChapterPos - 1) {
-            Log.i(TAG, "--------------------------------updateTextChapter1");
             mPreChapter = txtChapter;
             if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawContent(-1);
@@ -1502,13 +1506,11 @@ public abstract class PageLoader {
                 mPageView.drawPage(-1);
             }
         } else if (txtChapter.getPosition() == mCurChapterPos) {
-            Log.i(TAG, "--------------------------------updateTextChapter2");
             mCurChapter = txtChapter;
             reSetPage();
             chapterChangeCallback();
             finishPaging(PageAnimation.Direction.NONE);
         } else if (txtChapter.getPosition() == mCurChapterPos + 1) {
-            Log.i(TAG, "--------------------------------updateTextChapter3");
             mNextChapter = txtChapter;
             if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawContent(1);
@@ -1525,7 +1527,7 @@ public abstract class PageLoader {
             canvas.drawText(indent, x, top, paint);
             float bw = StaticLayout.getDesiredWidth(indent, paint);
             x += bw;
-            line = line.substring(readBookControl.getIndent());
+            line = line.substring(readSettingManager.getIndent());
         }
         int gapCount = line.length() - 1;
         int i = 0;
@@ -1579,6 +1581,9 @@ public abstract class PageLoader {
         mPreChapter = null;
         mCurChapter = null;
         mNextChapter = null;
+
+        //通知gc
+        System.gc();
     }
 
     public boolean isClose() {

@@ -8,7 +8,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
 
-import com.thmub.newbook.manager.ReadBookControl;
+import com.thmub.newbook.manager.ReadSettingManager;
 
 import androidx.annotation.NonNull;
 
@@ -21,7 +21,7 @@ public abstract class PageAnimation {
     static final int animationSpeed = 300;
     //正在使用的View
     protected View mView;
-    protected ReadBookControl readBookControl = ReadBookControl.getInstance();
+    protected ReadSettingManager readSettingManager = ReadSettingManager.getInstance();
     //滑动装置
     Scroller mScroller;
     //监听器

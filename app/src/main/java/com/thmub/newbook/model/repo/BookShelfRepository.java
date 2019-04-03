@@ -1,5 +1,6 @@
 package com.thmub.newbook.model.repo;
 
+import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.model.dao.BookChapterBeanDao;
@@ -23,6 +24,7 @@ public class BookShelfRepository {
     private static volatile BookShelfRepository sInstance;
     private DaoSession mSession;
     private ShelfBookBeanDao mShelfBookDao;
+    private BookChapterBeanDao mBookChapterDao;
 
     private BookShelfRepository() {
         mSession = DaoDbHelper.getInstance().getSession();
@@ -98,6 +100,17 @@ public class BookShelfRepository {
         return mShelfBookDao.queryBuilder()
                 .orderDesc(ShelfBookBeanDao.Properties.LastRead)
                 .list();
+    }
+
+    /**
+     * 获取书籍所有章节
+     *
+     * @param book
+     * @return
+     */
+    public List<BookChapterBean> getChapters(ShelfBookBean book) {
+        book.__setDaoSession(mSession);
+        return book.getBookChapterList();
     }
 
     /**************************Delete************************************/

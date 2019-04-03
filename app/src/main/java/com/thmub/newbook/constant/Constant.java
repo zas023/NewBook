@@ -13,4 +13,9 @@ public class Constant {
     public static String BOOK_CACHE_PATH = FileUtils.getCachePath()+File.separator + "book_cache"+ File.separator ;
     //文件阅读记录保存的路径
     public static String BOOK_RECORD_PATH = FileUtils.getCachePath() + File.separator + "book_record" + File.separator;
+
+    //Book Date Convert Format
+    public static final String FORMAT_BOOK_DATE = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String FORMAT_TIME = "HH:mm";
+    public static final String FORMAT_FILE_DATE = "yyyy-MM-dd";
 }

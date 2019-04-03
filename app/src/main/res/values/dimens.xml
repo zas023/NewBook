@@ -40,4 +40,5 @@
     <!--read setting-->
     <dimen name="read_setting_divider">20dp</dimen>
     <dimen name="read_setting_btn_height">35dp</dimen>
+    <dimen name="read_setting_btn_width">25dp</dimen>
 </resources>

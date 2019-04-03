@@ -60,6 +60,39 @@
         <item name="android:dividerHeight">@dimen/divider_line</item>
     </style>
 
+    <!--animation-->
+    <style name="anim_slide_bottom_in_out" parent="android:Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/slide_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_bottom_out</item>
+    </style>
+
+    <style name="anim_slide_left_in_right_out" parent="android:Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/slide_left_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_right_out</item>
+    </style>
+
+    <style name="anim_slide_right_in_left_out" parent="android:Animation.Dialog">
+        <item name="android:windowExitAnimation">@anim/slide_right_out</item>
+        <item name="android:windowEnterAnimation">@anim/slide_left_in</item>
+    </style>
+
+    <!--Dialog-->
+    <style name="CommonDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--必须要加上这句才能实现真正的半透明，-->
+        <item name="android:windowIsTranslucent">false</item>
+        <!--直接写windowEnter或者windowExit 是无效的-->Re
+        <item name="android:windowAnimationStyle">@style/anim_slide_left_in_right_out</item>
+    </style>
+
+    <style name="ReadSettingDialog" parent="CommonDialog">
+        <item name="android:windowAnimationStyle">@style/anim_slide_bottom_in_out</item>
+    </style>
+
 
     <!--BookDetail-->
     <style name="BottomNavigationViewTheme" parent="AppTheme" />

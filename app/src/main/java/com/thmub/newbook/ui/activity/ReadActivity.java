@@ -1,7 +1,10 @@
 package com.thmub.newbook.ui.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -16,24 +19,31 @@ import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
-import com.thmub.newbook.manager.ReadBookControl;
+import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.manager.ReadSettingManager;
+import com.thmub.newbook.model.repo.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
 import com.thmub.newbook.ui.adapter.CatalogAdapter;
+import com.thmub.newbook.ui.dialog.ReadSettingDialog;
 import com.thmub.newbook.utils.BatteryUtils;
+import com.thmub.newbook.utils.StringUtils;
 import com.thmub.newbook.utils.SystemBarUtils;
 import com.thmub.newbook.utils.UiUtils;
+import com.thmub.newbook.widget.animation.PageAnimation;
 import com.thmub.newbook.widget.page.PageLoader;
 import com.thmub.newbook.widget.page.PageView;
 
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -49,15 +59,13 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     /****************************Constant*********************************/
     public static final String EXTRA_BOOK = "extra_book";
+    public static final String EXTRA_IS_COLLECTED = "extra_is_collected";
 
     /*****************************View***********************************/
     @BindView(R.id.read_drawer)
     DrawerLayout readDrawer;
     @BindView(R.id.read_rv_catalog)
     RecyclerView readRvCatalog;
-    //顶部菜单
-    @BindView(R.id.read_tv_brief)
-    TextView readTvBrief;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.read_abl_top_menu)
@@ -84,6 +92,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     LinearLayout readLlBottomMenu;
 
 
+    private ReadSettingDialog mSettingDialog;
     /****************************Variable*********************************/
     private ShelfBookBean mShelfBook;
 
@@ -93,11 +102,12 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private Animation mBottomInAnim;
     private Animation mBottomOutAnim;
 
-    private ReadBookControl readBookControl = ReadBookControl.getInstance();
+    private ReadSettingManager readSettingManager = ReadSettingManager.getInstance();
 
     private CatalogAdapter mAdapter;
 
-    private boolean isFullScreen=true;
+    private boolean isFullScreen = true;
+    private boolean isCollected;
 
     /*************************Public Method*******************************/
 
@@ -112,7 +122,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         mShelfBook = getIntent().getParcelableExtra(EXTRA_BOOK);
+        isCollected = getIntent().getBooleanExtra(EXTRA_IS_COLLECTED, false);
         mPageLoader = pageView.getPageLoader(this, mShelfBook);
+        //重置书籍更新提示状态
+        mShelfBook.setIsUpdate(false);
     }
 
     /**
@@ -128,7 +141,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     @Override
     protected void setUpToolbar(Toolbar toolbar) {
         super.setUpToolbar(toolbar);
-//        getActionBar().setTitle(mShelfBook.getTitle());
+        getSupportActionBar().setTitle(mShelfBook.getTitle());
         ImmersionBar.with(this).init();
     }
 
@@ -139,10 +152,14 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mAdapter = new CatalogAdapter();
         readRvCatalog.setLayoutManager(new LinearLayoutManager(mContext));
         readRvCatalog.setAdapter(mAdapter);
-        readRvCatalog.setBackground(readBookControl.getTextBackground(this));
+        readRvCatalog.setBackground(readSettingManager.getTextBackground(this));
+
         // PageView
-        pageView.setBackground(readBookControl.getTextBackground(this));
+        pageView.setBackground(readSettingManager.getTextBackground(this));
         mPageLoader.updateBattery(BatteryUtils.getLevel(this));
+
+        //Dialog
+        mSettingDialog = new ReadSettingDialog(this);
 
         // Menu
         initTopMenu();
@@ -163,7 +180,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
      */
     private void initBottomMenu() {
         //判断是否全屏
-        if (ReadSettingManager.getInstance().isFullScreen()) {
+        if (ReadSettingManager.getInstance().getHideStatusBar()) {
             //还需要设置mBottomMenu的底部高度
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) readLlBottomMenu.getLayoutParams();
             params.bottomMargin = UiUtils.getNavigationBarHeight();
@@ -180,10 +197,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     @Override
     protected void initClick() {
         super.initClick();
+        //pageLoader
         mPageLoader.setOnPageChangeListener(new PageLoader.OnPageChangeListener() {
             @Override
             public void onChapterChange(int pos) {
-                mAdapter.setChapter(pos);
+                mAdapter.setSelectedChapter(pos);
             }
 
             @Override
@@ -198,10 +216,12 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
             @Override
             public void onPageChange(int chapterIndex, int pageIndex, boolean resetReadAloud) {
-
+                Log.i(TAG,chapterIndex+"  "+pageIndex);
+                mShelfBook.setCurChapter(chapterIndex);
+                mShelfBook.setCurChapterPage(pageIndex);
             }
         });
-
+        //pageView
         pageView.setTouchListener(new PageView.TouchListener() {
             @Override
             public boolean onTouch() {
@@ -214,6 +234,167 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             }
         });
 
+        //catalog
+        mAdapter.setOnItemClickListener((view, pos) -> {
+            mPageLoader.skipToChapter(pos, 0);
+        });
+
+        //监听底部设置菜单
+        mSettingDialog.setOnDismissListener(
+                dialog -> hideSystemBar()
+        );
+
+        //dialog
+        mSettingDialog.setOnChangeListener(new ReadSettingDialog.OnSettingChangeListener() {
+            @Override
+            public void onPageModeChange() {
+                if (mPageLoader != null) {
+                    mPageLoader.setPageMode(PageAnimation.Mode.getPageMode(readSettingManager.getPageMode()));
+                }
+            }
+
+            @Override
+            public void OnTextSizeChange() {
+                if (mPageLoader != null) {
+                    mPageLoader.setTextSize();
+                }
+            }
+
+            @Override
+            public void OnMarginChange() {
+
+            }
+
+
+            @Override
+            public void onBgChange() {
+                readSettingManager.initTextDrawableIndex();
+                pageView.setBackground(readSettingManager.getTextBackground(mContext));
+                if (mPageLoader != null) {
+                    mPageLoader.refreshUi();
+                }
+            }
+
+            @Override
+            public void refresh() {
+                if (mPageLoader != null) {
+                    mPageLoader.refreshUi();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void processLogic() {
+        super.processLogic();
+        mPageLoader.refreshChapterList();
+    }
+
+
+    /**************************Transaction********************************/
+    @Override
+    protected ReadContract.Presenter bindPresenter() {
+        return new ReadPresenter();
+    }
+
+    @Override
+    public void finishLoadContent(String content) {
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void complete() {
+
+    }
+
+    /*********************************Event*************************************/
+    /**
+     * 监听返回键
+     * 退出前检提示，以便保存记录
+     */
+    @Override
+    public void onBackPressed() {
+        if (readAblTopMenu.getVisibility() == View.VISIBLE) {
+            //非全屏下才收缩，全屏下直接退出
+            toggleMenu(true);
+            return;
+        } else if (mSettingDialog.isShowing()) {
+            mSettingDialog.dismiss();
+            return;
+        } else if (readDrawer.isDrawerOpen(GravityCompat.START)) {
+            readDrawer.closeDrawer(GravityCompat.START);
+            return;
+        }
+        if (isCollected) {
+            //设置阅读时间
+            mShelfBook.setLastRead(StringUtils.
+                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+            BookShelfRepository.getInstance()
+                    .saveShelfBook(mShelfBook);
+
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle("加入书架")
+                    .setMessage("喜欢本书就加入书架吧")
+                    .setPositiveButton("确定", (dialog, which) -> {
+                        //设置为已收藏
+                        isCollected = true;
+                        //设置阅读时间
+                        mShelfBook.setLastRead(StringUtils.
+                                dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+                        //保存
+                        BookShelfRepository.getInstance()
+                                .saveShelfBook(mShelfBook);
+                    })
+                    .setNegativeButton("取消", (dialog, which) -> {
+
+                    }).create().show();
+        }
+        exit();
+    }
+
+    //退出
+    private void exit() {
+        //关闭pageLoader,防止内存泄漏
+        mPageLoader.closeBook();
+        //返回给BookDetail。
+        setResult(Activity.RESULT_OK, new Intent().putExtra(BookDetailActivity.RESULT_IS_COLLECTED, isCollected));
+        //退出
+        finish();
+    }
+
+    @OnClick({R.id.read_tv_category, R.id.read_tv_setting, R.id.read_tv_pre_chapter
+            , R.id.read_tv_next_chapter, R.id.read_tv_night_mode, R.id.read_tv_download})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.read_tv_category: //目录
+                //移动到指定位置
+
+                //切换菜单
+                toggleMenu(true);
+                //打开侧滑动栏
+                readDrawer.openDrawer(GravityCompat.START);
+                break;
+            case R.id.read_tv_download:  //下载
+                break;
+            case R.id.read_tv_setting:  //设置
+                toggleMenu(false);
+                mSettingDialog.show();
+                break;
+            case R.id.read_tv_pre_chapter:  //前一章
+                mPageLoader.skipToPreChapter();
+                break;
+            case R.id.read_tv_next_chapter:  //后一章
+                mPageLoader.skipToNextChapter();
+                break;
+            case R.id.read_tv_night_mode:  //夜间模式
+
+                break;
+        }
     }
 
     /**
@@ -226,11 +407,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         if (readAblTopMenu.getVisibility() == VISIBLE) {
             toggleMenu(true);
             return true;
+        } else if (mSettingDialog.isShowing()) {
+            mSettingDialog.dismiss();
+            return true;
         }
-//        else if (mSettingDialog.isShowing()) {
-//            mSettingDialog.dismiss();
-//            return true;
-//        }
         return false;
     }
 
@@ -290,31 +470,4 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         }
     }
 
-
-    @Override
-    protected void processLogic() {
-        super.processLogic();
-        mPageLoader.refreshChapterList();
-    }
-
-
-    /**************************Transaction********************************/
-    @Override
-    protected ReadContract.Presenter bindPresenter() {
-        return new ReadPresenter();
-    }
-
-    @Override
-    public void finishLoadContent(String content) {
-    }
-
-    @Override
-    public void showError() {
-
-    }
-
-    @Override
-    public void complete() {
-
-    }
 }

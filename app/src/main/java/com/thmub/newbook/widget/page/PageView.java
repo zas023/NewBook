@@ -13,7 +13,7 @@ import android.view.ViewConfiguration;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.thmub.newbook.bean.ShelfBookBean;
-import com.thmub.newbook.manager.ReadBookControl;
+import com.thmub.newbook.manager.ReadSettingManager;
 import com.thmub.newbook.utils.ScreenUtils;
 import com.thmub.newbook.utils.SharedPreUtils;
 import com.thmub.newbook.utils.SnackbarUtils;
@@ -48,7 +48,7 @@ public class PageView extends View {
     private boolean isMove = false;
     private boolean actionFromEdge = false;
     // 初始化参数
-    private ReadBookControl readBookControl = ReadBookControl.getInstance();
+    private ReadSettingManager readSettingManager = ReadSettingManager.getInstance();
     // 是否允许点击
     private boolean canTouch = true;
     // 唤醒菜单的区域
@@ -133,7 +133,7 @@ public class PageView extends View {
     void setPageMode(PageAnimation.Mode pageMode, int marginTop, int marginBottom) {
         //视图未初始化的时候，禁止调用
         if (mViewWidth == 0 || mViewHeight == 0 || mPageLoader == null) return;
-        if (!readBookControl.getHideStatusBar()) {
+        if (!readSettingManager.getHideStatusBar()) {
             marginTop = marginTop + statusBarHeight;
         }
         switch (pageMode) {
@@ -372,7 +372,7 @@ public class PageView extends View {
                         return true;
                     }
 
-                    if (!readBookControl.getCanClickTurn() || isRunning()) {
+                    if (!readSettingManager.getCanClickTurn() || isRunning()) {
                         return true;
                     }
 

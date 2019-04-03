@@ -36,6 +36,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         implements BookDetailContract.View {
 
     /****************************Constant*********************************/
+    public static final String RESULT_IS_COLLECTED = "result_is_collected";
     public static final String EXTRA_BOOK = "extra_book";
 
     /*****************************View***********************************/
@@ -168,7 +169,8 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
                 break;
             case R.id.fl_open_book:  //开始阅读
                 startActivity(new Intent(mContext, ReadActivity.class)
-                        .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook));
+                        .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook)
+                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, isCollected));
                 break;
         }
     }

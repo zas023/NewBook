@@ -65,7 +65,7 @@ class ChapterProvider {
         List<String> lines = new ArrayList<>();
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
         int titleLinesCount = 0;
-        boolean showTitle = pageLoader.readBookControl.getShowTitle(); // 是否展示标题
+        boolean showTitle = pageLoader.readSettingManager.getShowTitle(); // 是否展示标题
         String paragraph = null;
         if (showTitle) {
             //paragraph = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), chapter.getDurChapterName());

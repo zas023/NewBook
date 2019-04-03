@@ -18,6 +18,9 @@ public interface BookShelfContract {
     interface Presenter extends BaseContract.BasePresenter<View> {
         //加载目录
         void loadShelfBook();
+
+        //检查更新
+        void checkBookUpdate(List<ShelfBookBean> items);
     }
 
 }
