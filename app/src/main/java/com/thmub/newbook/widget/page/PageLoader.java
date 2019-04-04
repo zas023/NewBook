@@ -1572,7 +1572,9 @@ public abstract class PageLoader {
      * 关闭书本
      */
     public void closeBook() {
-        compositeDisposable.dispose();
+        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
         compositeDisposable = null;
 
         isChapterListPrepare = false;
@@ -1582,8 +1584,6 @@ public abstract class PageLoader {
         mCurChapter = null;
         mNextChapter = null;
 
-        //通知gc
-        System.gc();
     }
 
     public boolean isClose() {

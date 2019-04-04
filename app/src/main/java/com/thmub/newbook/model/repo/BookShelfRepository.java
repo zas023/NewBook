@@ -52,8 +52,7 @@ public class BookShelfRepository {
     public void saveShelfBook(ShelfBookBean book) {
         if (book.getBookChapterList() != null) {
             // 存储BookChapterBean
-            mSession.getBookChapterBeanDao()
-                    .insertOrReplaceInTx(book.getBookChapterList());
+            mSession.getBookChapterBeanDao().insertOrReplaceInTx(book.getBookChapterList());
         }
         //存储BookShelfBean
         mShelfBookDao.insertOrReplace(book);

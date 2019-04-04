@@ -1,6 +1,7 @@
 package com.thmub.newbook.presenter.contract;
 
 import com.thmub.newbook.base.BaseContract;
+import com.thmub.newbook.bean.ShelfBookBean;
 
 /**
  * Created by Zhouas666 on 2019-03-28
@@ -9,12 +10,12 @@ import com.thmub.newbook.base.BaseContract;
 public interface ReadContract {
 
     interface View extends BaseContract.BaseView {
-        void finishLoadContent(String content);
+        void finishSaveRecord();
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {
 
-        void loadContent(String chapter, String sourceId);
+        void saveReadRecord(ShelfBookBean bookBean);
     }
 
 }

@@ -298,7 +298,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     }
 
     @Override
-    public void finishLoadContent(String content) {
+    public void finishSaveRecord() {
+        exit();
     }
 
     @Override
@@ -335,7 +336,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
             BookShelfRepository.getInstance()
                     .saveShelfBook(mShelfBook);
-
+            //mPresenter.saveReadRecord(mShelfBook);
+            exit();
         } else {
             new AlertDialog.Builder(this)
                     .setTitle("加入书架")
@@ -349,22 +351,21 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                         //保存
                         BookShelfRepository.getInstance()
                                 .saveShelfBook(mShelfBook);
+                        //mPresenter.saveReadRecord(mShelfBook);
+                        exit();
                     })
                     .setNegativeButton("取消", (dialog, which) -> {
-
+                        exit();
                     }).create().show();
         }
-        exit();
     }
 
     //退出
     private void exit() {
-        //关闭pageLoader,防止内存泄漏
-        mPageLoader.closeBook();
         //返回给BookDetail。
         setResult(Activity.RESULT_OK, new Intent().putExtra(BookDetailActivity.RESULT_IS_COLLECTED, isCollected));
         //退出
-        finish();
+        super.onBackPressed();
     }
 
     @OnClick({R.id.read_tv_category, R.id.read_tv_setting, R.id.read_tv_pre_chapter
@@ -470,4 +471,22 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         }
     }
 
+
+    /******************************Life Cycle********************************/
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mPageLoader != null) {
+            mPageLoader.closeBook();
+            mPageLoader = null;
+        }
+    }
+
+    /**
+     * 结束
+     */
+    @Override
+    public void finish() {
+        super.finish();
+    }
 }

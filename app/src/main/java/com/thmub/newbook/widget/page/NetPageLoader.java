@@ -41,7 +41,7 @@ public class NetPageLoader extends PageLoader {
 
     NetPageLoader(PageView pageView, ShelfBookBean bookShelfBean) {
         super(pageView, bookShelfBean);
-        executorService = Executors.newFixedThreadPool(20);
+        executorService = Executors.newFixedThreadPool(10);
         scheduler = Schedulers.from(executorService);
     }
 
@@ -104,55 +104,13 @@ public class NetPageLoader extends PageLoader {
      * @param chapterIndex
      */
     private synchronized void loadChapterContent(final int chapterIndex) {
-//        if (downloadingChapterList.size() >= 20) return;
-//        if (dealDownloadingList(listHandle.CHECK, bookShelfBean.getChapter(chapterIndex).getChapterLink()))
-//            return;
+        if (downloadingChapterList.size() >= 20) return;
+        if (dealDownloadingList(listHandle.CHECK, bookShelfBean.getChapter(chapterIndex).getChapterLink()))
+            return;
         if (null != bookShelfBean && bookShelfBean.getBookChapterListSize() > 0) {
 
-            SourceModel.getInstance(bookShelfBean.getSource())
-                    .parseContent(bookShelfBean.getChapter(chapterIndex))
-                    .timeout(30, TimeUnit.SECONDS)
-                    .subscribeOn(scheduler)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<BookContentBean>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            compositeDisposable.add(d);
-                        }
-
-                        @Override
-                        public void onNext(BookContentBean bookContentBean) {
-                            BookManager.getInstance()
-                                    .saveChapter(bookShelfBean.getTitle() + "-" + bookShelfBean.getSource()
-                                            , bookShelfBean.getChapter(chapterIndex).getChapterIndex()
-                                            , bookShelfBean.getChapter(chapterIndex).getChapterTitle()
-                                            , bookContentBean.getChapterContent());
-//                            dealDownloadingList(listHandle.REMOVE, bookContentBean.getChapterLink());
-                            finishContent(bookContentBean.getChapterIndex());
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            //dealDownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getChapterLink());
-                            if (chapterIndex == mCurChapterPos) {
-                                showChapterError(e.getMessage());
-                            }
-                        }
-
-                        @Override
-                        public void onComplete() {
-                        }
-                    });
-//
-//            Observable.create((ObservableOnSubscribe<Integer>) e -> {
-//                if (shouldRequestChapter(chapterIndex)) {
-//                    dealDownloadingList(listHandle.ADD, bookShelfBean.getChapter(chapterIndex).getChapterLink());
-//                    e.onNext(chapterIndex);
-//                }
-//                e.onComplete();
-//            })
-//                    .flatMap(index -> SourceModel.getInstance(bookShelfBean.getSource())
-//                            .parseContent(bookShelfBean.getChapter(chapterIndex)))
+//            SourceModel.getInstance(bookShelfBean.getSource())
+//                    .parseContent(bookShelfBean.getChapter(chapterIndex))
 //                    .timeout(30, TimeUnit.SECONDS)
 //                    .subscribeOn(scheduler)
 //                    .observeOn(AndroidSchedulers.mainThread())
@@ -169,13 +127,13 @@ public class NetPageLoader extends PageLoader {
 //                                            , bookShelfBean.getChapter(chapterIndex).getChapterIndex()
 //                                            , bookShelfBean.getChapter(chapterIndex).getChapterTitle()
 //                                            , bookContentBean.getChapterContent());
-//                            dealDownloadingList(listHandle.REMOVE, bookContentBean.getChapterLink());
+////                            dealDownloadingList(listHandle.REMOVE, bookContentBean.getChapterLink());
 //                            finishContent(bookContentBean.getChapterIndex());
 //                        }
 //
 //                        @Override
 //                        public void onError(Throwable e) {
-//                            dealDownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getChapterLink());
+//                            //dealDownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getChapterLink());
 //                            if (chapterIndex == mCurChapterPos) {
 //                                showChapterError(e.getMessage());
 //                            }
@@ -185,6 +143,48 @@ public class NetPageLoader extends PageLoader {
 //                        public void onComplete() {
 //                        }
 //                    });
+
+            Observable.create((ObservableOnSubscribe<Integer>) e -> {
+                if (shouldRequestChapter(chapterIndex)) {
+                    dealDownloadingList(listHandle.ADD, bookShelfBean.getChapter(chapterIndex).getChapterLink());
+                    e.onNext(chapterIndex);
+                }
+                e.onComplete();
+            })
+                    .flatMap(index -> SourceModel.getInstance(bookShelfBean.getSource())
+                            .parseContent(bookShelfBean.getChapter(chapterIndex)))
+                    .timeout(30, TimeUnit.SECONDS)
+                    .subscribeOn(scheduler)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<BookContentBean>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
+                        }
+
+                        @Override
+                        public void onNext(BookContentBean bookContentBean) {
+                            BookManager.getInstance()
+                                    .saveChapter(bookShelfBean.getTitle() + "-" + bookShelfBean.getSource()
+                                            , bookShelfBean.getChapter(chapterIndex).getChapterIndex()
+                                            , bookShelfBean.getChapter(chapterIndex).getChapterTitle()
+                                            , bookContentBean.getChapterContent());
+                            dealDownloadingList(listHandle.REMOVE, bookContentBean.getChapterLink());
+                            finishContent(bookContentBean.getChapterIndex());
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            dealDownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getChapterLink());
+                            if (chapterIndex == mCurChapterPos) {
+                                showChapterError(e.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onComplete() {
+                        }
+                    });
         }
     }
 
@@ -253,7 +253,7 @@ public class NetPageLoader extends PageLoader {
      */
     @Override
     void parseCurChapter() {
-        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, bookShelfBean.getBookChapterListSize()); i++) {
+        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 2, bookShelfBean.getBookChapterListSize()); i++) {
             loadChapterContent(i);
         }
         super.parseCurChapter();
@@ -264,7 +264,8 @@ public class NetPageLoader extends PageLoader {
      */
     @Override
     void parseNextChapter() {
-        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, bookShelfBean.getBookChapterListSize()); i++) {
+        //接下来的两章节
+        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 2, bookShelfBean.getBookChapterListSize()); i++) {
             loadChapterContent(i);
         }
         super.parseNextChapter();
