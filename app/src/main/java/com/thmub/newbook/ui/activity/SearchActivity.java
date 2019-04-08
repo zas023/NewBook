@@ -3,6 +3,7 @@ package com.thmub.newbook.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseActivity;
@@ -10,6 +11,7 @@ import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.model.SearchEngine;
 import com.thmub.newbook.model.repo.BookSourceRepository;
 import com.thmub.newbook.ui.adapter.SearchBookAdapter;
+import com.thmub.newbook.utils.SnackbarUtils;
 import com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView;
 
 import java.util.List;
@@ -27,15 +29,25 @@ import butterknife.BindView;
  */
 public class SearchActivity extends BaseActivity {
 
+
+
+    /****************************Constant*********************************/
+    public final static String RESULT_IS_CHANGED = "result_is_changed";
+    private final static int REQUEST_CODE = 1;
+
+
+    /****************************View*********************************/
     @BindView(R.id.search_rv_content)
     ScrollRefreshRecyclerView searchRvContent;
     @BindView(R.id.search_sv)
     SearchView searchView;
 
+    /****************************Variable*********************************/
     private SearchBookAdapter mAdapter;
 
     private SearchEngine mSearchEngine;
 
+    /****************************Initialization*********************************/
     @Override
     protected int getLayoutId() {
         return R.layout.activity_search;
@@ -120,16 +132,41 @@ public class SearchActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void processLogic() {
-        super.processLogic();
-    }
-
-
+    /************************************Event**************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_book_search, menu);
         return true;
+    }
+
+    /**
+     * 导航栏菜单点击事件
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_source:
+                startActivityForResult(new Intent(this, BookSourceActivity.class),REQUEST_CODE);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode){
+                case REQUEST_CODE:
+                    //查询初始化搜书引擎
+                    if (data.getBooleanExtra(RESULT_IS_CHANGED,false))
+                        mSearchEngine.initSearchEngine(BookSourceRepository.getInstance().getAllSelectedBookSource());
+                    break;
+            }
+        }
     }
 
 

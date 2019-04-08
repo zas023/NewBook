@@ -9,6 +9,7 @@ import com.thmub.newbook.ui.adapter.holder.SearchBookHolder;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,8 +52,17 @@ public class SearchBookAdapter extends QuickAdapter<BookSearchBean> {
             for (BookSearchBean temp : bookSearchBeansAdd) {
                 mList.add(temp);
             }
-
-            activityRef.get().runOnUiThread(()->{
+            //排序，基于最符合关键字的搜书结果应该是最短的
+            //TODO ;这里只做了简单的比较排序，还需要继续完善
+            Collections.sort(mList, (o1, o2) -> {
+                if (o1.getTitle().length() < o2.getTitle().length())
+                    return -1;
+                if (o1.getTitle().length() == o2.getTitle().length())
+                    return 0;
+                return 1;
+            });
+            //更新
+            activityRef.get().runOnUiThread(() -> {
                 notifyDataSetChanged();
             });
         }

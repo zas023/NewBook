@@ -1,7 +1,10 @@
 package com.thmub.newbook.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,10 +19,13 @@ import com.thmub.newbook.model.repo.BookShelfRepository;
 import com.thmub.newbook.presenter.BookDetailPresenter;
 import com.thmub.newbook.presenter.contract.BookDetailContract;
 import com.thmub.newbook.ui.adapter.BookDetailAdapter;
+import com.thmub.newbook.utils.SnackbarUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,7 +62,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     TextView bookDetailTvOpen;
 
     /****************************Variable*********************************/
-    private BookSearchBean bookBean;
+    private BookSearchBean mSearchBook;
     private ShelfBookBean mShelfBook;
 
     private boolean isCollected;
@@ -73,11 +79,11 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
-        bookBean = getIntent().getParcelableExtra(EXTRA_BOOK);
+        mSearchBook = getIntent().getParcelableExtra(EXTRA_BOOK);
         //查找书架，判断是否是已收藏
-        mShelfBook = BookShelfRepository.getInstance().getShelfBook(bookBean.getTitle(), bookBean.getAuthor());
+        mShelfBook = BookShelfRepository.getInstance().getShelfBook(mSearchBook.getTitle(), mSearchBook.getAuthor());
         if (mShelfBook == null)
-            mShelfBook = bookBean.getShelfBook();
+            mShelfBook = mSearchBook.getShelfBook();
         else
             isCollected = true;
     }
@@ -85,7 +91,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     @Override
     protected void setUpToolbar(Toolbar toolbar) {
         super.setUpToolbar(toolbar);
-        getSupportActionBar().setTitle(bookBean.getTitle());
+        getSupportActionBar().setTitle(mSearchBook.getTitle());
     }
 
 
@@ -93,15 +99,17 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     protected void initWidget() {
         super.initWidget();
         //Title Info
-        Glide.with(mContext).load(bookBean.getCover()).into(mIvCover);
-        mTvAuthor.setText(bookBean.getAuthor());
-        mTvType.setText(bookBean.getLink());
-        mTvWordCount.setText(bookBean.getSourceUrls().toString());
+        Glide.with(mContext).load(mSearchBook.getCover()).into(mIvCover);
+        mTvAuthor.setText(mSearchBook.getAuthor());
+        mTvType.setText(mSearchBook.getLink());
+        mTvWordCount.setText(mSearchBook.getSourceUrls().toString());
 
         //Recycler
         mAdapter = new BookDetailAdapter();
+        mAdapter.addItem(new BookChapterBean(mSearchBook.getDesc()));
         mRvContent.setLayoutManager(new LinearLayoutManager(mContext));
         mRvContent.setAdapter(mAdapter);
+
 
         //Button
         if (isCollected) {
@@ -134,8 +142,14 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
 
         //设置详情页
         List<BookChapterBean> list = new ArrayList<>();
-        list.add(new BookChapterBean(bookBean.getDesc()));
-        list.addAll(items.subList(0, 10));
+        //最新十章
+        int size = items.size();
+        if (size > 10)
+            //subList中有些坑，取值范围是 fromIndex <= field < toIndex
+            list.addAll(items.subList(size - 10, size));
+        else
+            list.addAll(items);
+        Collections.reverse(list);
 
         mAdapter.addItems(list);
     }
@@ -156,6 +170,59 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     }
 
     /********************************Event***************************************/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_book_detail, menu);
+        return true;
+    }
+
+    /**
+     * 导航栏菜单点击事件
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_change_source:  //换源
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("选择一个书源");
+                //    设置一个下拉的列表选择项
+                builder.setItems(mSearchBook.getSourceUrlArray(), (dialog, which) -> {
+                    SnackbarUtils.show(mContext,""+which);
+                });
+                builder.show();
+                break;
+            case R.id.action_edit_source:  //编辑源
+
+                break;
+            case R.id.action_reload:  //重新加载
+
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //如果进入阅读页面收藏了，就需要返回改变收藏按钮
+        if (resultCode == RESULT_OK) {
+
+            if (data == null) return;
+
+            isCollected = data.getBooleanExtra(RESULT_IS_COLLECTED, false);
+
+            if (isCollected) {
+                bookDetailTvAdd.setText("移除书架");
+                bookDetailTvOpen.setText("继续阅读");
+            }
+        }
+    }
+
     /**
      * 监听点击事件
      *
@@ -193,4 +260,6 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
             isCollected = true;
         }
     }
+
+
 }

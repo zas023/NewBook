@@ -88,6 +88,13 @@ public class BookSearchBean implements Parcelable {
         return sourceUrls;
     }
 
+    public String[] getSourceUrlArray() {
+        String[] array = new String[sourceUrls.size()];
+        for (int i = 0; i < sourceUrls.size(); i++)
+            array[i] = sourceUrls.get(i);
+        return array;
+    }
+
     public void setSourceUrls(List<String> sourceUrls) {
         this.sourceUrls = sourceUrls;
     }

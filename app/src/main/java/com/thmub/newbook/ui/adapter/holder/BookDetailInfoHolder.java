@@ -41,7 +41,9 @@ public class BookDetailInfoHolder extends ViewHolderImpl<BookChapterBean> {
             //两个字符缩进
             itemTvBookInfo.setText("\t\t\t\t"+data.getChapterTitle());
         }else {
-            itemTvBookInfo.setText("第 "+pos+" 章  "+data.getChapterTitle());
+            //itemTvBookInfo.setText("第 "+data.getChapterIndex()+1+" 章  "+data.getChapterTitle());
+            //data.getChapterIndex()+1会被jvm优化成字符串
+            itemTvBookInfo.setText("第 "+(data.getChapterIndex()+1)+" 章  "+data.getChapterTitle());
         }
     }
 }

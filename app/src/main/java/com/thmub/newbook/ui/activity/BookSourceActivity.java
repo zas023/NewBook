@@ -1,5 +1,6 @@
 package com.thmub.newbook.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -44,6 +45,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
 
     private BookSourceAdapter mAdapter;
 
+    private boolean ischanged;
     /******************************Initialization**********************************/
 
     @Override
@@ -76,11 +78,12 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
             @Override
             public void onMove(int fromPosition, int toPosition) {
                 mAdapter.onMove(fromPosition, toPosition);
+                ischanged=true;
             }
 
             @Override
             public void onSwiped(int position) {
-
+                ischanged=true;
             }
         });
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(dragCallback);
@@ -123,7 +126,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
     /*******************************Event**************************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_book_source, menu);
+        getMenuInflater().inflate(R.menu.menu_source, menu);
         return true;
     }
 
@@ -159,6 +162,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
 
     private void exit() {
         BookSourceRepository.getInstance().saveBookSourceWithAsync(mAdapter.getItems());
+        setResult(Activity.RESULT_OK,new Intent().putExtra(SearchActivity.RESULT_IS_CHANGED,ischanged));
         finish();
     }
 
@@ -170,6 +174,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
                 SnackbarUtils.show(this, "保存成功");
                 mAdapter.clear();
                 mPresenter.loadBookSource();
+                ischanged=true;
             }
         }
     }

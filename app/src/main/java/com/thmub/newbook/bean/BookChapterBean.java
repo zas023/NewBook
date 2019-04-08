@@ -122,6 +122,20 @@ public class BookChapterBean implements Parcelable {
     }
 
 
+    @Override
+    public String toString() {
+        return "BookChapterBean{" +
+                "bookLink='" + bookLink + '\'' +
+                ", tag='" + tag + '\'' +
+                ", chapterLink='" + chapterLink + '\'' +
+                ", chapterTitle='" + chapterTitle + '\'' +
+                ", chapterIndex=" + chapterIndex +
+                ", start=" + start +
+                ", end=" + end +
+                ", unreadble=" + unreadble +
+                '}';
+    }
+
     public BookChapterBean(Parcel in) {
         bookLink = in.readString();
         chapterTitle = in.readString();
