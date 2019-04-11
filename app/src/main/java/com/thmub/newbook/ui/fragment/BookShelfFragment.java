@@ -27,7 +27,6 @@ import butterknife.BindView;
 public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Presenter>
         implements BookShelfContract.View {
 
-
     @BindView(R.id.shelf_rv_content)
     ScrollRefreshRecyclerView shelfRvContent;
 
@@ -94,5 +93,17 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     @Override
     public void complete() {
 
+    }
+
+    /*************************Life Cycle*******************************/
+    /**
+     * 实现从阅读界面返回时刷新书架
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.clear();
+        shelfRvContent.startRefresh();
+        mPresenter.loadShelfBook();
     }
 }

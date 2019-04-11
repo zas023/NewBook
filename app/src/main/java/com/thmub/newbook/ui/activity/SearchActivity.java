@@ -112,11 +112,6 @@ public class SearchActivity extends BaseActivity {
         mSearchEngine.setOnSearchListener(new SearchEngine.OnSearchListener() {
 
             @Override
-            public void refreshFinish(Boolean isAll) {
-
-            }
-
-            @Override
             public void loadMoreFinish(Boolean isAll) {
                 //ScrollRefreshRecyclerView会被多个线程操作
                 //需要加锁

@@ -60,10 +60,9 @@ public class SearchEngine {
             Log.i(TAG, bean.toString());
     }
 
-    public void search(final String keyword) {
+    public void search(String keyword) {
         if (mSourceList.size() == 0) {
             System.out.println("没有选中任何书源");
-            searchListener.refreshFinish(true);
             searchListener.loadMoreFinish(true);
             return;
         }
@@ -71,6 +70,19 @@ public class SearchEngine {
         searchSiteIndex = -1;
         for (int i = 0; i < threadsNum; i++) {
             searchOnEngine(keyword);
+        }
+    }
+
+    public void search(String title, String author) {
+        if (mSourceList.size() == 0) {
+            System.out.println("没有选中任何书源");
+            searchListener.loadMoreFinish(true);
+            return;
+        }
+        searchSuccessNum = 0;
+        searchSiteIndex = -1;
+        for (int i = 0; i < threadsNum; i++) {
+            searchOnEngine(title, author);
         }
     }
 
@@ -111,11 +123,55 @@ public class SearchEngine {
 
     }
 
+    private synchronized void searchOnEngine(final String title, final String author) {
+        searchSiteIndex++;
+        if (searchSiteIndex < mSourceList.size()) {
+            BookSourceBean source = mSourceList.get(searchSiteIndex);
+            SourceModel.getInstance(source.getSourceName())
+                    .searchBook(title)
+                    .subscribeOn(scheduler)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<List<BookSearchBean>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
+                        }
+
+                        @Override
+                        public void onNext(List<BookSearchBean> bookSearchBeans) {
+                            if (bookSearchBeans != null) {
+                                List<BookSearchBean> list = new ArrayList<>(1);
+                                for (BookSearchBean bean : bookSearchBeans) {
+                                    if (bean.getTitle().equals(title)
+                                            && bean.getAuthor().equals(author)) {
+                                        list.add(bean);
+                                        searchListener.loadMoreSearchBook(list);
+                                        break;
+                                    }
+                                }
+                            }
+                            searchOnEngine(title, author);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            searchOnEngine(title, author);
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        } else {
+            searchListener.loadMoreFinish(true);
+        }
+
+    }
+
 
     /************************************************************************/
     public interface OnSearchListener {
-
-        void refreshFinish(Boolean isAll);
 
         void loadMoreFinish(Boolean isAll);
 

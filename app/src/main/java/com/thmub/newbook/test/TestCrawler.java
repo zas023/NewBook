@@ -33,11 +33,6 @@ public class TestCrawler {
         searchEngine.setOnSearchListener(new SearchEngine.OnSearchListener() {
 
             @Override
-            public void refreshFinish(Boolean isAll) {
-
-            }
-
-            @Override
             public void loadMoreFinish(Boolean isAll) {
 
             }

@@ -50,12 +50,13 @@ public class BookShelfRepository {
      * @param book
      */
     public void saveShelfBook(ShelfBookBean book) {
+        //存储BookShelfBean
+        mShelfBookDao.insertOrReplace(book);
+        //
         if (book.getBookChapterList() != null) {
             // 存储BookChapterBean
             mSession.getBookChapterBeanDao().insertOrReplaceInTx(book.getBookChapterList());
         }
-        //存储BookShelfBean
-        mShelfBookDao.insertOrReplace(book);
     }
 
     /***

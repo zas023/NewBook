@@ -195,28 +195,15 @@ public class BookShelfBeanDao extends AbstractDao<ShelfBookBean, String> {
     }
 
     @Override
+    protected ShelfBookBean readEntity(Cursor cursor, int offset) {
+        return null;
+    }
+
+    @Override
     public String readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
     }    
 
-    @Override
-    public ShelfBookBean readEntity(Cursor cursor, int offset) {
-        ShelfBookBean entity = new ShelfBookBean( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // link
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // author
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // desc
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // cover
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // source
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // updated
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // lastRead
-            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // curChapter
-            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // curChapterPage
-            cursor.getShort(offset + 10) != 0, // isUpdate
-            cursor.getShort(offset + 11) != 0 // isLocal
-        );
-        return entity;
-    }
      
     @Override
     public void readEntity(Cursor cursor, ShelfBookBean entity, int offset) {

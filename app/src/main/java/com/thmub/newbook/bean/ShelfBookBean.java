@@ -40,10 +40,18 @@ public class ShelfBookBean implements Parcelable {
     //书源名称
     private String source;
 
+    //最新章节名称
+    private String latestChapter;
+    //总章节数量
+    private int chapterCount;
+
+
     //最新更新日期
     private String updated;
     //最新阅读日期
     private String lastRead;
+    //当前阅读章节名称
+    private String curChapterTitle;
     //当前章节(包括番外)
     private Integer curChapter = 0;
     //当前章节位置(章节的页码)
@@ -69,18 +77,21 @@ public class ShelfBookBean implements Parcelable {
     private transient ShelfBookBeanDao myDao;
 
 
-    @Generated(hash = 457399032)
-    public ShelfBookBean(String link, String title, String author, String desc, String cover,
-                         String source, String updated, String lastRead, Integer curChapter,
-                         Integer curChapterPage, boolean isUpdate, boolean isLocal) {
+    @Generated(hash = 281309507)
+    public ShelfBookBean(String link, String title, String author, String desc, String cover, String source,
+                         String latestChapter, int chapterCount, String updated, String lastRead, String curChapterTitle,
+                         Integer curChapter, Integer curChapterPage, boolean isUpdate, boolean isLocal) {
         this.link = link;
         this.title = title;
         this.author = author;
         this.desc = desc;
         this.cover = cover;
         this.source = source;
+        this.latestChapter = latestChapter;
+        this.chapterCount = chapterCount;
         this.updated = updated;
         this.lastRead = lastRead;
+        this.curChapterTitle = curChapterTitle;
         this.curChapter = curChapter;
         this.curChapterPage = curChapterPage;
         this.isUpdate = isUpdate;
@@ -98,8 +109,11 @@ public class ShelfBookBean implements Parcelable {
         desc = in.readString();
         cover = in.readString();
         source = in.readString();
+        latestChapter = in.readString();
+        chapterCount = in.readInt();
         updated = in.readString();
         lastRead = in.readString();
+        curChapterTitle = in.readString();
         if (in.readByte() == 0) {
             curChapter = null;
         } else {
@@ -225,8 +239,34 @@ public class ShelfBookBean implements Parcelable {
         this.isLocal = isLocal;
     }
 
+    public String getLatestChapter() {
+        return this.latestChapter;
+    }
+
+    public void setLatestChapter(String latestChapter) {
+        this.latestChapter = latestChapter;
+    }
+
+    public int getChapterCount() {
+        return this.chapterCount;
+    }
+
+    public void setChapterCount(int chapterCount) {
+        this.chapterCount = chapterCount;
+    }
+
+    public String getCurChapterTitle() {
+        return this.curChapterTitle;
+    }
+
+    public void setCurChapterTitle(String curChapterTitle) {
+        this.curChapterTitle = curChapterTitle;
+    }
+
     public void setBookChapterList(List<BookChapterBean> bookChapterList) {
         this.bookChapterList = bookChapterList;
+        chapterCount = bookChapterList.size();
+        latestChapter = bookChapterList.get(chapterCount - 1).getChapterTitle();
     }
 
     public int getBookChapterListSize() {
@@ -260,8 +300,7 @@ public class ShelfBookBean implements Parcelable {
                 throw new DaoException("Entity is detached from DAO context");
             }
             BookChapterBeanDao targetDao = daoSession.getBookChapterBeanDao();
-            List<BookChapterBean> bookChapterListNew = targetDao
-                    ._queryShelfBookBean_BookChapterList(link);
+            List<BookChapterBean> bookChapterListNew = targetDao._queryShelfBookBean_BookChapterList(link);
             synchronized (this) {
                 if (bookChapterList == null) {
                     bookChapterList = bookChapterListNew;
@@ -315,6 +354,15 @@ public class ShelfBookBean implements Parcelable {
         myDao.update(this);
     }
 
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
+    @Generated(hash = 53859549)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getShelfBookBeanDao() : null;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -328,8 +376,11 @@ public class ShelfBookBean implements Parcelable {
         dest.writeString(desc);
         dest.writeString(cover);
         dest.writeString(source);
+        dest.writeString(latestChapter);
+        dest.writeInt(chapterCount);
         dest.writeString(updated);
         dest.writeString(lastRead);
+        dest.writeString(curChapterTitle);
         if (curChapter == null) {
             dest.writeByte((byte) 0);
         } else {
@@ -347,12 +398,27 @@ public class ShelfBookBean implements Parcelable {
         dest.writeTypedList(bookChapterList);
     }
 
-    /**
-     * called by internal mechanisms, do not call yourself.
-     */
-    @Generated(hash = 53859549)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getShelfBookBeanDao() : null;
+    @Override
+    public String toString() {
+        return "ShelfBookBean{" +
+                "link='" + link + '\'' +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", desc='" + desc + '\'' +
+                ", cover='" + cover + '\'' +
+                ", source='" + source + '\'' +
+                ", latestChapter='" + latestChapter + '\'' +
+                ", chapterCount=" + chapterCount +
+                ", updated='" + updated + '\'' +
+                ", lastRead='" + lastRead + '\'' +
+                ", curChapterTitle='" + curChapterTitle + '\'' +
+                ", curChapter=" + curChapter +
+                ", curChapterPage=" + curChapterPage +
+                ", isUpdate=" + isUpdate +
+                ", isLocal=" + isLocal +
+                ", bookChapterList=" + bookChapterList +
+                ", daoSession=" + daoSession +
+                ", myDao=" + myDao +
+                '}';
     }
 }

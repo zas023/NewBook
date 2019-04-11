@@ -29,8 +29,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                 bookBean.setLastRead(StringUtils.
                         dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
                 bookBean.setIsUpdate(false);
-                BookShelfRepository.getInstance()
-                        .saveShelfBook(bookBean);
+                BookShelfRepository.getInstance().saveShelfBook(bookBean);
                 e.onNext(bookBean);
                 e.onComplete();
             }).subscribeOn(Schedulers.newThread())

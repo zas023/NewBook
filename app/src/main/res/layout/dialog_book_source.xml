@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
+
+
+    <TextView
+        android:id="@+id/dialog_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_normal"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:text="神墓（辰东）"/>
+
+    <com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView
+        android:id="@+id/dialog_rv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackground" />
+
+</LinearLayout>

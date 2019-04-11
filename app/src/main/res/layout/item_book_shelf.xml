@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/item_shelf_iv_cover"
@@ -20,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/padding_normal">
+            android:padding="@dimen/padding_small">
 
             <TextView
                 android:id="@+id/item_shelf_tv_title"
@@ -28,36 +29,81 @@
                 android:layout_height="wrap_content"
                 android:text="神墓"
                 android:textColor="@color/textPrimary"
-                android:textSize="@dimen/text_large" />
-
-            <TextView
-                android:id="@+id/item_shelf_tv_author"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="辰东"
-                android:textColor="@color/textAssist"
                 android:textSize="@dimen/text_normal" />
 
-            <TextView
-                android:id="@+id/item_shelf_tv_info"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="简介"
-                android:textColor="@color/textAssist"
-                android:textSize="@dimen/text_small" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/item_shelf_tv_source"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_small"
+                    android:src="@mipmap/ic_book_author" />
+
+                <TextView
+                    android:id="@+id/item_shelf_tv_author"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="辰东"
+                    android:textColor="@color/textAssist"
+                    android:textSize="@dimen/text_small" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="[棉花糖小说]"
-                android:textColor="@color/textAssist"
-                android:textSize="@dimen/text_small" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_small"
+                    android:src="@mipmap/ic_book_record" />
+
+                <TextView
+                    android:id="@+id/item_shelf_tv_record"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="第1章 xxxxxxxx"
+                    android:textColor="@color/textAssist"
+                    android:textSize="@dimen/text_small" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_small"
+                    android:src="@mipmap/ic_book_last" />
+
+                <TextView
+                    android:id="@+id/item_shelf_tv_last"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="第999章 xxxxxxxx"
+                    android:textColor="@color/textAssist"
+                    android:textSize="@dimen/text_small" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ProgressBar
+                    android:id="@+id/item_shelf_pl"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:max="100"
+                    style="?android:progressBarStyleHorizontal"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

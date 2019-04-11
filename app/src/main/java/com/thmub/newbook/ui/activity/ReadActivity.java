@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -216,7 +217,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
             @Override
             public void onPageChange(int chapterIndex, int pageIndex, boolean resetReadAloud) {
-                Log.i(TAG,chapterIndex+"  "+pageIndex);
                 mShelfBook.setCurChapter(chapterIndex);
                 mShelfBook.setCurChapterPage(pageIndex);
             }
@@ -235,9 +235,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         });
 
         //catalog
-        mAdapter.setOnItemClickListener((view, pos) -> {
-            mPageLoader.skipToChapter(pos, 0);
-        });
+        mAdapter.setOnItemClickListener((view, pos) -> mPageLoader.skipToChapter(pos, 0));
 
         //监听底部设置菜单
         mSettingDialog.setOnDismissListener(
@@ -299,7 +297,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     @Override
     public void finishSaveRecord() {
-        exit();
+        finish();
     }
 
     @Override
@@ -313,59 +311,51 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     }
 
     /*********************************Event*************************************/
+
     /**
-     * 监听返回键
+     * 监听按键
      * 退出前检提示，以便保存记录
      */
     @Override
-    public void onBackPressed() {
-        if (readAblTopMenu.getVisibility() == View.VISIBLE) {
-            //非全屏下才收缩，全屏下直接退出
-            toggleMenu(true);
-            return;
-        } else if (mSettingDialog.isShowing()) {
-            mSettingDialog.dismiss();
-            return;
-        } else if (readDrawer.isDrawerOpen(GravityCompat.START)) {
-            readDrawer.closeDrawer(GravityCompat.START);
-            return;
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //if (event.getRepeatCount() > 0) return false;
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (readAblTopMenu.getVisibility() == View.VISIBLE) {
+                    //非全屏下才收缩，全屏下直接退出
+                    toggleMenu(true);
+                    return true;
+                } else if (mSettingDialog.isShowing()) {
+                    mSettingDialog.dismiss();
+                    return true;
+                } else if (readDrawer.isDrawerOpen(GravityCompat.START)) {
+                    readDrawer.closeDrawer(GravityCompat.START);
+                    return true;
+                }
+                if (!isCollected) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("加入书架")
+                            .setMessage("喜欢本书就加入书架吧")
+                            .setPositiveButton("确定", (dialog, which) -> {
+                                //设置为已收藏
+                                isCollected = true;
+                                finish();
+                            })
+                            .setNegativeButton("取消", (dialog, which) -> finish())
+                            .create().show();
+                    return true;
+                } else {
+                    finish();
+                    return true;
+                }
+            case KeyEvent.KEYCODE_VOLUME_UP:  //音量键
+                mPageLoader.skipToPrePage();
+                break;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                mPageLoader.skipToNextPage();
+                break;
         }
-        if (isCollected) {
-            //设置阅读时间
-            mShelfBook.setLastRead(StringUtils.
-                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-            BookShelfRepository.getInstance()
-                    .saveShelfBook(mShelfBook);
-            //mPresenter.saveReadRecord(mShelfBook);
-            exit();
-        } else {
-            new AlertDialog.Builder(this)
-                    .setTitle("加入书架")
-                    .setMessage("喜欢本书就加入书架吧")
-                    .setPositiveButton("确定", (dialog, which) -> {
-                        //设置为已收藏
-                        isCollected = true;
-                        //设置阅读时间
-                        mShelfBook.setLastRead(StringUtils.
-                                dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-                        //保存
-                        BookShelfRepository.getInstance()
-                                .saveShelfBook(mShelfBook);
-                        //mPresenter.saveReadRecord(mShelfBook);
-                        exit();
-                    })
-                    .setNegativeButton("取消", (dialog, which) -> {
-                        exit();
-                    }).create().show();
-        }
-    }
-
-    //退出
-    private void exit() {
-        //返回给BookDetail。
-        setResult(Activity.RESULT_OK, new Intent().putExtra(BookDetailActivity.RESULT_IS_COLLECTED, isCollected));
-        //退出
-        super.onBackPressed();
+        return super.onKeyDown(keyCode, event);
     }
 
     @OnClick({R.id.read_tv_category, R.id.read_tv_setting, R.id.read_tv_pre_chapter
@@ -487,6 +477,16 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
      */
     @Override
     public void finish() {
+        if (isCollected) {
+            //设置阅读时间
+            mShelfBook.setLastRead(StringUtils.
+                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+            //阅读章节名称
+            mShelfBook.setCurChapterTitle(mAdapter.getItem(mShelfBook.getCurChapter()).getChapterTitle());
+            BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
+        }
+        //返回给BookDetail。
+        setResult(Activity.RESULT_OK, new Intent().putExtra(BookDetailActivity.RESULT_IS_COLLECTED, isCollected));
         super.finish();
     }
 }

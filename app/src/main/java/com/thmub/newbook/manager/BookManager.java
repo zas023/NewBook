@@ -44,7 +44,7 @@ public class BookManager {
     public boolean openChapter(String folderName, String chapterName, long position) {
         //如果文件不存在，则打开失败
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + chapterName + FileUtils.SUFFIX_CB);
+                + File.separator + chapterName + FileUtils.SUFFIX_NB);
         if (!file.exists()) {
             return false;
         }
@@ -136,7 +136,7 @@ public class BookManager {
      */
     public static File getBookFile(String folderName, String fileName) {
         return FileUtils.getFile(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fileName + FileUtils.SUFFIX_CB);
+                + File.separator + fileName + FileUtils.SUFFIX_NB);
     }
 
     public static String formatFileName(int index, String fileName) {
@@ -169,7 +169,7 @@ public class BookManager {
      */
     public static boolean isChapterCached(String folderName, String fileName) {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fileName + FileUtils.SUFFIX_CB);
+                + File.separator + fileName + FileUtils.SUFFIX_NB);
         return file.exists();
     }
 

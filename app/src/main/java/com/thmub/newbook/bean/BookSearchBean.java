@@ -24,14 +24,45 @@ public class BookSearchBean implements Parcelable {
     private String cover;
     //小说地址
     private String link;
+    //分类
+    private String kind;
+    //最新章节
+    private String latestChapter;
     //来源
     private String source;
+
+    //是否选择当前源（换源标记）
+    private boolean selected;
 
     private List<String> sourceUrls;
 
     public BookSearchBean() {
 
     }
+
+    protected BookSearchBean(Parcel in) {
+        title = in.readString();
+        author = in.readString();
+        desc = in.readString();
+        cover = in.readString();
+        link = in.readString();
+        kind = in.readString();
+        latestChapter = in.readString();
+        source = in.readString();
+        sourceUrls = in.createStringArrayList();
+    }
+
+    public static final Creator<BookSearchBean> CREATOR = new Creator<BookSearchBean>() {
+        @Override
+        public BookSearchBean createFromParcel(Parcel in) {
+            return new BookSearchBean(in);
+        }
+
+        @Override
+        public BookSearchBean[] newArray(int size) {
+            return new BookSearchBean[size];
+        }
+    };
 
     /*************************************************************/
 
@@ -75,6 +106,22 @@ public class BookSearchBean implements Parcelable {
         this.link = link;
     }
 
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getLatestChapter() {
+        return latestChapter;
+    }
+
+    public void setLatestChapter(String latestChapter) {
+        this.latestChapter = latestChapter;
+    }
+
     public String getSource() {
         return source;
     }
@@ -82,6 +129,14 @@ public class BookSearchBean implements Parcelable {
     public void setSource(String source) {
         this.source = source;
         addSource(source);
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public List<String> getSourceUrls() {
@@ -105,7 +160,6 @@ public class BookSearchBean implements Parcelable {
             this.sourceUrls.add(soure);
         }
     }
-
     /*************************************************************/
     public ShelfBookBean getShelfBook() {
         ShelfBookBean shelfBookBean = new ShelfBookBean();
@@ -119,28 +173,6 @@ public class BookSearchBean implements Parcelable {
     }
 
     /*************************************************************/
-    protected BookSearchBean(Parcel in) {
-        title = in.readString();
-        author = in.readString();
-        desc = in.readString();
-        cover = in.readString();
-        link = in.readString();
-        source = in.readString();
-        sourceUrls = in.createStringArrayList();
-    }
-
-    public static final Creator<BookSearchBean> CREATOR = new Creator<BookSearchBean>() {
-        @Override
-        public BookSearchBean createFromParcel(Parcel in) {
-            return new BookSearchBean(in);
-        }
-
-        @Override
-        public BookSearchBean[] newArray(int size) {
-            return new BookSearchBean[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -153,20 +185,11 @@ public class BookSearchBean implements Parcelable {
         dest.writeString(desc);
         dest.writeString(cover);
         dest.writeString(link);
+        dest.writeString(kind);
+        dest.writeString(latestChapter);
         dest.writeString(source);
         dest.writeStringList(sourceUrls);
     }
 
-    @Override
-    public String toString() {
-        return "BookSearchBean{" +
-                "title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", shortIntro='" + desc + '\'' +
-                ", cover='" + cover + '\'' +
-                ", link='" + link + '\'' +
-                ", source='" + source + '\'' +
-                ", sourceUrls=" + sourceUrls +
-                '}';
-    }
+
 }

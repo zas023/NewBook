@@ -1,12 +1,15 @@
 package com.thmub.newbook.ui.adapter.holder;
 
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.adapter.ViewHolderImpl;
 import com.thmub.newbook.bean.ShelfBookBean;
+
+import butterknife.BindView;
 
 /**
  * Created by Zhouas666 on 2019-04-02
@@ -19,8 +22,9 @@ public class BookShelfHolder extends ViewHolderImpl<ShelfBookBean> {
     ImageView itemIvCover;
     TextView itemTvTitle;
     TextView itemTvAuthor;
-    TextView itemTvInfo;
-    TextView itemTvSource;
+    TextView itemTvRecord;
+    TextView itemTvLast;
+    ProgressBar itemPl;
 
     @Override
     protected int getItemLayoutId() {
@@ -32,8 +36,9 @@ public class BookShelfHolder extends ViewHolderImpl<ShelfBookBean> {
         itemIvCover = findById((R.id.item_shelf_iv_cover));
         itemTvTitle = findById((R.id.item_shelf_tv_title));
         itemTvAuthor = findById((R.id.item_shelf_tv_author));
-        itemTvInfo = findById((R.id.item_shelf_tv_info));
-        itemTvSource = findById((R.id.item_shelf_tv_source));
+        itemTvRecord = findById((R.id.item_shelf_tv_record));
+        itemTvLast = findById((R.id.item_shelf_tv_last));
+        itemPl = findById((R.id.item_shelf_pl));
     }
 
     @Override
@@ -41,7 +46,11 @@ public class BookShelfHolder extends ViewHolderImpl<ShelfBookBean> {
         Glide.with(getContext()).load(data.getCover()).into(itemIvCover);
         itemTvTitle.setText(data.getTitle());
         itemTvAuthor.setText(data.getAuthor());
-        itemTvInfo.setText(data.getDesc());
-        itemTvSource.setText(data.getSource());
+
+        itemTvRecord.setText("第" + (data.getCurChapter() + 1) + "章 " + data.getCurChapterTitle());
+        itemTvLast.setText("第" + data.getChapterCount() + "章 " + data.getLatestChapter());
+
+        itemPl.setMax(data.getChapterCount());
+        itemPl.setProgress(data.getCurChapter());
     }
 }

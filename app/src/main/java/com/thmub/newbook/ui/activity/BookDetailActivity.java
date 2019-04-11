@@ -1,6 +1,5 @@
 package com.thmub.newbook.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,13 +18,12 @@ import com.thmub.newbook.model.repo.BookShelfRepository;
 import com.thmub.newbook.presenter.BookDetailPresenter;
 import com.thmub.newbook.presenter.contract.BookDetailContract;
 import com.thmub.newbook.ui.adapter.BookDetailAdapter;
-import com.thmub.newbook.utils.SnackbarUtils;
+import com.thmub.newbook.ui.dialog.ChangeSourceDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,6 +59,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     @BindView(R.id.book_detail_tv_open)
     TextView bookDetailTvOpen;
 
+    private ChangeSourceDialog mSourceDialog;
     /****************************Variable*********************************/
     private BookSearchBean mSearchBook;
     private ShelfBookBean mShelfBook;
@@ -68,7 +67,6 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     private boolean isCollected;
 
     private BookDetailAdapter mAdapter;
-
 
     /**************************Initialization******************************/
     @Override
@@ -98,11 +96,8 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     @Override
     protected void initWidget() {
         super.initWidget();
-        //Title Info
-        Glide.with(mContext).load(mSearchBook.getCover()).into(mIvCover);
-        mTvAuthor.setText(mSearchBook.getAuthor());
-        mTvType.setText(mSearchBook.getLink());
-        mTvWordCount.setText(mSearchBook.getSourceUrls().toString());
+
+        initBookInfo();
 
         //Recycler
         mAdapter = new BookDetailAdapter();
@@ -110,18 +105,35 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         mRvContent.setLayoutManager(new LinearLayoutManager(mContext));
         mRvContent.setAdapter(mAdapter);
 
-
         //Button
         if (isCollected) {
             bookDetailTvAdd.setText("移除书架");
             bookDetailTvOpen.setText("继续阅读");
         }
+
+        //Dialog
+        mSourceDialog = new ChangeSourceDialog(this, mShelfBook);
+
+    }
+
+    //Book title info
+    private void initBookInfo() {
+        Glide.with(mContext).load(mSearchBook.getCover()).into(mIvCover);
+        mTvAuthor.setText(mSearchBook.getAuthor());
+        mTvType.setText(mSearchBook.getLink());
+        mTvWordCount.setText(mSearchBook.getSource());
     }
 
     @Override
     protected void initClick() {
         super.initClick();
-
+        mSourceDialog.setListener(bean -> {
+            mSearchBook = bean;
+            mShelfBook=mSearchBook.getShelfBook();
+            initBookInfo();
+            mPresenter.loadCatalogs(mShelfBook);
+            mSourceDialog.dismiss();
+        });
     }
 
     /**************************Transaction********************************/
@@ -129,6 +141,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     protected BookDetailContract.Presenter bindPresenter() {
         return new BookDetailPresenter();
     }
+
 
     @Override
     protected void processLogic() {
@@ -186,13 +199,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_change_source:  //换源
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("选择一个书源");
-                //    设置一个下拉的列表选择项
-                builder.setItems(mSearchBook.getSourceUrlArray(), (dialog, which) -> {
-                    SnackbarUtils.show(mContext,""+which);
-                });
-                builder.show();
+                mSourceDialog.show();
                 break;
             case R.id.action_edit_source:  //编辑源
 

@@ -26,7 +26,7 @@ import io.reactivex.Single;
 public class FileUtils {
     public static final byte BLANK = 0x0a;
     //采用自己的格式去设置文件，防止文件被系统文件查询到
-    public static final String SUFFIX_CB = ".cb";
+    public static final String SUFFIX_NB = ".nb";
     public static final String SUFFIX_TXT = ".txt";
     public static final String SUFFIX_EPUB = ".epub";
     public static final String SUFFIX_PDF = ".pdf";

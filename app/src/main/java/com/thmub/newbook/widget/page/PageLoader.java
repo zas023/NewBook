@@ -1377,8 +1377,8 @@ public abstract class PageLoader {
         if (mCurChapter.getStatus() != TxtChapter.Status.FINISH) {
             Single.create((SingleOnSubscribe<TxtChapter>) e -> {
                 ChapterProvider chapterProvider = new ChapterProvider(this);
-                TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(mCurChapterPos), mPageView.isPrepare());
-                e.onSuccess(txtChapter);
+                e.onSuccess(chapterProvider.dealLoadPageList(bookShelfBean.getChapter(mCurChapterPos)
+                        , mPageView.isPrepare()));
             })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -1422,8 +1422,8 @@ public abstract class PageLoader {
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
             ChapterProvider chapterProvider = new ChapterProvider(this);
-            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(prevChapterPos), mPageView.isPrepare());
-            e.onSuccess(txtChapter);
+            e.onSuccess(chapterProvider.dealLoadPageList(bookShelfBean.getChapter(prevChapterPos)
+                    , mPageView.isPrepare()));
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -1464,8 +1464,8 @@ public abstract class PageLoader {
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
             ChapterProvider chapterProvider = new ChapterProvider(this);
-            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(nextChapterPos), mPageView.isPrepare());
-            e.onSuccess(txtChapter);
+            e.onSuccess(chapterProvider.dealLoadPageList(bookShelfBean.getChapter(nextChapterPos)
+                    , mPageView.isPrepare()));
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
