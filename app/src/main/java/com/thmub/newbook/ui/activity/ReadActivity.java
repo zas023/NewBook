@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -26,6 +27,7 @@ import com.thmub.newbook.model.repo.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
 import com.thmub.newbook.ui.adapter.CatalogAdapter;
+import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 import com.thmub.newbook.ui.dialog.ReadSettingDialog;
 import com.thmub.newbook.utils.BatteryUtils;
 import com.thmub.newbook.utils.StringUtils;
@@ -34,6 +36,7 @@ import com.thmub.newbook.utils.UiUtils;
 import com.thmub.newbook.widget.animation.PageAnimation;
 import com.thmub.newbook.widget.page.PageLoader;
 import com.thmub.newbook.widget.page.PageView;
+import com.thmub.newbook.widget.page.TxtChapter;
 
 import java.util.List;
 
@@ -94,6 +97,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
 
     private ReadSettingDialog mSettingDialog;
+    private SourceExchangeDialog mSourceDialog;
     /****************************Variable*********************************/
     private ShelfBookBean mShelfBook;
 
@@ -161,7 +165,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
         //Dialog
         mSettingDialog = new ReadSettingDialog(this);
-
+        mSourceDialog = new SourceExchangeDialog(this, mShelfBook);
         // Menu
         initTopMenu();
         initBottomMenu();
@@ -207,6 +211,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
             @Override
             public void onCategoryFinish(List<BookChapterBean> chapters) {
+                mAdapter.clear();
                 mAdapter.addItems(chapters);
             }
 
@@ -243,6 +248,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         );
 
         //dialog
+        //底部设置菜单
         mSettingDialog.setOnChangeListener(new ReadSettingDialog.OnSettingChangeListener() {
             @Override
             public void onPageModeChange() {
@@ -280,6 +286,21 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 }
             }
         });
+        //换源
+        mSourceDialog.setListener(bean -> {
+            mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
+            //交换数据
+            ShelfBookBean oldBook=mShelfBook;
+            mShelfBook=bean.getShelfBook();
+            mShelfBook.setCurChapter(oldBook.getCurChapter());
+            mShelfBook.setCurChapterPage(oldBook.getCurChapterPage());
+
+            BookShelfRepository.getInstance().deleteShelfBook(oldBook);
+            BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
+            //更新目录
+            mPresenter.loadCatalogs(mShelfBook);
+            mSourceDialog.dismiss();
+        });
     }
 
     @Override
@@ -296,8 +317,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     }
 
     @Override
-    public void finishSaveRecord() {
-        finish();
+    public void finishLoadCatalogs(List<BookChapterBean> items) {
+        mShelfBook.setBookChapterList(items);
+        mPageLoader.changeSourceFinish(mShelfBook);
     }
 
     @Override
@@ -311,6 +333,40 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     }
 
     /*********************************Event*************************************/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_read, menu);
+        return true;
+    }
+
+    /**
+     * 导航栏菜单点击事件
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:    //左侧返回键
+                finish();
+            case R.id.action_change_source:
+                mSourceDialog.show();
+                break;
+            case R.id.action_refresh_chapter:
+                break;
+            case R.id.action_add_bookmark:
+                break;
+            case R.id.action_copy_content:
+                break;
+            case R.id.action_refresh_catalog:
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     /**
      * 监听按键
@@ -489,4 +545,5 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         setResult(Activity.RESULT_OK, new Intent().putExtra(BookDetailActivity.RESULT_IS_COLLECTED, isCollected));
         super.finish();
     }
+
 }

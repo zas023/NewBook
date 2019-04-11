@@ -1,0 +1,25 @@
+<?xml version ="1.0" encoding ="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_change_source"
+        android:icon="@mipmap/ic_menu_exchange"
+        android:title="换源"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_refresh_chapter"
+        android:icon="@mipmap/ic_menu_refresh"
+        android:title="刷新"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_add_bookmark"
+        android:title="添加书签" />
+
+    <item
+        android:id="@+id/action_copy_content"
+        android:title="拷贝内容" />
+    <item
+        android:id="@+id/action_refresh_catalog"
+        android:title="刷新目录" />
+</menu>

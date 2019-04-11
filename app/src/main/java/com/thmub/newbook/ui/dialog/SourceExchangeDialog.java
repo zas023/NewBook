@@ -13,7 +13,7 @@ import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.model.SearchEngine;
 import com.thmub.newbook.model.repo.BookSourceRepository;
-import com.thmub.newbook.ui.adapter.ChangeSourceAdapter;
+import com.thmub.newbook.ui.adapter.SourceExchangeAdapter;
 import com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView;
 
 import java.util.List;
@@ -30,16 +30,16 @@ import butterknife.ButterKnife;
  * 换源dialog
  */
 
-public class ChangeSourceDialog extends Dialog {
+public class SourceExchangeDialog extends Dialog {
 
-    private static final String TAG = "ChangeSourceDialog";
+    private static final String TAG = "SourceExchangeDialog";
     @BindView(R.id.dialog_tv_title)
     TextView dialogTvTitle;
     @BindView(R.id.dialog_rv_content)
     ScrollRefreshRecyclerView dialogRvContent;
 
     private SearchEngine searchEngine;
-    private ChangeSourceAdapter mAdapter;
+    private SourceExchangeAdapter mAdapter;
 
     private OnSourceChangeListener listener;
 
@@ -49,7 +49,7 @@ public class ChangeSourceDialog extends Dialog {
     private int sourceIndex = -1;
 
     /***************************************************************************/
-    public ChangeSourceDialog(@NonNull Activity activity, ShelfBookBean bookBean) {
+    public SourceExchangeDialog(@NonNull Activity activity, ShelfBookBean bookBean) {
         super(activity);
         mActivity = activity;
         mShelfBook = bookBean;
@@ -93,7 +93,7 @@ public class ChangeSourceDialog extends Dialog {
     private void initData() {
         dialogTvTitle.setText(mShelfBook.getTitle() + "(" + mShelfBook.getAuthor() + ")");
 
-        mAdapter = new ChangeSourceAdapter(mActivity);
+        mAdapter = new SourceExchangeAdapter(mActivity);
         dialogRvContent.setLayoutManager(new LinearLayoutManager(mActivity));
         dialogRvContent.setAdapter(mAdapter);
 

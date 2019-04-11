@@ -16,21 +16,21 @@
     <style name="AppTheme" parent="BaseAppTheme" />
 
     <!--Toolbar-->
-    <style name="Theme.ToolBar" parent="Base.Widget.AppCompat.Toolbar">
+    <style name="Theme.ToolBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <!-- 设置-弹窗的背景-颜色-->
         <item name="android:colorBackground">@color/colorBackground</item>
         <!-- 字体的颜色-->
-        <item name="android:textColor">@color/textAssist</item>
+        <item name="android:textColor">@color/textPrimary</item>
         <!-- 字体大小-->
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
-    <style name="Theme.ToolBar.Menu" parent="Base.Widget.AppCompat.Toolbar">
+    <style name="Theme.ToolBar.Menu" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <!-- 设置-弹窗的背景-颜色-->
         <item name="android:colorBackground">@color/colorBackground</item>
         <!-- 字体的颜色-->
-        <item name="android:textColor">@color/textAssist</item>
+        <item name="android:textColor">@color/textPrimary</item>
         <!-- 字体大小-->
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center_vertical</item>
@@ -39,17 +39,12 @@
         <!-- 内容距离返回箭头距离-->
         <item name="contentInsetStart">0dp</item>
         <item name="contentInsetStartWithNavigation">0dp</item>
-        <!-- 用于替换菜单的三个小白点，换成自已的图片-->
-        <!--<item name="actionOverflowButtonStyle">@style/ActionButton.Overflow.Menu</item>-->
         <!--用于控制menu弹出的位置，位于toolbar的下面，而不是上面-->
         <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
         <!-- 用于修改item默认的分割线-->
-        <!--<item name="android:dropDownListViewStyle">@style/DropDownStyle</item>-->
-        <!--<item name="dropDownListViewStyle">@style/DropDownStyle</item>-->
+        <item name="android:dropDownListViewStyle">@style/DropDownStyle</item>
+        <item name="dropDownListViewStyle">@style/DropDownStyle</item>
     </style>
-    <!--<style name="ActionButton.Overflow.Menu" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">-->
-    <!--&lt;!&ndash;<item name="android:src">@mipmap/ic_menu_overflow</item>&ndash;&gt;-->
-    <!--</style>-->
     <style name="OverflowMenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
     </style>
@@ -85,7 +80,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--必须要加上这句才能实现真正的半透明，-->
         <item name="android:windowIsTranslucent">false</item>
-        <!--直接写windowEnter或者windowExit 是无效的-->Re
+        <!--直接写windowEnter或者windowExit 是无效的-->
         <item name="android:windowAnimationStyle">@style/anim_slide_left_in_right_out</item>
     </style>
 

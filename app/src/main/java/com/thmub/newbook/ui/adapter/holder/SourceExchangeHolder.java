@@ -13,7 +13,7 @@ import com.thmub.newbook.bean.BookSearchBean;
  * Created by Zhouas666 on 2019-04-11
  * Github: https://github.com/zas023
  */
-public class ChangeSourceHolder extends ViewHolderImpl<BookSearchBean> {
+public class SourceExchangeHolder extends ViewHolderImpl<BookSearchBean> {
 
     TextView itemSourceTvTitle;
     TextView itemSourceTvChapter;

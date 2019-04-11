@@ -18,7 +18,7 @@ import com.thmub.newbook.model.repo.BookShelfRepository;
 import com.thmub.newbook.presenter.BookDetailPresenter;
 import com.thmub.newbook.presenter.contract.BookDetailContract;
 import com.thmub.newbook.ui.adapter.BookDetailAdapter;
-import com.thmub.newbook.ui.dialog.ChangeSourceDialog;
+import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +59,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     @BindView(R.id.book_detail_tv_open)
     TextView bookDetailTvOpen;
 
-    private ChangeSourceDialog mSourceDialog;
+    private SourceExchangeDialog mSourceDialog;
     /****************************Variable*********************************/
     private BookSearchBean mSearchBook;
     private ShelfBookBean mShelfBook;
@@ -112,7 +112,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         }
 
         //Dialog
-        mSourceDialog = new ChangeSourceDialog(this, mShelfBook);
+        mSourceDialog = new SourceExchangeDialog(this, mShelfBook);
 
     }
 

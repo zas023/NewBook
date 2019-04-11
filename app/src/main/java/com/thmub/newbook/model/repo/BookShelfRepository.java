@@ -116,6 +116,16 @@ public class BookShelfRepository {
     /**************************Delete************************************/
 
     /**
+     * 删除书架书籍
+     * 用于换源时更新书籍数据
+     *
+     * @param book
+     */
+    public void deleteShelfBook(ShelfBookBean book) {
+        mShelfBookDao.delete(book);
+    }
+
+    /**
      * 将书籍异步移出书籍
      *
      * @param book
