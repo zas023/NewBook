@@ -99,8 +99,9 @@ public class NetPageLoader extends PageLoader {
      * @param chapterIndex
      */
     private synchronized void loadChapterContent(final int chapterIndex) {
-
-        if (null != bookShelfBean && bookShelfBean.getBookChapterListSize() > 0) {
+        if (null == bookShelfBean || bookShelfBean.getBookChapterListSize() <= 0)
+            return;
+        if (shouldRequestChapter(chapterIndex)) {
             SourceModel.getInstance(bookShelfBean.getSource())
                     .parseContent(bookShelfBean.getChapter(chapterIndex))
                     .subscribeOn(scheduler)
@@ -120,7 +121,6 @@ public class NetPageLoader extends PageLoader {
                                             , bookShelfBean.getChapter(chapterIndex).getChapterTitle()
                                             , bookContentBean.getChapterContent());
                             finishContent(bookContentBean.getChapterIndex());
-
                         }
 
                         @Override
@@ -154,6 +154,7 @@ public class NetPageLoader extends PageLoader {
 
     /**
      * 获取章节内容
+     *
      * @param chapter
      * @return
      * @throws Exception
@@ -186,6 +187,7 @@ public class NetPageLoader extends PageLoader {
         if (mPageChangeListener != null && mCurChapterPos >= 1) {
             loadChapterContent(mCurChapterPos - 1);
         }
+        super.parsePrevChapter();
     }
 
     /**
@@ -196,6 +198,7 @@ public class NetPageLoader extends PageLoader {
         for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 2, bookShelfBean.getBookChapterListSize()); i++) {
             loadChapterContent(i);
         }
+        super.parseCurChapter();
     }
 
     /**
@@ -207,6 +210,7 @@ public class NetPageLoader extends PageLoader {
         for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 2, bookShelfBean.getBookChapterListSize()); i++) {
             loadChapterContent(i);
         }
+        super.parseNextChapter();
     }
 
     /**
