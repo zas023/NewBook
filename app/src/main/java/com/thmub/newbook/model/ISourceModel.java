@@ -12,11 +12,11 @@ import io.reactivex.Observable;
  * Created by Zhouas666 on 2019-03-27
  * Github: https://github.com/zas023
  */
-public abstract class ISourceModel {
+public  interface ISourceModel {
 
-    public abstract Observable<List<BookSearchBean>> searchBook(String keyword);
+    Observable<List<BookSearchBean>> searchBook(String keyword);
 
-    public abstract Observable<List<BookChapterBean>> parseCatalog(String catalogLink);
+    Observable<List<BookChapterBean>> parseCatalog(String catalogLink);
 
-    public abstract Observable<BookContentBean> parseContent(BookChapterBean chapter);
+    Observable<BookContentBean> parseContent(BookChapterBean chapter);
 }

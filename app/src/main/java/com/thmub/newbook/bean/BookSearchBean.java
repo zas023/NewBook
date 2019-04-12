@@ -191,5 +191,19 @@ public class BookSearchBean implements Parcelable {
         dest.writeStringList(sourceUrls);
     }
 
-
+    @Override
+    public String toString() {
+        return "BookSearchBean{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", desc='" + desc + '\'' +
+                ", cover='" + cover + '\'' +
+                ", link='" + link + '\'' +
+                ", kind='" + kind + '\'' +
+                ", latestChapter='" + latestChapter + '\'' +
+                ", source='" + source + '\'' +
+                ", selected=" + selected +
+                ", sourceUrls=" + sourceUrls +
+                '}';
+    }
 }

@@ -23,6 +23,8 @@ public class BookSourceBean implements Parcelable {
     private String rootLink;    //利用url的唯一性
     //书源名称
     private String sourceName;
+    //书源类型（Xpath,Json)
+    private String sourceType;
     //编码格式
     private String encodeType;
     //搜索地址
@@ -30,12 +32,14 @@ public class BookSourceBean implements Parcelable {
 
     //书源规则
     //搜索
+    private String ruleSearchBook;
     private String ruleSearchTitle;
     private String ruleSearchAuthor;
     private String ruleSearchDesc;
     private String ruleSearchCover;
     private String ruleSearchLink;
     //目录
+    private String ruleCatalogChapter;
     private String ruleCatalogTitle;
     private String ruleCatalogLink;
     //章节
@@ -51,19 +55,23 @@ public class BookSourceBean implements Parcelable {
     //是否选择
     private boolean isSelected;
 
-    @Generated(hash = 1647316888)
-    public BookSourceBean(String rootLink, String sourceName, String encodeType, String searchLink, String ruleSearchTitle,
-            String ruleSearchAuthor, String ruleSearchDesc, String ruleSearchCover, String ruleSearchLink, String ruleCatalogTitle,
-            String ruleCatalogLink, String ruleChapterContent, int orderNumber, int weight, boolean isSelected) {
+    @Generated(hash = 787390721)
+    public BookSourceBean(String rootLink, String sourceName, String sourceType, String encodeType, String searchLink,
+            String ruleSearchBook, String ruleSearchTitle, String ruleSearchAuthor, String ruleSearchDesc, String ruleSearchCover,
+            String ruleSearchLink, String ruleCatalogChapter, String ruleCatalogTitle, String ruleCatalogLink,
+            String ruleChapterContent, int orderNumber, int weight, boolean isSelected) {
         this.rootLink = rootLink;
         this.sourceName = sourceName;
+        this.sourceType = sourceType;
         this.encodeType = encodeType;
         this.searchLink = searchLink;
+        this.ruleSearchBook = ruleSearchBook;
         this.ruleSearchTitle = ruleSearchTitle;
         this.ruleSearchAuthor = ruleSearchAuthor;
         this.ruleSearchDesc = ruleSearchDesc;
         this.ruleSearchCover = ruleSearchCover;
         this.ruleSearchLink = ruleSearchLink;
+        this.ruleCatalogChapter = ruleCatalogChapter;
         this.ruleCatalogTitle = ruleCatalogTitle;
         this.ruleCatalogLink = ruleCatalogLink;
         this.ruleChapterContent = ruleChapterContent;
@@ -79,13 +87,16 @@ public class BookSourceBean implements Parcelable {
     protected BookSourceBean(Parcel in) {
         rootLink = in.readString();
         sourceName = in.readString();
+        sourceType = in.readString();
         encodeType = in.readString();
         searchLink = in.readString();
+        ruleSearchBook = in.readString();
         ruleSearchTitle = in.readString();
         ruleSearchAuthor = in.readString();
         ruleSearchDesc = in.readString();
         ruleSearchCover = in.readString();
         ruleSearchLink = in.readString();
+        ruleCatalogChapter = in.readString();
         ruleCatalogTitle = in.readString();
         ruleCatalogLink = in.readString();
         ruleChapterContent = in.readString();
@@ -130,12 +141,29 @@ public class BookSourceBean implements Parcelable {
         this.searchLink = searchLink;
     }
 
+    public String getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
+    }
+
     public String getEncodeType() {
         return encodeType;
     }
 
     public void setEncodeType(String encodeType) {
         this.encodeType = encodeType;
+    }
+
+
+    public String getRuleSearchBook() {
+        return ruleSearchBook;
+    }
+
+    public void setRuleSearchBook(String ruleSearchBook) {
+        this.ruleSearchBook = ruleSearchBook;
     }
 
     public String getRuleSearchTitle() {
@@ -176,6 +204,15 @@ public class BookSourceBean implements Parcelable {
 
     public void setRuleSearchLink(String ruleSearchLink) {
         this.ruleSearchLink = ruleSearchLink;
+    }
+
+
+    public String getRuleCatalogChapter() {
+        return ruleCatalogChapter;
+    }
+
+    public void setRuleCatalogChapter(String ruleCatalogChapter) {
+        this.ruleCatalogChapter = ruleCatalogChapter;
     }
 
     public String getRuleCatalogTitle() {
@@ -228,27 +265,6 @@ public class BookSourceBean implements Parcelable {
 
     /*************************************************************************/
 
-    @Override
-    public String toString() {
-        return "BookSourceBean{" +
-                "rootLink='" + rootLink + '\'' +
-                ", sourceName='" + sourceName + '\'' +
-                ", searchLink='" + searchLink + '\'' +
-                ", encodeType='" + encodeType + '\'' +
-                ", ruleSearchTitle='" + ruleSearchTitle + '\'' +
-                ", ruleSearchAuthor='" + ruleSearchAuthor + '\'' +
-                ", ruleSearchDesc='" + ruleSearchDesc + '\'' +
-                ", ruleSearchCover='" + ruleSearchCover + '\'' +
-                ", ruleSearchLink='" + ruleSearchLink + '\'' +
-                ", ruleCatalogTitle='" + ruleCatalogTitle + '\'' +
-                ", ruleCatalogLink='" + ruleCatalogLink + '\'' +
-                ", ruleChapterContent='" + ruleChapterContent + '\'' +
-                ", orderNumber=" + orderNumber +
-                ", weight=" + weight +
-                ", isSelected=" + isSelected +
-                '}';
-    }
-
     public boolean getIsSelected() {
         return this.isSelected;
     }
@@ -256,6 +272,7 @@ public class BookSourceBean implements Parcelable {
     public void setIsSelected(boolean isSelected) {
         this.isSelected = isSelected;
     }
+
 
     @Override
     public int describeContents() {
@@ -266,13 +283,16 @@ public class BookSourceBean implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(rootLink);
         dest.writeString(sourceName);
+        dest.writeString(sourceType);
         dest.writeString(encodeType);
         dest.writeString(searchLink);
+        dest.writeString(ruleSearchBook);
         dest.writeString(ruleSearchTitle);
         dest.writeString(ruleSearchAuthor);
         dest.writeString(ruleSearchDesc);
         dest.writeString(ruleSearchCover);
         dest.writeString(ruleSearchLink);
+        dest.writeString(ruleCatalogChapter);
         dest.writeString(ruleCatalogTitle);
         dest.writeString(ruleCatalogLink);
         dest.writeString(ruleChapterContent);
