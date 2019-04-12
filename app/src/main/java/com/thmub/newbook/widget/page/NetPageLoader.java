@@ -1,6 +1,5 @@
 package com.thmub.newbook.widget.page;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.thmub.newbook.bean.BookChapterBean;
@@ -9,7 +8,7 @@ import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.manager.BookManager;
 import com.thmub.newbook.model.SourceModel;
 import com.thmub.newbook.utils.FileUtils;
-import com.thmub.newbook.utils.NetworkUtil;
+import com.thmub.newbook.utils.NetworkUtils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -45,7 +44,7 @@ public class NetPageLoader extends PageLoader {
      */
     @Override
     public void refreshChapterList() {
-        if (bookShelfBean.getBookChapterListSize() > 0) {
+        if (bookShelfBean != null && bookShelfBean.getBookChapterListSize() > 0) {
             isChapterListPrepare = true;
 
             // 目录加载完成，执行回调操作。
@@ -176,7 +175,7 @@ public class NetPageLoader extends PageLoader {
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
-        return NetworkUtil.isNetWorkAvailable() && hasChapterData(bookShelfBean.getChapter(chapterIndex));
+        return NetworkUtils.isNetWorkAvailable() && hasChapterData(bookShelfBean.getChapter(chapterIndex));
     }
 
     /**

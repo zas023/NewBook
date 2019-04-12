@@ -290,15 +290,15 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mSourceDialog.setListener(bean -> {
             mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
             //交换数据
-            ShelfBookBean oldBook=mShelfBook;
-            mShelfBook=bean.getShelfBook();
+            ShelfBookBean oldBook = mShelfBook;
+            mShelfBook = bean.getShelfBook();
             mShelfBook.setCurChapter(oldBook.getCurChapter());
             mShelfBook.setCurChapterPage(oldBook.getCurChapterPage());
 
             BookShelfRepository.getInstance().deleteShelfBook(oldBook);
             BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
             //更新目录
-            mPresenter.loadCatalogs(mShelfBook);
+            mPresenter.loadCatalogs(mShelfBook, true);
             mSourceDialog.dismiss();
         });
     }
@@ -306,9 +306,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     @Override
     protected void processLogic() {
         super.processLogic();
+        //加载目录
         mPageLoader.refreshChapterList();
     }
-
 
     /**************************Transaction********************************/
     @Override
@@ -317,9 +317,13 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     }
 
     @Override
-    public void finishLoadCatalogs(List<BookChapterBean> items) {
+    public void finishLoadCatalogs(List<BookChapterBean> items, boolean fromNet) {
         mShelfBook.setBookChapterList(items);
-        mPageLoader.changeSourceFinish(mShelfBook);
+        if (fromNet) {
+            mPageLoader.changeSourceFinish(mShelfBook);
+        } else {
+            mPageLoader.skipToChapter(mShelfBook.getCurChapter(), mShelfBook.getCurChapterPage());
+        }
     }
 
     @Override
@@ -351,16 +355,17 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         switch (item.getItemId()) {
             case android.R.id.home:    //左侧返回键
                 finish();
-            case R.id.action_change_source:
+            case R.id.action_change_source:  //换源
                 mSourceDialog.show();
                 break;
-            case R.id.action_refresh_chapter:
+            case R.id.action_refresh_chapter:  //刷新章节
+                mPageLoader.refreshCurChapter();
                 break;
-            case R.id.action_add_bookmark:
+            case R.id.action_add_bookmark:  //添加书签
                 break;
-            case R.id.action_copy_content:
+            case R.id.action_copy_content:  //复制内容
                 break;
-            case R.id.action_refresh_catalog:
+            case R.id.action_refresh_catalog:  //刷新目录
                 break;
             default:
                 break;

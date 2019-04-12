@@ -264,13 +264,14 @@ public class ShelfBookBean implements Parcelable {
     }
 
     public void setBookChapterList(List<BookChapterBean> bookChapterList) {
+        if (bookChapterList == null || bookChapterList.size() <= 0) return;
         this.bookChapterList = bookChapterList;
         chapterCount = bookChapterList.size();
         latestChapter = bookChapterList.get(chapterCount - 1).getChapterTitle();
     }
 
     public int getBookChapterListSize() {
-        return getBookChapterList().size();
+        return bookChapterList == null ? 0 : getBookChapterList().size();
     }
 
     public BookChapterBean getChapter(int index) {

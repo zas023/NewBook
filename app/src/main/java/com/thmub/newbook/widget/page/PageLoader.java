@@ -380,8 +380,7 @@ public abstract class PageLoader {
     /**
      * 刷新当前章节
      */
-    public void refreshDurChapter() {
-        //BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()), mCurChapterPos, bookShelfBean.getChapter(mCurChapterPos).getDurChapterName());
+    public void refreshCurChapter() {
         skipToChapter(mCurChapterPos, 0);
     }
 
@@ -393,7 +392,7 @@ public abstract class PageLoader {
             openChapter(mCurPagePos);
         } else {
             bookShelfBean = book;
-            mPageChangeListener.onCategoryFinish(book.getBookChapterList());
+//            mPageChangeListener.onCategoryFinish(book.getBookChapterList());
             skipToChapter(bookShelfBean.getCurChapter(), bookShelfBean.getCurChapterPage());
         }
     }

@@ -13,12 +13,12 @@ import java.util.List;
 public interface ReadContract {
 
     interface View extends BaseContract.BaseView {
-        void finishLoadCatalogs(List<BookChapterBean> items);
+        void finishLoadCatalogs(List<BookChapterBean> items, boolean fromNet);
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {
         //加载目录
-        void loadCatalogs(ShelfBookBean bookBean);
+        void loadCatalogs(ShelfBookBean bookBean,boolean fromNet);
     }
 
 }

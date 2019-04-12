@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 import com.thmub.newbook.bean.BookChapterBean;
-import com.thmub.newbook.utils.NetworkUtil;
+import com.thmub.newbook.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ class ChapterProvider {
         TxtChapter txtChapter = new TxtChapter(chapter.getChapterIndex());
         // 判断章节是否存在
         if (!isPrepare) {
-            if (pageLoader instanceof NetPageLoader && !NetworkUtil.isNetWorkAvailable()) {
+            if (pageLoader instanceof NetPageLoader && !NetworkUtils.isNetWorkAvailable()) {
                 txtChapter.setStatus(TxtChapter.Status.ERROR);
                 txtChapter.setMsg("网络连接不可用");
             }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">搜书神器</string>
+    <string name="app_name">览阅</string>
     <string name="app_name_en">Reader</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

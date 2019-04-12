@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NetworkUtil {
+public class NetworkUtils {
     public static final int SUCCESS = 10000;
     public static final int ERROR_CODE_NONET = 10001;
     public static final int ERROR_CODE_OUTTIME = 10002;
