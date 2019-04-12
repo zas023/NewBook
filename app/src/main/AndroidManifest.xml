@@ -15,7 +15,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:name="com.thmub.newbook.App"
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,23 +23,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.thmub.newbook.ui.activity.MainActivity">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.thmub.newbook.ui.activity.SearchActivity" />
-        <activity android:name="com.thmub.newbook.ui.activity.BookDetailActivity" />
-        <activity android:name="com.thmub.newbook.ui.activity.BookSourceActivity" />
-        <activity android:name="com.thmub.newbook.ui.activity.SourceEditActivity" />
-        <activity android:name="com.thmub.newbook.ui.activity.ReadActivity" />
+        <activity android:name=".ui.activity.SearchActivity" />
+        <activity android:name=".ui.activity.BookDetailActivity" />
+        <activity android:name=".ui.activity.BookSourceActivity" />
+        <activity android:name=".ui.activity.SourceEditActivity" />
+        <activity android:name=".ui.activity.ReadActivity" />
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
             android:authorities="com.thmub.newbook.BmobContentProvider" />
 
+        <activity android:name=".ui.activity.AboutActivity"></activity>
     </application>
 
 </manifest>

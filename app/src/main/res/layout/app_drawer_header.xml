@@ -25,15 +25,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:paddingLeft="@dimen/margin_normal"
         android:text="账户"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/textPrimary" />
+        android:textColor="@color/md_white_1000" />
 
     <TextView
         android:id="@+id/drawer_tv_mail"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="@dimen/margin_normal"
         android:text="点我登陆"
-        android:textColor="@color/textPrimary" />
+        android:textColor="@color/md_white_1000" />
 
 </LinearLayout>

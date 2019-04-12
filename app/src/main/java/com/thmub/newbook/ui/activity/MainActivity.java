@@ -191,6 +191,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.action_setting:  //设置
                 break;
             case R.id.action_about:  //关于
+                startActivity(new Intent(this,AboutActivity.class));
                 break;
             case R.id.action_night:  //夜间模式
                 setNightTheme(!isNightTheme());

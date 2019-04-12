@@ -28,7 +28,7 @@ android {
     }
 }
 
-greendao{
+greendao {
     schemaVersion 1
     daoPackage 'com.thmub.newbook.model.dao'
     targetGenDir 'src/main/java'
