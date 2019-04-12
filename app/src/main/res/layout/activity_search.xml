@@ -20,9 +20,9 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                style="@style/Theme.ToolBar.Menu"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/Theme.ToolBar.Menu">
                 app:layout_scrollFlags="scroll|enterAlways">
 
                 <androidx.appcompat.widget.SearchView

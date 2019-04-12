@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -54,7 +55,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private View drawerHeader;
     private ImageView drawerIv;
     private TextView drawerTvAccount, drawerTvMail;
-
+    private Switch swNightMode;
 
     /*****************************Variable********************************/
 
@@ -84,29 +85,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         toggle.syncState();
 
         drawerHeader = navigationView.inflateHeaderView(R.layout.app_drawer_header);
-        drawerIv =  drawerHeader.findViewById(R.id.drawer_iv);
-        drawerTvAccount =  drawerHeader.findViewById(R.id.drawer_tv_name);
-        drawerTvMail =  drawerHeader.findViewById(R.id.drawer_tv_mail);
+        drawerIv = drawerHeader.findViewById(R.id.drawer_iv);
+        drawerTvAccount = drawerHeader.findViewById(R.id.drawer_tv_name);
+        drawerTvMail = drawerHeader.findViewById(R.id.drawer_tv_mail);
     }
 
     @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
-
-        //第一次进入App初始化数据库
-//        if (SharedPreUtils.getInstance().getBoolean("shared_app_first_in", true)) {
-//            BookSourceRepository.getInstance()
-//                    .saveBookSourceWithAsync(BookSourceManager.getInstance().getBookSourceList());
-//            SharedPreUtils.getInstance().putBoolean("shared_app_first_in", false);
-//        }
         //如果没有书源，则添加默认书源
-        if(BookSourceRepository.getInstance().getAllBookSource().size()==0)
+        if (BookSourceRepository.getInstance().getAllBookSource().size() == 0)
             BookSourceRepository.getInstance()
                     .saveBookSourceWithAsync(BookSourceManager.getInstance().getBookSourceList());
 
         tabAdapter = new TabFragmentPageAdapter(getSupportFragmentManager());
-        tabAdapter.addFragment(new BookShelfFragment(),"书架");
-        tabAdapter.addFragment(new BookStoreFragment(),"书城");
+        tabAdapter.addFragment(new BookShelfFragment(), "书架");
+        tabAdapter.addFragment(new BookStoreFragment(), "书城");
     }
 
     @Override
@@ -115,12 +109,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mainVpContent.setAdapter(tabAdapter);
         mainVpContent.setOffscreenPageLimit(3);
         mainTabTitle.setupWithViewPager(mainVpContent);
+
+        swNightMode = navigationView.getMenu()
+                .findItem(R.id.action_night).getActionView().findViewById(R.id.menu_switch);
+        swNightMode.setChecked(isNightTheme());
     }
 
     @Override
     protected void initClick() {
         super.initClick();
         navigationView.setNavigationItemSelectedListener(this);
+
+        //监听夜间模式switch
+        swNightMode.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (compoundButton.isPressed()) {
+                setNightTheme(b);
+            }
+        });
     }
 
     @Override
@@ -169,14 +174,29 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     /**
      * 侧滑菜单点击事件
+     *
      * @param item
      * @return
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_source:
+            case R.id.action_source:  //书源管理
                 startActivity(new Intent(this, BookSourceActivity.class));
+                break;
+            case R.id.action_download:  //下载管理
+                break;
+            case R.id.action_replace:  //替换管理
+                break;
+            case R.id.action_setting:  //设置
+                break;
+            case R.id.action_about:  //关于
+                break;
+            case R.id.action_night:  //夜间模式
+                setNightTheme(!isNightTheme());
+                swNightMode.setChecked(isNightTheme());
+                break;
+            case R.id.action_sync:  //同步书架
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -31,7 +31,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    style="@style/Theme.ToolBar.Menu">
+                    app:popupTheme="@style/Theme.ToolBar.Menu">
 
                 </androidx.appcompat.widget.Toolbar>
             </androidx.cardview.widget.CardView>
@@ -41,7 +41,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/tab_height"
                 app:tabIndicatorColor="@color/md_orange_800"
-                app:tabIndicatorFullWidth="false"
                 app:tabSelectedTextColor="@color/md_white_1000"
                 app:tabTextColor="@color/textTranslucent" />
 

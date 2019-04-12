@@ -1,10 +1,44 @@
 <?xml version ="1.0" encoding ="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/action_download"
-        android:title="下载管理"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--设置group的id以便显示分割线-->
+    <group android:id="@+id/menu_group_one">
+        <item
+            android:id="@+id/action_source"
+            android:icon="@mipmap/ic_menu_source"
+            android:title="书源管理" />
 
-    <item
-        android:id="@+id/action_source"
-        android:title="书源管理"/>
+        <item
+            android:id="@+id/action_download"
+            android:icon="@mipmap/ic_menu_download"
+            android:title="下载管理" />
+
+        <item
+            android:id="@+id/action_replace"
+            android:icon="@mipmap/ic_menu_replace"
+            android:title="替换管理" />
+    </group>
+
+    <group android:id="@+id/menu_group_two">
+        <item
+            android:id="@+id/action_setting"
+            android:icon="@mipmap/ic_menu_setting"
+            android:title="设置" />
+        <item
+            android:id="@+id/action_about"
+            android:icon="@mipmap/ic_menu_about"
+            android:title="关于" />
+    </group>
+
+    <group android:id="@+id/menu_group_three">
+        <item
+            android:id="@+id/action_night"
+            android:icon="@mipmap/ic_menu_night"
+            android:title="夜间模式"
+            app:actionLayout="@layout/app_menu_switch" />
+        <item
+            android:id="@+id/action_sync"
+            android:icon="@mipmap/ic_menu_sync"
+            android:title="同步书架" />
+    </group>
 </menu>

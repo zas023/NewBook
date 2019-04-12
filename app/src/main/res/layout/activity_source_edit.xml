@@ -11,9 +11,9 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            style="@style/Theme.ToolBar.Menu"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/Theme.ToolBar.Menu">
 
         </androidx.appcompat.widget.Toolbar>
 
