@@ -1,7 +1,7 @@
-# 搜书神器（NewBook）
-<img width="3%" hight="3%" src="https://github.com/zas023/CocoBook/blob/master/image/151633_65868181.png" />  免费小说阅读器
+# 览阅——爬虫版（NewBook）
+<img width="3%" hight="3%" src="https://github.com/zas023/CocoBook/blob/master/image/151633_65868181.png" />  一款免费的阅读神器
 
-搜书神器致力于打造绿色健康、无广告的阅读平台，为广大读者提供优质健康的阅读服务。
+览阅致力于打造绿色健康、无广告的阅读平台，为广大读者提供优质健康的阅读服务。
 项目采用MVP架构，使用流行的RxJava和Retrofit 框架等等，追求每个功能的最佳代码实现。
 
 ### 程序效果
