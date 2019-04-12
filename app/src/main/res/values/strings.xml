@@ -5,6 +5,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+
+    <!--read-->
+    <string name="read_catalog_title">第 %1$d 章 %2$s</string>
+
     <!--string_array start-->
 
     <!--首页fragment-->

@@ -17,9 +17,9 @@ import androidx.core.content.ContextCompat;
 public class CatalogHolder extends ViewHolderImpl<BookChapterBean> {
 
 
-    TextView itemCatalogTvTitle;
+    private TextView itemCatalogTvTitle;
 
-    private int currentSelected = 0;
+    private int currentSelected;
 
     public CatalogHolder(int pos) {
         this.currentSelected = pos;
@@ -38,7 +38,7 @@ public class CatalogHolder extends ViewHolderImpl<BookChapterBean> {
     @Override
     public void onBind(BookChapterBean data, int pos) {
         //首先判断是否该章已下载
-        Drawable drawable = null;
+        Drawable drawable;
 
         //如果没有链接地址表示是本地文件
         if (data.getBookLink() == null) {
@@ -52,12 +52,14 @@ public class CatalogHolder extends ViewHolderImpl<BookChapterBean> {
         }
 
         itemCatalogTvTitle.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-        itemCatalogTvTitle.setSelected(false);
         itemCatalogTvTitle.setText(data.getChapterTitle());
         //选中
         if (currentSelected == pos) {
-            itemCatalogTvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.md_red_400));
+            itemCatalogTvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
             itemCatalogTvTitle.setSelected(true);
+        }else {
+            itemCatalogTvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.textPrimary));
+            itemCatalogTvTitle.setSelected(false);
         }
     }
 }

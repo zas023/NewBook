@@ -154,8 +154,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void initWidget() {
         super.initWidget();
         // Catalog
-        mAdapter = new CatalogAdapter();
+        mAdapter = new CatalogAdapter(mShelfBook);
         readRvCatalog.setLayoutManager(new LinearLayoutManager(mContext));
+        readRvCatalog.getLayoutManager().scrollToPosition(mShelfBook.getCurChapter());
         readRvCatalog.setAdapter(mAdapter);
         readRvCatalog.setBackground(readSettingManager.getTextBackground(this));
 
@@ -207,17 +208,16 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             @Override
             public void onChapterChange(int pos) {
                 mAdapter.setSelectedChapter(pos);
+                readRvCatalog.getLayoutManager().scrollToPosition(pos);
             }
 
             @Override
             public void onCategoryFinish(List<BookChapterBean> chapters) {
-                mAdapter.clear();
-                mAdapter.addItems(chapters);
+                mShelfBook.setBookChapterList(chapters);
             }
 
             @Override
             public void onPageCountChange(int count) {
-
             }
 
             @Override
@@ -240,7 +240,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         });
 
         //catalog
-        mAdapter.setOnItemClickListener((view, pos) -> mPageLoader.skipToChapter(pos, 0));
+        mAdapter.setListener((index, page) -> mPageLoader.skipToChapter(index, 0));
 
         //监听底部设置菜单
         mSettingDialog.setOnDismissListener(
@@ -543,7 +543,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             mShelfBook.setLastRead(StringUtils.
                     dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
             //阅读章节名称
-            mShelfBook.setCurChapterTitle(mAdapter.getItem(mShelfBook.getCurChapter()).getChapterTitle());
+            mShelfBook.setCurChapterTitle(mShelfBook.getChapter(mShelfBook.getCurChapter()).getChapterTitle());
             BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
         }
         //返回给BookDetail。
