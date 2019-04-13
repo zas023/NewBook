@@ -12,7 +12,7 @@ import com.thmub.newbook.R;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.model.SearchEngine;
-import com.thmub.newbook.model.repo.BookSourceRepository;
+import com.thmub.newbook.model.local.BookSourceRepository;
 import com.thmub.newbook.ui.adapter.SourceExchangeAdapter;
 import com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView;
 

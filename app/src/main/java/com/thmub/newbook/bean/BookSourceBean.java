@@ -38,6 +38,8 @@ public class BookSourceBean implements Parcelable {
     private String ruleSearchDesc;
     private String ruleSearchCover;
     private String ruleSearchLink;
+    //发现
+    private String ruleFindBook;
     //目录
     private String ruleCatalogChapter;
     private String ruleCatalogTitle;
@@ -55,11 +57,11 @@ public class BookSourceBean implements Parcelable {
     //是否选择
     private boolean isSelected;
 
-    @Generated(hash = 787390721)
-    public BookSourceBean(String rootLink, String sourceName, String sourceType, String encodeType, String searchLink,
-            String ruleSearchBook, String ruleSearchTitle, String ruleSearchAuthor, String ruleSearchDesc, String ruleSearchCover,
-            String ruleSearchLink, String ruleCatalogChapter, String ruleCatalogTitle, String ruleCatalogLink,
-            String ruleChapterContent, int orderNumber, int weight, boolean isSelected) {
+    @Generated(hash = 2145846218)
+    public BookSourceBean(String rootLink, String sourceName, String sourceType, String encodeType, String searchLink, String ruleSearchBook,
+            String ruleSearchTitle, String ruleSearchAuthor, String ruleSearchDesc, String ruleSearchCover, String ruleSearchLink,
+            String ruleFindBook, String ruleCatalogChapter, String ruleCatalogTitle, String ruleCatalogLink, String ruleChapterContent,
+            int orderNumber, int weight, boolean isSelected) {
         this.rootLink = rootLink;
         this.sourceName = sourceName;
         this.sourceType = sourceType;
@@ -71,6 +73,7 @@ public class BookSourceBean implements Parcelable {
         this.ruleSearchDesc = ruleSearchDesc;
         this.ruleSearchCover = ruleSearchCover;
         this.ruleSearchLink = ruleSearchLink;
+        this.ruleFindBook = ruleFindBook;
         this.ruleCatalogChapter = ruleCatalogChapter;
         this.ruleCatalogTitle = ruleCatalogTitle;
         this.ruleCatalogLink = ruleCatalogLink;
@@ -96,6 +99,7 @@ public class BookSourceBean implements Parcelable {
         ruleSearchDesc = in.readString();
         ruleSearchCover = in.readString();
         ruleSearchLink = in.readString();
+        ruleFindBook = in.readString();
         ruleCatalogChapter = in.readString();
         ruleCatalogTitle = in.readString();
         ruleCatalogLink = in.readString();
@@ -206,6 +210,13 @@ public class BookSourceBean implements Parcelable {
         this.ruleSearchLink = ruleSearchLink;
     }
 
+    public String getRuleFindBook() {
+        return ruleFindBook;
+    }
+
+    public void setRuleFindBook(String ruleFindBook) {
+        this.ruleFindBook = ruleFindBook;
+    }
 
     public String getRuleCatalogChapter() {
         return ruleCatalogChapter;
@@ -273,7 +284,6 @@ public class BookSourceBean implements Parcelable {
         this.isSelected = isSelected;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -292,6 +302,7 @@ public class BookSourceBean implements Parcelable {
         dest.writeString(ruleSearchDesc);
         dest.writeString(ruleSearchCover);
         dest.writeString(ruleSearchLink);
+        dest.writeString(ruleFindBook);
         dest.writeString(ruleCatalogChapter);
         dest.writeString(ruleCatalogTitle);
         dest.writeString(ruleCatalogLink);

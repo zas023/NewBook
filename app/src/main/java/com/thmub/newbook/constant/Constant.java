@@ -18,4 +18,8 @@ public class Constant {
     public static final String FORMAT_BOOK_DATE = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String FORMAT_TIME = "HH:mm";
     public static final String FORMAT_FILE_DATE = "yyyy-MM-dd";
+
+    /*URL_BASE*/
+    public static final String API_BASE_URL = "http://api.zhuishushenqi.com";
+    public static final String IMG_BASE_URL = "http://statics.zhuishushenqi.com";
 }

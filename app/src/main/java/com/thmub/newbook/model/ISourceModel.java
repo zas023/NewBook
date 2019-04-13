@@ -14,6 +14,8 @@ import io.reactivex.Observable;
  */
 public  interface ISourceModel {
 
+    Observable<List<BookSearchBean>> findBook(String findRule);
+
     Observable<List<BookSearchBean>> searchBook(String keyword);
 
     Observable<List<BookChapterBean>> parseCatalog(String catalogLink);

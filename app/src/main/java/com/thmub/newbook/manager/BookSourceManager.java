@@ -43,6 +43,7 @@ public class BookSourceManager {
                 "\t\t\"ruleSearchDesc\": \"shortIntro\",\n" +
                 "\t\t\"ruleSearchCover\": \"cover@http://statics.zhuishushenqi.com%s\",\n" +
                 "\t\t\"ruleSearchLink\": \"_id@http://api.zhuishushenqi.com/mix-atoc/%s?view=chapters\",\n" +
+                "\t\t\"ruleSearchFind\": \"_id@http://api.zhuishushenqi.com/book/%s/recommend\",\n" +
                 "\t\t\"ruleCatalogChapter\": \"mixToc$chapters\",\n" +
                 "\t\t\"ruleCatalogTitle\": \"title\",\n" +
                 "\t\t\"ruleCatalogLink\": \"link@UrlEncode#http://chapterup.zhuishushenqi.com/chapter/%s\",\n" +

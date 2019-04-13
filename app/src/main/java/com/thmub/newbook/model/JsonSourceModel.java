@@ -51,6 +51,17 @@ public class JsonSourceModel implements ISourceModel {
     }
 
     @Override
+    public Observable<List<BookSearchBean>> findBook(String findLink) {
+        if (isEmpty(findLink)) {
+            return Observable.create(emitter -> {
+                emitter.onNext(null);
+                emitter.onComplete();
+            });
+        }
+        return parseBook(findLink, bookSourceBean.getRuleSearchBook());
+    }
+
+    @Override
     public Observable<List<BookSearchBean>> searchBook(String keyword) {
         if (isEmpty(bookSourceBean.getSearchLink())) {
             return Observable.create(emitter -> {
@@ -58,7 +69,16 @@ public class JsonSourceModel implements ISourceModel {
                 emitter.onComplete();
             });
         }
+
+        String jsonLink = bookSourceBean.getRootLink() + String.format(bookSourceBean.getSearchLink(), keyword);
+
+        return parseBook(jsonLink, bookSourceBean.getRuleSearchBook());
+    }
+
+    public Observable<List<BookSearchBean>> parseBook(String jsonLink, String bookRule) {
+
         return Observable.create(emitter -> {
+
             String jsonStr = null, encodeType;
             //获取书源搜索地址的编码
             String[] encodes = bookSourceBean.getEncodeType().split("&");
@@ -68,16 +88,14 @@ public class JsonSourceModel implements ISourceModel {
                 encodeType = encodes[1];
 
             try {
-                jsonStr = OkHttpUtils.getHtml(bookSourceBean.getRootLink()
-                        + String.format(bookSourceBean.getSearchLink(),keyword)
-                        , encodeType);
+                jsonStr = OkHttpUtils.getHtml(jsonLink, encodeType);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            String bookJson = bookSourceBean.getRuleSearchBook();
-            String titleJson =bookSourceBean.getRuleSearchTitle();
-            String coverJson =bookSourceBean.getRuleSearchCover();
+            String bookJson = bookRule;
+            String titleJson = bookSourceBean.getRuleSearchTitle();
+            String coverJson = bookSourceBean.getRuleSearchCover();
             String linkJson = bookSourceBean.getRuleSearchLink();
             String authorJson = bookSourceBean.getRuleSearchAuthor();
             String descJson = bookSourceBean.getRuleSearchDesc();
@@ -140,7 +158,7 @@ public class JsonSourceModel implements ISourceModel {
 
                 bookList.add(bean);
 
-                Log.i("JsonSourceModel",bean.toString());
+                Log.i("JsonSourceModel", bean.toString());
             }
 
             emitter.onNext(bookList);

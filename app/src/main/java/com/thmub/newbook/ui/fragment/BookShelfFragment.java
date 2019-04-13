@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPFragment;
 import com.thmub.newbook.bean.ShelfBookBean;
-import com.thmub.newbook.model.repo.BookShelfRepository;
+import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.BookShelfPresenter;
 import com.thmub.newbook.presenter.contract.BookShelfContract;
 import com.thmub.newbook.ui.activity.ReadActivity;

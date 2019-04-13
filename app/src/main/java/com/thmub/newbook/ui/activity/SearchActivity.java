@@ -9,9 +9,8 @@ import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseActivity;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.model.SearchEngine;
-import com.thmub.newbook.model.repo.BookSourceRepository;
+import com.thmub.newbook.model.local.BookSourceRepository;
 import com.thmub.newbook.ui.adapter.SearchBookAdapter;
-import com.thmub.newbook.utils.SnackbarUtils;
 import com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView;
 
 import java.util.List;

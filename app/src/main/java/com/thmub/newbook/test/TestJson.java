@@ -25,9 +25,9 @@ public class TestJson {
 
 //        test.testSite();
 
-//        test.testCatalog();
+        test.testCatalog();
 
-        test.testContent();
+//        test.testContent();
     }
 
     public void testSite() {

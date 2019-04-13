@@ -23,7 +23,7 @@ import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.manager.ReadSettingManager;
-import com.thmub.newbook.model.repo.BookShelfRepository;
+import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
 import com.thmub.newbook.ui.adapter.CatalogAdapter;

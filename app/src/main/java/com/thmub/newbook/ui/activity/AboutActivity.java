@@ -7,6 +7,9 @@ import android.view.MenuItem;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseActivity;
 import com.thmub.newbook.utils.ShareUtils;
+import com.thmub.newbook.utils.UiUtils;
+
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * Created by Zhouas666 on 2019-04-12
@@ -19,6 +22,12 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.activity_about;
+    }
+
+    @Override
+    protected void setUpToolbar(Toolbar toolbar) {
+        super.setUpToolbar(toolbar);
+        getSupportActionBar().setTitle(UiUtils.getString(R.string.activity_about));
     }
 
     @Override

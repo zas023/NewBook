@@ -4,7 +4,7 @@ import com.thmub.newbook.bean.BookContentBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.BookSourceBean;
 import com.thmub.newbook.bean.BookChapterBean;
-import com.thmub.newbook.model.repo.BookSourceRepository;
+import com.thmub.newbook.model.local.BookSourceRepository;
 
 import java.util.List;
 
@@ -47,6 +47,17 @@ public class SourceModel implements ISourceModel {
         } else {
             return true;
         }
+    }
+
+    @Override
+    public Observable<List<BookSearchBean>> findBook(String findRule) {
+        if (!initBookSourceBean()) {
+            return Observable.create(emitter -> {
+                emitter.onNext(null);
+                emitter.onComplete();
+            });
+        }
+        return sourceModel.findBook(findRule);
     }
 
     @Override

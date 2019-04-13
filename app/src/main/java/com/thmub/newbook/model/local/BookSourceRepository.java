@@ -1,4 +1,4 @@
-package com.thmub.newbook.model.repo;
+package com.thmub.newbook.model.local;
 
 import android.util.Log;
 
@@ -125,6 +125,17 @@ public class BookSourceRepository {
     public BookSourceBean getBookSourceByLink(String sourceLink) {
         return mBookSourceDao.queryBuilder()
                 .where(BookSourceBeanDao.Properties.SearchLink.eq(sourceLink))
+                .unique();
+    }
+
+    /**
+     * 根据发现规则获取书源
+     *
+     * @return
+     */
+    public BookSourceBean getBookSourceWithFind() {
+        return mBookSourceDao.queryBuilder()
+                .where(BookSourceBeanDao.Properties.RuleFindBook.isNotNull())
                 .unique();
     }
 

@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -83,6 +84,20 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
     AppCompatEditText sourceEtRuleChapterContent;
     @BindView(R.id.source_tile_ruleChapterContent)
     TextInputLayout sourceTileRuleChapterContent;
+    @BindView(R.id.source_et_sourceType)
+    AppCompatEditText sourceEtSourceType;
+    @BindView(R.id.source_til_sourceType)
+    TextInputLayout sourceTilSourceType;
+    @BindView(R.id.source_et_ruleSearchBook)
+    AppCompatEditText sourceEtRuleSearchBook;
+    @BindView(R.id.source_tile_ruleSearchBook)
+    TextInputLayout sourceTileRuleSearchBook;
+    @BindView(R.id.source_et_ruleCatalogChapter)
+    AppCompatEditText sourceEtRuleCatalogChapter;
+    @BindView(R.id.source_tile_ruleCatalogChapter)
+    TextInputLayout sourceTileRuleCatalogChapter;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
 
     private BookSourceBean mBookSource;
@@ -126,13 +141,16 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
             isEdit = true;
             sourceEtRootLink.setText(mBookSource.getRootLink());
             sourceEtSourceName.setText(mBookSource.getSourceName());
+            sourceEtSourceType.setText(mBookSource.getSourceType());
             sourceEtEncodeType.setText(mBookSource.getEncodeType());
             sourceEtSearchLink.setText(mBookSource.getSearchLink());
+            sourceEtRuleSearchBook.setText(mBookSource.getRuleSearchBook());
             sourceEtRuleSearchTitle.setText(mBookSource.getRuleSearchTitle());
             sourceEtRuleSearchAuthor.setText(mBookSource.getRuleSearchAuthor());
             sourceEtRuleSearchDesc.setText(mBookSource.getRuleSearchDesc());
             sourceEtRuleSearchCover.setText(mBookSource.getRuleSearchCover());
             sourceEtRuleSearchLink.setText(mBookSource.getRuleSearchLink());
+            sourceEtRuleCatalogChapter.setText(mBookSource.getRuleCatalogChapter());
             sourceEtRuleCatalogTitle.setText(mBookSource.getRuleCatalogTitle());
             sourceEtRuleCatalogLink.setText(mBookSource.getRuleCatalogLink());
             sourceEtRuleChapterContent.setText(mBookSource.getRuleChapterContent());
@@ -143,16 +161,22 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
 
     private void saveBookSource() {
         if (isEmpty(trim(sourceEtRootLink.getText()))) {
-            SnackbarUtils.show(this,"书源根地址不能为空");
+            SnackbarUtils.show(this, "书源根地址不能为空");
             return;
         } else
             mBookSource.setRootLink(trim(sourceEtRootLink.getText()));
         //名称
         if (isEmpty(trim(sourceEtSourceName.getText()))) {
-            SnackbarUtils.show(this,"书源名称不能为空");
+            SnackbarUtils.show(this, "书源名称不能为空");
             return;
         } else
             mBookSource.setSourceName(trim(sourceEtSourceName.getText()));
+        //类型
+        if (isEmpty(trim(sourceEtSourceType.getText()))) {
+            SnackbarUtils.show(this, "书源类型不能为空");
+            return;
+        } else
+            mBookSource.setSourceType(trim(sourceEtSourceType.getText()));
         //编码：默认utf-8
         if (isEmpty(trim(sourceEtEncodeType.getText()))) {
             mBookSource.setEncodeType("utf-8");
@@ -160,57 +184,68 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
             mBookSource.setEncodeType(trim(sourceEtEncodeType.getText()));
         //
         if (isEmpty(trim(sourceEtSearchLink.getText()))) {
-            SnackbarUtils.show(this,"书源搜索地址不能为空");
+            SnackbarUtils.show(this, "书源搜索地址不能为空");
             return;
         } else
             mBookSource.setSearchLink(trim(sourceEtSearchLink.getText()));
         //
+        if (isEmpty(trim(sourceEtRuleSearchBook.getText()))) {
+            SnackbarUtils.show(this, "书源搜索结果列表规则不能为空");
+            return;
+        } else
+            mBookSource.setRuleSearchBook(trim(sourceEtRuleSearchBook.getText()));
+        //
         if (isEmpty(trim(sourceEtRuleSearchTitle.getText()))) {
-            SnackbarUtils.show(this,"书源搜索结果书名规则不能为空");
+            SnackbarUtils.show(this, "书源搜索结果书名规则不能为空");
             return;
         } else
             mBookSource.setRuleSearchTitle(trim(sourceEtRuleSearchTitle.getText()));
         //
         if (isEmpty(trim(sourceEtRuleSearchAuthor.getText()))) {
-            SnackbarUtils.show(this,"书源搜索结果作者规则不能为空");
+            SnackbarUtils.show(this, "书源搜索结果作者规则不能为空");
             return;
         } else
             mBookSource.setRuleSearchAuthor(trim(sourceEtRuleSearchAuthor.getText()));
         //
         if (isEmpty(trim(sourceEtRuleSearchDesc.getText()))) {
-            SnackbarUtils.show(this,"书源搜索结果简介规则不能为空");
+            SnackbarUtils.show(this, "书源搜索结果简介规则不能为空");
             return;
         } else
             mBookSource.setRuleSearchDesc(trim(sourceEtRuleSearchDesc.getText()));
         //
         if (isEmpty(trim(sourceEtRuleSearchCover.getText()))) {
-            SnackbarUtils.show(this,"书源搜索结果封面规则不能为空");
+            SnackbarUtils.show(this, "书源搜索结果封面规则不能为空");
             return;
         } else
             mBookSource.setRuleSearchCover(trim(sourceEtRuleSearchCover.getText()));
         //
         if (isEmpty(trim(sourceEtRuleSearchLink.getText()))) {
-            SnackbarUtils.show(this,"书源搜索结果链接规则不能为空");
+            SnackbarUtils.show(this, "书源搜索结果链接规则不能为空");
             return;
         } else
             mBookSource.setRuleSearchLink(trim(sourceEtRuleSearchLink.getText()));
-
+        //
+        if (isEmpty(trim(sourceEtRuleCatalogChapter.getText()))) {
+            SnackbarUtils.show(this, "书源目录列表规则不能为空");
+            return;
+        } else
+            mBookSource.setRuleCatalogChapter(trim(sourceEtRuleCatalogChapter.getText()));
         //
         if (isEmpty(trim(sourceEtRuleCatalogTitle.getText()))) {
-            SnackbarUtils.show(this,"书源目录标题规则不能为空");
+            SnackbarUtils.show(this, "书源目录标题规则不能为空");
             return;
         } else
             mBookSource.setRuleCatalogTitle(trim(sourceEtRuleCatalogTitle.getText()));
         //
         if (isEmpty(trim(sourceEtRuleCatalogLink.getText()))) {
-            SnackbarUtils.show(this,"书源目录链接规则不能为空");
+            SnackbarUtils.show(this, "书源目录链接规则不能为空");
             return;
         } else
             mBookSource.setRuleCatalogLink(trim(sourceEtRuleCatalogLink.getText()));
 
         //
         if (isEmpty(trim(sourceEtRuleChapterContent.getText()))) {
-            SnackbarUtils.show(this,"书源章节内容规则不能为空");
+            SnackbarUtils.show(this, "书源章节内容规则不能为空");
             return;
         } else
             mBookSource.setRuleChapterContent(trim(sourceEtRuleChapterContent.getText()));
@@ -246,7 +281,7 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
 
     @Override
     public void showError() {
-        SnackbarUtils.show(this,"保存失败");
+        SnackbarUtils.show(this, "保存失败");
     }
 
     @Override

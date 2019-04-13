@@ -22,8 +22,10 @@ public class BookSearchBean implements Parcelable {
     private String desc;
     //封面地址
     private String cover;
-    //小说地址
+    //小说地址(章节地址)
     private String link;
+    //发现地址(同类小说)
+    private String findLink;
     //分类
     private String kind;
     //最新章节
@@ -40,15 +42,18 @@ public class BookSearchBean implements Parcelable {
 
     }
 
+
     protected BookSearchBean(Parcel in) {
         title = in.readString();
         author = in.readString();
         desc = in.readString();
         cover = in.readString();
         link = in.readString();
+        findLink = in.readString();
         kind = in.readString();
         latestChapter = in.readString();
         source = in.readString();
+        selected = in.readByte() != 0;
         sourceUrls = in.createStringArrayList();
     }
 
@@ -122,6 +127,14 @@ public class BookSearchBean implements Parcelable {
         this.latestChapter = latestChapter;
     }
 
+    public String getFindLink() {
+        return findLink;
+    }
+
+    public void setFindLink(String findLink) {
+        this.findLink = findLink;
+    }
+
     public String getSource() {
         return source;
     }
@@ -160,6 +173,7 @@ public class BookSearchBean implements Parcelable {
             this.sourceUrls.add(soure);
         }
     }
+
     /*************************************************************/
     public ShelfBookBean getShelfBook() {
         ShelfBookBean shelfBookBean = new ShelfBookBean();
@@ -172,7 +186,6 @@ public class BookSearchBean implements Parcelable {
         return shelfBookBean;
     }
 
-    /*************************************************************/
     @Override
     public int describeContents() {
         return 0;
@@ -185,25 +198,15 @@ public class BookSearchBean implements Parcelable {
         dest.writeString(desc);
         dest.writeString(cover);
         dest.writeString(link);
+        dest.writeString(findLink);
         dest.writeString(kind);
         dest.writeString(latestChapter);
         dest.writeString(source);
+        dest.writeByte((byte) (selected ? 1 : 0));
         dest.writeStringList(sourceUrls);
     }
 
-    @Override
-    public String toString() {
-        return "BookSearchBean{" +
-                "title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", desc='" + desc + '\'' +
-                ", cover='" + cover + '\'' +
-                ", link='" + link + '\'' +
-                ", kind='" + kind + '\'' +
-                ", latestChapter='" + latestChapter + '\'' +
-                ", source='" + source + '\'' +
-                ", selected=" + selected +
-                ", sourceUrls=" + sourceUrls +
-                '}';
-    }
+    /*************************************************************/
+
+
 }

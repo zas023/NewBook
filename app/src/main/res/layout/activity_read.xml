@@ -114,25 +114,25 @@
                     android:id="@+id/read_tv_category"
                     style="@style/AppTheme.TextAppearance.Read.BottomMenu.Button"
                     android:drawableTop="@mipmap/ic_read_menu_category"
-                    android:text="@string/read_category" />
+                    android:text="目录" />
 
                 <TextView
                     android:id="@+id/read_tv_night_mode"
                     style="@style/AppTheme.TextAppearance.Read.BottomMenu.Button"
                     android:drawableTop="@mipmap/ic_read_menu_night"
-                    android:text="@string/mode_night" />
+                    android:text="夜间" />
 
                 <TextView
                     android:id="@+id/read_tv_download"
                     style="@style/AppTheme.TextAppearance.Read.BottomMenu.Button"
                     android:drawableTop="@mipmap/ic_read_menu_download"
-                    android:text="@string/read_download" />
+                    android:text="下载" />
 
                 <TextView
                     android:id="@+id/read_tv_setting"
                     style="@style/AppTheme.TextAppearance.Read.BottomMenu.Button"
                     android:drawableTop="@mipmap/ic_read_menu_font"
-                    android:text="@string/read_setting" />
+                    android:text="设置" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

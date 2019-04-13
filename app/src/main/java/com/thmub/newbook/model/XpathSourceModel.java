@@ -32,6 +32,15 @@ public class XpathSourceModel implements ISourceModel {
         this.bookSourceBean = bean;
     }
 
+    @Override
+    public Observable<List<BookSearchBean>> findBook(String findRule) {
+        return Observable.create(emitter -> {
+            emitter.onNext(null);
+            emitter.onComplete();
+        });
+    }
+
+    @Override
     public Observable<List<BookSearchBean>> searchBook(String keyword) {
         if (isEmpty(bookSourceBean.getSearchLink())) {
             return Observable.create(emitter -> {

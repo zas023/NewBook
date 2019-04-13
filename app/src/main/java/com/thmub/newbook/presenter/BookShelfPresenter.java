@@ -4,11 +4,9 @@ import com.thmub.newbook.base.RxPresenter;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.model.SourceModel;
-import com.thmub.newbook.model.repo.BookShelfRepository;
+import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.contract.BookShelfContract;
-import com.thmub.newbook.ui.activity.MainActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observer;

@@ -14,7 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseActivity;
 import com.thmub.newbook.manager.BookSourceManager;
-import com.thmub.newbook.model.repo.BookSourceRepository;
+import com.thmub.newbook.model.local.BookSourceRepository;
 import com.thmub.newbook.ui.adapter.TabFragmentPageAdapter;
 import com.thmub.newbook.ui.fragment.BookShelfFragment;
 import com.thmub.newbook.ui.fragment.BookStoreFragment;
@@ -185,13 +185,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(new Intent(this, BookSourceActivity.class));
                 break;
             case R.id.action_download:  //下载管理
+                startActivity(new Intent(this, DownloadActivity.class));
                 break;
             case R.id.action_replace:  //替换管理
+                startActivity(new Intent(this, ReplacementActivity.class));
                 break;
             case R.id.action_setting:  //设置
+                startActivity(new Intent(this, SettingActivity.class));
                 break;
             case R.id.action_about:  //关于
-                startActivity(new Intent(this,AboutActivity.class));
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.action_night:  //夜间模式
                 setNightTheme(!isNightTheme());

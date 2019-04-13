@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_large"
+    android:background="@color/colorBackground"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/item_iv_cover"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_default_book_cover" />
+
+    <TextView
+        android:id="@+id/item_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxEms="15"
+        android:maxLines="1"
+        android:textColor="@color/textAssist"
+        android:textSize="@dimen/text_xsmall"
+        tools:text="遮天" />
+</LinearLayout>

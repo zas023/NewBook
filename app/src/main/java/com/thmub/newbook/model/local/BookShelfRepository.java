@@ -1,4 +1,4 @@
-package com.thmub.newbook.model.repo;
+package com.thmub.newbook.model.local;
 
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;

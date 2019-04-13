@@ -35,13 +35,14 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         public final static Property RuleSearchDesc = new Property(8, String.class, "ruleSearchDesc", false, "RULE_SEARCH_DESC");
         public final static Property RuleSearchCover = new Property(9, String.class, "ruleSearchCover", false, "RULE_SEARCH_COVER");
         public final static Property RuleSearchLink = new Property(10, String.class, "ruleSearchLink", false, "RULE_SEARCH_LINK");
-        public final static Property RuleCatalogChapter = new Property(11, String.class, "ruleCatalogChapter", false, "RULE_CATALOG_CHAPTER");
-        public final static Property RuleCatalogTitle = new Property(12, String.class, "ruleCatalogTitle", false, "RULE_CATALOG_TITLE");
-        public final static Property RuleCatalogLink = new Property(13, String.class, "ruleCatalogLink", false, "RULE_CATALOG_LINK");
-        public final static Property RuleChapterContent = new Property(14, String.class, "ruleChapterContent", false, "RULE_CHAPTER_CONTENT");
-        public final static Property OrderNumber = new Property(15, int.class, "orderNumber", false, "ORDER_NUMBER");
-        public final static Property Weight = new Property(16, int.class, "weight", false, "WEIGHT");
-        public final static Property IsSelected = new Property(17, boolean.class, "isSelected", false, "IS_SELECTED");
+        public final static Property RuleFindBook = new Property(11, String.class, "ruleFindBook", false, "RULE_FIND_BOOK");
+        public final static Property RuleCatalogChapter = new Property(12, String.class, "ruleCatalogChapter", false, "RULE_CATALOG_CHAPTER");
+        public final static Property RuleCatalogTitle = new Property(13, String.class, "ruleCatalogTitle", false, "RULE_CATALOG_TITLE");
+        public final static Property RuleCatalogLink = new Property(14, String.class, "ruleCatalogLink", false, "RULE_CATALOG_LINK");
+        public final static Property RuleChapterContent = new Property(15, String.class, "ruleChapterContent", false, "RULE_CHAPTER_CONTENT");
+        public final static Property OrderNumber = new Property(16, int.class, "orderNumber", false, "ORDER_NUMBER");
+        public final static Property Weight = new Property(17, int.class, "weight", false, "WEIGHT");
+        public final static Property IsSelected = new Property(18, boolean.class, "isSelected", false, "IS_SELECTED");
     }
 
 
@@ -68,13 +69,14 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
                 "\"RULE_SEARCH_DESC\" TEXT," + // 8: ruleSearchDesc
                 "\"RULE_SEARCH_COVER\" TEXT," + // 9: ruleSearchCover
                 "\"RULE_SEARCH_LINK\" TEXT," + // 10: ruleSearchLink
-                "\"RULE_CATALOG_CHAPTER\" TEXT," + // 11: ruleCatalogChapter
-                "\"RULE_CATALOG_TITLE\" TEXT," + // 12: ruleCatalogTitle
-                "\"RULE_CATALOG_LINK\" TEXT," + // 13: ruleCatalogLink
-                "\"RULE_CHAPTER_CONTENT\" TEXT," + // 14: ruleChapterContent
-                "\"ORDER_NUMBER\" INTEGER NOT NULL ," + // 15: orderNumber
-                "\"WEIGHT\" INTEGER NOT NULL ," + // 16: weight
-                "\"IS_SELECTED\" INTEGER NOT NULL );"); // 17: isSelected
+                "\"RULE_FIND_BOOK\" TEXT," + // 11: ruleFindBook
+                "\"RULE_CATALOG_CHAPTER\" TEXT," + // 12: ruleCatalogChapter
+                "\"RULE_CATALOG_TITLE\" TEXT," + // 13: ruleCatalogTitle
+                "\"RULE_CATALOG_LINK\" TEXT," + // 14: ruleCatalogLink
+                "\"RULE_CHAPTER_CONTENT\" TEXT," + // 15: ruleChapterContent
+                "\"ORDER_NUMBER\" INTEGER NOT NULL ," + // 16: orderNumber
+                "\"WEIGHT\" INTEGER NOT NULL ," + // 17: weight
+                "\"IS_SELECTED\" INTEGER NOT NULL );"); // 18: isSelected
     }
 
     /** Drops the underlying database table. */
@@ -142,28 +144,33 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(11, ruleSearchLink);
         }
  
+        String ruleFindBook = entity.getRuleFindBook();
+        if (ruleFindBook != null) {
+            stmt.bindString(12, ruleFindBook);
+        }
+ 
         String ruleCatalogChapter = entity.getRuleCatalogChapter();
         if (ruleCatalogChapter != null) {
-            stmt.bindString(12, ruleCatalogChapter);
+            stmt.bindString(13, ruleCatalogChapter);
         }
  
         String ruleCatalogTitle = entity.getRuleCatalogTitle();
         if (ruleCatalogTitle != null) {
-            stmt.bindString(13, ruleCatalogTitle);
+            stmt.bindString(14, ruleCatalogTitle);
         }
  
         String ruleCatalogLink = entity.getRuleCatalogLink();
         if (ruleCatalogLink != null) {
-            stmt.bindString(14, ruleCatalogLink);
+            stmt.bindString(15, ruleCatalogLink);
         }
  
         String ruleChapterContent = entity.getRuleChapterContent();
         if (ruleChapterContent != null) {
-            stmt.bindString(15, ruleChapterContent);
+            stmt.bindString(16, ruleChapterContent);
         }
-        stmt.bindLong(16, entity.getOrderNumber());
-        stmt.bindLong(17, entity.getWeight());
-        stmt.bindLong(18, entity.getIsSelected() ? 1L: 0L);
+        stmt.bindLong(17, entity.getOrderNumber());
+        stmt.bindLong(18, entity.getWeight());
+        stmt.bindLong(19, entity.getIsSelected() ? 1L: 0L);
     }
 
     @Override
@@ -225,28 +232,33 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(11, ruleSearchLink);
         }
  
+        String ruleFindBook = entity.getRuleFindBook();
+        if (ruleFindBook != null) {
+            stmt.bindString(12, ruleFindBook);
+        }
+ 
         String ruleCatalogChapter = entity.getRuleCatalogChapter();
         if (ruleCatalogChapter != null) {
-            stmt.bindString(12, ruleCatalogChapter);
+            stmt.bindString(13, ruleCatalogChapter);
         }
  
         String ruleCatalogTitle = entity.getRuleCatalogTitle();
         if (ruleCatalogTitle != null) {
-            stmt.bindString(13, ruleCatalogTitle);
+            stmt.bindString(14, ruleCatalogTitle);
         }
  
         String ruleCatalogLink = entity.getRuleCatalogLink();
         if (ruleCatalogLink != null) {
-            stmt.bindString(14, ruleCatalogLink);
+            stmt.bindString(15, ruleCatalogLink);
         }
  
         String ruleChapterContent = entity.getRuleChapterContent();
         if (ruleChapterContent != null) {
-            stmt.bindString(15, ruleChapterContent);
+            stmt.bindString(16, ruleChapterContent);
         }
-        stmt.bindLong(16, entity.getOrderNumber());
-        stmt.bindLong(17, entity.getWeight());
-        stmt.bindLong(18, entity.getIsSelected() ? 1L: 0L);
+        stmt.bindLong(17, entity.getOrderNumber());
+        stmt.bindLong(18, entity.getWeight());
+        stmt.bindLong(19, entity.getIsSelected() ? 1L: 0L);
     }
 
     @Override
@@ -268,13 +280,14 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // ruleSearchDesc
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // ruleSearchCover
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // ruleSearchLink
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // ruleCatalogChapter
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // ruleCatalogTitle
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // ruleCatalogLink
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // ruleChapterContent
-            cursor.getInt(offset + 15), // orderNumber
-            cursor.getInt(offset + 16), // weight
-            cursor.getShort(offset + 17) != 0 // isSelected
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // ruleFindBook
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // ruleCatalogChapter
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // ruleCatalogTitle
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // ruleCatalogLink
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // ruleChapterContent
+            cursor.getInt(offset + 16), // orderNumber
+            cursor.getInt(offset + 17), // weight
+            cursor.getShort(offset + 18) != 0 // isSelected
         );
         return entity;
     }
@@ -292,13 +305,14 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         entity.setRuleSearchDesc(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setRuleSearchCover(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setRuleSearchLink(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setRuleCatalogChapter(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setRuleCatalogTitle(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setRuleCatalogLink(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setRuleChapterContent(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setOrderNumber(cursor.getInt(offset + 15));
-        entity.setWeight(cursor.getInt(offset + 16));
-        entity.setIsSelected(cursor.getShort(offset + 17) != 0);
+        entity.setRuleFindBook(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setRuleCatalogChapter(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setRuleCatalogTitle(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setRuleCatalogLink(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setRuleChapterContent(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setOrderNumber(cursor.getInt(offset + 16));
+        entity.setWeight(cursor.getInt(offset + 17));
+        entity.setIsSelected(cursor.getShort(offset + 18) != 0);
      }
     
     @Override

@@ -14,7 +14,7 @@ import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.ShelfBookBean;
-import com.thmub.newbook.model.repo.BookShelfRepository;
+import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.BookDetailPresenter;
 import com.thmub.newbook.presenter.contract.BookDetailContract;
 import com.thmub.newbook.ui.adapter.BookDetailAdapter;

@@ -54,6 +54,18 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_til_sourceType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_sourceType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="书源类型(sourceType)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_tile_encodeType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -80,6 +92,17 @@
             <!--start rule-->
 
             <!--搜索-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleSearchBook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleSearchBook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="搜索结果列表规则(ruleSearchBook)" />
+            </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_tile_ruleSearchTitle"
                 android:layout_width="match_parent"
@@ -141,6 +164,17 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--章节-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleCatalogChapter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleCatalogChapter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="目录章节列表规则(ruleCatalogChapter)" />
+            </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_tile_ruleCatalogTitle"
                 android:layout_width="match_parent"
