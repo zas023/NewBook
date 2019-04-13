@@ -22,4 +22,7 @@ public class Constant {
     /*URL_BASE*/
     public static final String API_BASE_URL = "http://api.zhuishushenqi.com";
     public static final String IMG_BASE_URL = "http://statics.zhuishushenqi.com";
+    //URL
+    public static final String URL_CATALOG_LINK = "http://api.zhuishushenqi.com/mix-atoc/%s?view=chapters";
+    public static final String URL_COVER_LINK = "http://statics.zhuishushenqi.com%s";
 }

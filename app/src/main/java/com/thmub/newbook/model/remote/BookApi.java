@@ -1,5 +1,6 @@
 package com.thmub.newbook.model.remote;
 
+import com.thmub.newbook.bean.zhui.BookBean;
 import com.thmub.newbook.bean.zhui.StoreBannerListBean;
 import com.thmub.newbook.bean.zhui.StoreNodeBookListBean;
 
@@ -12,6 +13,17 @@ import retrofit2.http.Path;
  * Github: https://github.com/zas023
  */
 public interface BookApi {
+
+
+    /****************************Book***********************************/
+    /**
+     * 书籍详情
+     *
+     * @param bookId
+     * @return
+     */
+    @GET("/book/{bookId}")
+    Single<BookBean> getBookDetail(@Path("bookId") String bookId);
 
 
     /****************************Store***********************************/

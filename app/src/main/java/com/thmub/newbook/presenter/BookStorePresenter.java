@@ -1,6 +1,7 @@
 package com.thmub.newbook.presenter;
 
 import com.thmub.newbook.base.RxPresenter;
+import com.thmub.newbook.manager.BookManager;
 import com.thmub.newbook.model.remote.RemoteRepository;
 import com.thmub.newbook.presenter.contract.BookStoreContract;
 
@@ -23,6 +24,17 @@ public class BookStorePresenter extends RxPresenter<BookStoreContract.View>
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(beans -> {
                     mView.finishStoreBanner(beans);
+                }));
+    }
+
+    @Override
+    public void loadBookSearchBean(String id) {
+        addDisposable(RemoteRepository.getInstance()
+                .getBookDetail(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bean -> {
+                    mView.finishBookSearchBean(BookManager.getSearchBook(bean));
                 }));
     }
 }

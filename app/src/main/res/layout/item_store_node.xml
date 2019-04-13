@@ -23,6 +23,7 @@
             android:text="综合讨论区"/>
 
         <TextView
+            android:id="@+id/item_tv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

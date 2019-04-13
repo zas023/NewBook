@@ -1,5 +1,6 @@
 package com.thmub.newbook.model.remote;
 
+import com.thmub.newbook.bean.zhui.BookBean;
 import com.thmub.newbook.bean.zhui.StoreBannerBean;
 import com.thmub.newbook.bean.zhui.StoreNodeBookBean;
 
@@ -37,6 +38,16 @@ public class RemoteRepository {
     }
 
     /****************************Store************************/
+
+    /**
+     * 书籍详情
+     *
+     * @return
+     */
+    public Single<BookBean> getBookDetail(String bookId) {
+        return mBookApi.getBookDetail(bookId);
+    }
+
 
     /**
      * 商城顶部banner

@@ -1,18 +1,25 @@
 package com.thmub.newbook.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPFragment;
+import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.type.StoreNodeType;
+import com.thmub.newbook.bean.zhui.BookBean;
 import com.thmub.newbook.bean.zhui.StoreBannerBean;
 import com.thmub.newbook.bean.zhui.StoreNodeBean;
+import com.thmub.newbook.manager.BookManager;
 import com.thmub.newbook.presenter.BookStorePresenter;
 import com.thmub.newbook.presenter.contract.BookStoreContract;
+import com.thmub.newbook.ui.activity.BookDetailActivity;
+import com.thmub.newbook.ui.activity.StoreNodeActivity;
 import com.thmub.newbook.ui.adapter.StoreNodeAdapter;
+import com.thmub.newbook.ui.adapter.holder.StoreNodeHolder;
 import com.thmub.newbook.utils.NetworkUtils;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -35,17 +42,20 @@ import butterknife.BindView;
 public class BookStoreFragment extends BaseMVPFragment<BookStoreContract.Presenter>
         implements BookStoreContract.View {
 
+    /***************************View*****************************/
     @BindView(R.id.store_rv_content)
     RecyclerView storeRvContent;
     @BindView(R.id.store_banner)
     Banner storeBanner;
 
+    /***************************Variable*****************************/
     private StoreNodeAdapter mAdapter;
 
     private List<StoreNodeBean> mStoreNodes = new ArrayList<>();
     private List<StoreBannerBean> mStoreBanners;
     private List<String> mImages = new ArrayList<>();
 
+    /***************************Initialization*****************************/
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_book_store;
@@ -84,12 +94,35 @@ public class BookStoreFragment extends BaseMVPFragment<BookStoreContract.Present
         storeBanner.setIndicatorGravity(BannerConfig.RIGHT);
 
         //Store Node
-        mAdapter = new StoreNodeAdapter();
+        mAdapter = new StoreNodeAdapter(new StoreNodeHolder.OnClickListener() {
+            @Override
+            public void onMore(StoreNodeBean item) {
+                startActivity(new Intent(mContext, StoreNodeActivity.class)
+                        .putExtra(StoreNodeActivity.EXTRA_STORE_NODE, item));
+            }
+
+            @Override
+            public void onItemClick(BookBean book) {
+                finishBookSearchBean(BookManager.getSearchBook(book));
+            }
+        });
         storeRvContent.setLayoutManager(new LinearLayoutManager(mContext));
         storeRvContent.setAdapter(mAdapter);
 
     }
 
+    @Override
+    protected void initClick() {
+        super.initClick();
+        storeBanner.setOnBannerListener(
+                (pos) -> {
+                    StoreBannerBean bean = mStoreBanners.get(pos);
+                    if (bean.getType().equals("c-bookdetail"))
+                        mPresenter.loadBookSearchBean(bean.getLink());
+//                    if (bean.getType().equals("c-booklist"))
+//                        BookListDetailActivity.startActivity(mContext, bean.getLink());
+                });
+    }
 
     @Override
     protected void processLogic() {
@@ -99,7 +132,7 @@ public class BookStoreFragment extends BaseMVPFragment<BookStoreContract.Present
         }
     }
 
-    /****************************************************************/
+    /*****************************Transaction******************************/
     @Override
     protected BookStoreContract.Presenter bindPresenter() {
         return new BookStorePresenter();
@@ -118,6 +151,12 @@ public class BookStoreFragment extends BaseMVPFragment<BookStoreContract.Present
 
         //
         mAdapter.addItems(mStoreNodes);
+    }
+
+    @Override
+    public void finishBookSearchBean(BookSearchBean bean) {
+        startActivity(new Intent(mContext, BookDetailActivity.class)
+                .putExtra(BookDetailActivity.EXTRA_BOOK, bean));
     }
 
     @Override

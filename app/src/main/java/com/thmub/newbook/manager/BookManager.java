@@ -1,7 +1,12 @@
 package com.thmub.newbook.manager;
 
+import com.google.gson.JsonObject;
+import com.thmub.newbook.bean.BookSearchBean;
+import com.thmub.newbook.bean.zhui.BookBean;
 import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.utils.FileUtils;
+import com.thmub.newbook.utils.RegexUtils;
+import com.thmub.newbook.utils.RxUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -171,6 +176,30 @@ public class BookManager {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
                 + File.separator + fileName + FileUtils.SUFFIX_NB);
         return file.exists();
+    }
+
+
+    public static BookSearchBean getSearchBook(BookBean book) {
+        BookSearchBean bean = new BookSearchBean();
+
+        bean.setTitle(book.getTitle());
+
+        String id = book.get_id();
+        bean.setLink(String.format(Constant.URL_CATALOG_LINK, id));
+
+        String cover = book.getCover();
+        if (RegexUtils.checkURL(cover))
+            bean.setCover(cover);
+        else
+            bean.setCover(String.format(Constant.URL_COVER_LINK, cover));
+
+        bean.setAuthor(book.getAuthor());
+
+        bean.setDesc(book.getLongIntro());
+
+        bean.setSource("追书神器");
+
+        return bean;
     }
 
     /*******************************InterClass************************************/

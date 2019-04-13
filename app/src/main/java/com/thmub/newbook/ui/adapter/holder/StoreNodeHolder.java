@@ -4,6 +4,7 @@ import android.widget.TextView;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.adapter.ViewHolderImpl;
+import com.thmub.newbook.bean.zhui.BookBean;
 import com.thmub.newbook.bean.zhui.StoreNodeBean;
 import com.thmub.newbook.model.remote.RemoteRepository;
 import com.thmub.newbook.ui.adapter.StoreNodeBookAdapter;
@@ -19,13 +20,19 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 public class StoreNodeHolder extends ViewHolderImpl<StoreNodeBean> {
 
-    TextView itemTvName;
+    private TextView itemTvName;
+    private TextView itemTvMore;
 
-    RecyclerView itemRvContent;
+    private RecyclerView itemRvContent;
 
-    StoreNodeBookAdapter itemAdapter;
+    private StoreNodeBookAdapter itemAdapter;
 
-    boolean hasLoad;
+    private OnClickListener onClickListener;
+    private boolean hasLoad;
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
     @Override
     protected int getItemLayoutId() {
@@ -35,6 +42,7 @@ public class StoreNodeHolder extends ViewHolderImpl<StoreNodeBean> {
     @Override
     public void initView() {
         itemTvName = findById(R.id.item_tv_name);
+        itemTvMore = findById(R.id.item_tv_more);
         itemRvContent = findById(R.id.item_rv_content);
 
         itemAdapter = new StoreNodeBookAdapter();
@@ -56,5 +64,16 @@ public class StoreNodeHolder extends ViewHolderImpl<StoreNodeBean> {
                         hasLoad = true;
                     }));
         }
+
+        itemTvMore.setOnClickListener(v -> onClickListener.onMore(data));
+        itemAdapter.setOnItemClickListener((view, pos1) -> {
+            onClickListener.onItemClick(itemAdapter.getItem(pos1).getBook());
+        });
+    }
+
+    public interface OnClickListener {
+        void onMore(StoreNodeBean item);
+
+        void onItemClick(BookBean book);
     }
 }

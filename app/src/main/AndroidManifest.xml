@@ -39,6 +39,7 @@
         <activity android:name=".ui.activity.ReplacementActivity" />
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.AboutActivity" />
+        <activity android:name=".ui.activity.StoreNodeActivity" />
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
