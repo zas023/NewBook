@@ -23,9 +23,8 @@ class ChapterProvider {
     }
 
     TxtChapter dealLoadPageList(BookChapterBean chapter, boolean isPrepare) {
-        Log.i(TAG, "------------------------dealLoadPageList");
         TxtChapter txtChapter = new TxtChapter(chapter.getChapterIndex());
-        // 判断章节是否存在
+        // 判断view是否存在
         if (!isPrepare) {
             if (pageLoader instanceof NetPageLoader && !NetworkUtils.isNetWorkAvailable()) {
                 txtChapter.setStatus(TxtChapter.Status.ERROR);
@@ -50,6 +49,7 @@ class ChapterProvider {
         return loadPageList(chapter, content);
     }
 
+    /********************************************************************/
     /**
      * 将章节数据，解析成页面列表
      *
@@ -57,7 +57,6 @@ class ChapterProvider {
      * @param content：章节的文本
      */
     private TxtChapter loadPageList(BookChapterBean chapter, @NonNull String content) {
-        Log.i(TAG, "------------------------loadPageList:"+content);
         //生成的页面
         TxtChapter txtChapter = new TxtChapter(chapter.getChapterIndex());
         //content = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), content);
@@ -69,7 +68,7 @@ class ChapterProvider {
         String paragraph = null;
         if (showTitle) {
             //paragraph = contentHelper.replaceContent(pageLoader.bookShelfBean.getBookInfoBean().getName(), pageLoader.bookShelfBean.getTag(), chapter.getDurChapterName());
-            paragraph=chapter.getChapterTitle();
+            paragraph = chapter.getChapterTitle();
             paragraph = paragraph.trim() + "\n";
         }
         int i = 1;

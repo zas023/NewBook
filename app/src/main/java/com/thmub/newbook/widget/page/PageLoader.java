@@ -13,7 +13,6 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.thmub.newbook.bean.BookChapterBean;
@@ -40,6 +39,7 @@ import io.reactivex.schedulers.Schedulers;
  * Github: https://github.com/zas023
  */
 public abstract class PageLoader {
+
     private static final String TAG = "PageLoader";
 
     /****************************Constant****************************/
@@ -389,11 +389,10 @@ public abstract class PageLoader {
      */
     public void changeSourceFinish(ShelfBookBean book) {
         if (book == null) {
-            openChapter(mCurPagePos);
+            openChapterPage(mCurPagePos);
         } else {
             bookShelfBean = book;
-//            mPageChangeListener.onCategoryFinish(book.getBookChapterList());
-            skipToChapter(bookShelfBean.getCurChapter(), bookShelfBean.getCurChapterPage());
+            refreshChapterList();
         }
     }
 
@@ -414,7 +413,7 @@ public abstract class PageLoader {
         parsePrevChapter();
 
         chapterChangeCallback();
-        openChapter(mCurPagePos);
+        openChapterPage(mCurPagePos);
         finishPaging(PageAnimation.Direction.NONE);
     }
 
@@ -422,7 +421,7 @@ public abstract class PageLoader {
      * 跳转到下一章
      */
     public boolean skipToNextChapter() {
-        if (mCurChapterPos + 1 >= bookShelfBean.getBookChapterList().size()) {
+        if (mCurChapterPos + 1 >= bookShelfBean.getBookChapterListSize()) {
             return false;
         }
 
@@ -432,10 +431,11 @@ public abstract class PageLoader {
         mPreChapter = mCurChapter;
         mCurChapter = mNextChapter;
         mNextChapter = null;
+
         parseNextChapter();
 
         chapterChangeCallback();
-        openChapter(mCurPagePos);
+        openChapterPage(mCurPagePos);
         finishPaging(PageAnimation.Direction.NONE);
         return true;
     }
@@ -452,7 +452,7 @@ public abstract class PageLoader {
         mCurChapter = null;
         mNextChapter = null;
 
-        openChapter(pagePos);
+        openChapterPage(pagePos);
     }
 
     /**
@@ -462,7 +462,7 @@ public abstract class PageLoader {
         if (!isChapterListPrepare) {
             return;
         }
-        openChapter(pos);
+        openChapterPage(pos);
     }
 
     /**
@@ -655,7 +655,7 @@ public abstract class PageLoader {
     /**
      * 打开当前章节指定页
      */
-    void openChapter(int pagePos) {
+    void openChapterPage(int pagePos) {
         mCurPagePos = pagePos;
 
         //阅读页面没有准备好
@@ -1008,7 +1008,6 @@ public abstract class PageLoader {
     /**
      * 绘制内容-滚动
      */
-    @SuppressWarnings("ConstantConditions")
     void drawContent(final Canvas canvas, float offset) {
         if (offset > MAX_SCROLL_OFFSET) {
             offset = MAX_SCROLL_OFFSET;
@@ -1370,37 +1369,41 @@ public abstract class PageLoader {
     }
 
     /**
-     * 解析数据
+     * 解析当前章节数据
      */
     void parseCurChapter() {
         if (mCurChapter.getStatus() != TxtChapter.Status.FINISH) {
-            Single.create((SingleOnSubscribe<TxtChapter>) e -> {
-                ChapterProvider chapterProvider = new ChapterProvider(this);
-                e.onSuccess(chapterProvider.dealLoadPageList(bookShelfBean.getChapter(mCurChapterPos)
-                        , mPageView.isPrepare()));
-            })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SingleObserver<TxtChapter>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            compositeDisposable.add(d);
-                        }
-
-                        @Override
-                        public void onSuccess(TxtChapter txtChapter) {
-                            updateTextChapter(txtChapter);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            if (mPreChapter == null || mPreChapter.getStatus() != TxtChapter.Status.FINISH) {
-                                mPreChapter = new TxtChapter(mCurChapterPos);
-                                mPreChapter.setStatus(TxtChapter.Status.ERROR);
-                                mPreChapter.setMsg(e.getMessage());
-                            }
-                        }
-                    });
+            ChapterProvider chapterProvider = new ChapterProvider(this);
+            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(mCurChapterPos)
+                    , mPageView.isPrepare());
+            updateTextChapter(txtChapter);
+//            Single.create((SingleOnSubscribe<TxtChapter>) e -> {
+//                ChapterProvider chapterProvider = new ChapterProvider(this);
+//                e.onSuccess(chapterProvider.dealLoadPageList(bookShelfBean.getChapter(mCurChapterPos)
+//                        , mPageView.isPrepare()));
+//            })
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new SingleObserver<TxtChapter>() {
+//                        @Override
+//                        public void onSubscribe(Disposable d) {
+//                            compositeDisposable.add(d);
+//                        }
+//
+//                        @Override
+//                        public void onSuccess(TxtChapter txtChapter) {
+//                            updateTextChapter(txtChapter);
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            if (mPreChapter == null || mPreChapter.getStatus() != TxtChapter.Status.FINISH) {
+//                                mPreChapter = new TxtChapter(mCurChapterPos);
+//                                mPreChapter.setStatus(TxtChapter.Status.ERROR);
+//                                mPreChapter.setMsg(e.getMessage());
+//                            }
+//                        }
+//                    });
         }
         parsePrevChapter();
         parseNextChapter();
@@ -1496,20 +1499,19 @@ public abstract class PageLoader {
      * @param txtChapter
      */
     private void updateTextChapter(TxtChapter txtChapter) {
-        Log.i(TAG, "--------------------------------updateTextChapter   " + txtChapter.getPosition() + "  " + mCurChapterPos);
-        if (txtChapter.getPosition() == mCurChapterPos - 1) {
+        if (txtChapter.getPosition() == mCurChapterPos - 1) {   //上一章
             mPreChapter = txtChapter;
             if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawContent(-1);
             } else {
                 mPageView.drawPage(-1);
             }
-        } else if (txtChapter.getPosition() == mCurChapterPos) {
+        } else if (txtChapter.getPosition() == mCurChapterPos) {  //当前章节
             mCurChapter = txtChapter;
-            reSetPage();
+            reSetPage();   //重置和更新页面
             chapterChangeCallback();
             finishPaging(PageAnimation.Direction.NONE);
-        } else if (txtChapter.getPosition() == mCurChapterPos + 1) {
+        } else if (txtChapter.getPosition() == mCurChapterPos + 1) {  //下一章节
             mNextChapter = txtChapter;
             if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawContent(1);
@@ -1540,12 +1542,23 @@ public abstract class PageLoader {
 
     }
 
-    //判断是不是d'hou
+    /**
+     * 判断是不是段首
+     *
+     * @param line
+     * @return
+     */
     private boolean isFirstLineOfParagraph(String line) {
         return line.length() > 3 && line.charAt(0) == (char) 12288 && line.charAt(1) == (char) 12288;
     }
 
-    private boolean needScale(String line) {//判断不是空行
+    /**
+     * 判断不是空行
+     *
+     * @param line
+     * @return
+     */
+    private boolean needScale(String line) {
         return line != null && line.length() != 0 && line.charAt(line.length() - 1) != '\n';
     }
 
@@ -1557,7 +1570,19 @@ public abstract class PageLoader {
         }
     }
 
-    public abstract void updateChapter();
+    /**
+     * 是否关闭书籍
+     *
+     * @return
+     */
+    public boolean isClose() {
+        return isClose;
+    }
+
+    /**
+     * 更新目录
+     */
+    public abstract void updateCatalog();
 
     /**
      * 根据当前状态，决定是否能够翻页
@@ -1583,10 +1608,6 @@ public abstract class PageLoader {
         mCurChapter = null;
         mNextChapter = null;
 
-    }
-
-    public boolean isClose() {
-        return isClose;
     }
 
     /*****************************************interface*****************************************/

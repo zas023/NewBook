@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -53,6 +52,7 @@ public class PageView extends View {
     private boolean canTouch = true;
     // 唤醒菜单的区域
     private RectF mCenterRect = null;
+    //view是否准备
     private boolean isPrepare;
     // 动画类
     private PageAnimation mPageAnim;
@@ -331,8 +331,8 @@ public class PageView extends View {
         int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.i(TAG, "onTouchEvent:ACTION_DOWN");
-                if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(5) || event.getRawY() > getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(5)) {
+                if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(5)
+                        || event.getRawY() > getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(5)) {
                     actionFromEdge = true;
                     return true;
                 }
@@ -343,7 +343,6 @@ public class PageView extends View {
                 mPageAnim.onTouchEvent(event);
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.i(TAG, "onTouchEvent:ACTION_MOVE");
                 // 判断是否大于最小滑动值。
                 int slop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
                 if (!isMove) {
@@ -356,7 +355,6 @@ public class PageView extends View {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                Log.i(TAG, "onTouchEvent:ACTION_UP");
                 if (!isMove) {
                     //设置中间区域范围
                     if (mCenterRect == null) {

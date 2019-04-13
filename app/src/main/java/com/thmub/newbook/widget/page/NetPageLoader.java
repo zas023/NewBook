@@ -1,5 +1,6 @@
 package com.thmub.newbook.widget.page;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.thmub.newbook.bean.BookChapterBean;
@@ -98,9 +99,14 @@ public class NetPageLoader extends PageLoader {
      * @param chapterIndex
      */
     private synchronized void loadChapterContent(final int chapterIndex) {
-        if (null == bookShelfBean || bookShelfBean.getBookChapterListSize() <= 0)
+        if (null == bookShelfBean || bookShelfBean.getBookChapterListSize() <= 0) {
+            if (chapterIndex == mCurChapterPos) {
+                showChapterError("当前目录为空");
+            }
             return;
-        if (shouldRequestChapter(chapterIndex)) {
+        }
+        //判断是否需要从网络请求章节
+        if (NetworkUtils.isNetWorkAvailable() && !hasChapterData(bookShelfBean.getChapter(chapterIndex))) {
             SourceModel.getInstance(bookShelfBean.getSource())
                     .parseContent(bookShelfBean.getChapter(chapterIndex))
                     .subscribeOn(scheduler)
@@ -115,11 +121,13 @@ public class NetPageLoader extends PageLoader {
                         public void onNext(BookContentBean bookContentBean) {
                             //保存章节内容
                             BookManager.getInstance()
-                                    .saveChapter(bookShelfBean.getTitle() + File.separator + bookShelfBean.getSource()
+                                    .saveChapter(bookShelfBean.getTitle()
+                                                    + File.separator + bookShelfBean.getSource()
                                             , bookShelfBean.getChapter(chapterIndex).getChapterIndex()
                                             , bookShelfBean.getChapter(chapterIndex).getChapterTitle()
                                             , bookContentBean.getChapterContent());
-                            finishContent(bookContentBean.getChapterIndex());
+                            Log.i(TAG, chapterIndex + "保存章节内容完成");
+                            finishLoadContent(bookContentBean.getChapterIndex());
                         }
 
                         @Override
@@ -133,13 +141,15 @@ public class NetPageLoader extends PageLoader {
                         public void onComplete() {
                         }
                     });
+        } else {
+            finishLoadContent(chapterIndex);
         }
     }
 
     /**
      * 章节下载完成
      */
-    private void finishContent(int chapterIndex) {
+    private void finishLoadContent(int chapterIndex) {
         if (chapterIndex == mCurChapterPos) {
             super.parseCurChapter();
         }
@@ -168,14 +178,16 @@ public class NetPageLoader extends PageLoader {
         return new String(contentByte, StandardCharsets.UTF_8);
     }
 
+    /**
+     * 判断章节是否缓存
+     *
+     * @param chapter
+     * @return
+     */
     @Override
     protected boolean hasChapterData(BookChapterBean chapter) {
         return BookManager.isChapterCached(bookShelfBean.getTitle() + File.separator + bookShelfBean.getSource(),
                 BookManager.formatFileName(chapter.getChapterIndex(), chapter.getChapterTitle()));
-    }
-
-    private boolean shouldRequestChapter(Integer chapterIndex) {
-        return NetworkUtils.isNetWorkAvailable() && hasChapterData(bookShelfBean.getChapter(chapterIndex));
     }
 
     /**
@@ -186,7 +198,6 @@ public class NetPageLoader extends PageLoader {
         if (mPageChangeListener != null && mCurChapterPos >= 1) {
             loadChapterContent(mCurChapterPos - 1);
         }
-        super.parsePrevChapter();
     }
 
     /**
@@ -194,10 +205,7 @@ public class NetPageLoader extends PageLoader {
      */
     @Override
     void parseCurChapter() {
-        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 2, bookShelfBean.getBookChapterListSize()); i++) {
-            loadChapterContent(i);
-        }
-        super.parseCurChapter();
+        loadChapterContent(mCurChapterPos);
     }
 
     /**
@@ -205,18 +213,17 @@ public class NetPageLoader extends PageLoader {
      */
     @Override
     void parseNextChapter() {
-        //接下来的两章节
-        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 2, bookShelfBean.getBookChapterListSize()); i++) {
-            loadChapterContent(i);
-        }
-        super.parseNextChapter();
+        //加载接下来的两章节
+//        for (int i=mCurChapterPos+1;i<Math.min(mCurChapterPos + 3, bookShelfBean.getBookChapterListSize());i++)
+//            loadChapterContent(i);
+        loadChapterContent(Math.min(mCurChapterPos + 1, bookShelfBean.getBookChapterListSize()));
     }
 
     /**
      * 更新目录
      */
     @Override
-    public void updateChapter() {
+    public void updateCatalog() {
         Toast.makeText(mPageView.getActivity(), "目录更新中", Toast.LENGTH_SHORT).show();
         SourceModel.getInstance(bookShelfBean.getSource())
                 .parseCatalog(bookShelfBean.getLink())
