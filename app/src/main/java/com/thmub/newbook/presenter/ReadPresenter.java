@@ -2,10 +2,12 @@ package com.thmub.newbook.presenter;
 
 import com.thmub.newbook.base.RxPresenter;
 import com.thmub.newbook.bean.BookChapterBean;
+import com.thmub.newbook.bean.DownloadBookBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.model.SourceModel;
 import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.contract.ReadContract;
+import com.thmub.newbook.service.DownloadService;
 
 import java.util.List;
 

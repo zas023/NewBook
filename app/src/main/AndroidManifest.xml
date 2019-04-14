@@ -41,6 +41,8 @@
         <activity android:name=".ui.activity.AboutActivity" />
         <activity android:name=".ui.activity.StoreNodeActivity" />
 
+        <service android:name=".service.DownloadService" />
+
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
             android:authorities="com.thmub.newbook.BmobContentProvider" />

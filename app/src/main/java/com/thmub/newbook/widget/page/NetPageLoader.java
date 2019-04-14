@@ -214,9 +214,8 @@ public class NetPageLoader extends PageLoader {
     @Override
     void parseNextChapter() {
         //加载接下来的两章节
-//        for (int i=mCurChapterPos+1;i<Math.min(mCurChapterPos + 3, bookShelfBean.getBookChapterListSize());i++)
-//            loadChapterContent(i);
-        loadChapterContent(Math.min(mCurChapterPos + 1, bookShelfBean.getBookChapterListSize()));
+        for (int i=mCurChapterPos+1;i<Math.min(mCurChapterPos + 3, bookShelfBean.getBookChapterListSize());i++)
+            loadChapterContent(i);
     }
 
     /**

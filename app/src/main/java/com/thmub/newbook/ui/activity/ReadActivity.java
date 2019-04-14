@@ -1,6 +1,7 @@
 package com.thmub.newbook.ui.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,23 +15,27 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.gyf.barlibrary.ImmersionBar;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookChapterBean;
+import com.thmub.newbook.bean.DownloadBookBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.manager.ReadSettingManager;
 import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
+import com.thmub.newbook.service.DownloadService;
 import com.thmub.newbook.ui.adapter.CatalogAdapter;
 import com.thmub.newbook.ui.dialog.CopyContentDialog;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 import com.thmub.newbook.ui.dialog.ReadSettingDialog;
 import com.thmub.newbook.utils.BatteryUtils;
+import com.thmub.newbook.utils.NetworkUtils;
 import com.thmub.newbook.utils.StringUtils;
 import com.thmub.newbook.utils.SystemBarUtils;
 import com.thmub.newbook.utils.UiUtils;
@@ -436,6 +441,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 readDrawer.openDrawer(GravityCompat.START);
                 break;
             case R.id.read_tv_download:  //下载
+                downloadBook();
                 break;
             case R.id.read_tv_setting:  //设置
                 toggleMenu(false);
@@ -451,6 +457,56 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
                 break;
         }
+    }
+
+    private int selectedIndex;
+
+    /**
+     * 下载
+     */
+    private void downloadBook() {
+        if (!NetworkUtils.isNetWorkAvailable()) {
+            Toast.makeText(mContext, "无网络连接", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("下载")
+                .setSingleChoiceItems(R.array.dialog_download, selectedIndex, (dialog, which) -> {
+                    selectedIndex = which;
+                })
+                .setNegativeButton("取消", ((dialog, which) -> dialog.dismiss()))
+                .setPositiveButton("确定",
+                        (dialog, which) -> {
+                            switch (selectedIndex) {
+                                case 0:
+                                    addDownload(mShelfBook.getCurChapter(), mShelfBook.getCurChapter() + 50);
+                                    break;
+                                case 1:
+                                    addDownload(mShelfBook.getCurChapter() - 50, mShelfBook.getCurChapter() + 50);
+                                    break;
+                                case 2:
+                                    addDownload(mShelfBook.getCurChapter(), mShelfBook.getBookChapterListSize());
+                                    break;
+                                case 3:
+                                    addDownload(0, mShelfBook.getBookChapterListSize());
+                                    break;
+                            }
+                        }).show();
+    }
+
+    private void addDownload(int start, int end) {
+        start = Math.max(0, start);
+        end = Math.min(end, mShelfBook.getBookChapterListSize());
+
+        DownloadBookBean downloadBook = new DownloadBookBean();
+        downloadBook.setName(mShelfBook.getTitle());
+        downloadBook.setNoteUrl(mShelfBook.getCatalogLink());
+        downloadBook.setCoverUrl(mShelfBook.getCover());
+        downloadBook.setStart(start);
+        downloadBook.setEnd(end);
+        downloadBook.setFinalDate(System.currentTimeMillis());
+        DownloadService.addDownload(mContext, downloadBook);
     }
 
     /**

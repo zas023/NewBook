@@ -1,6 +1,7 @@
 package com.thmub.newbook.manager;
 
 import com.thmub.newbook.bean.BookSearchBean;
+import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.bean.zhui.BookBean;
 import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.utils.FileUtils;
@@ -170,12 +171,16 @@ public class BookManager {
      * @param fileName:  chapterName
      * @return
      */
+
     public static boolean isChapterCached(String folderName, String fileName) {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
                 + File.separator + fileName + FileUtils.SUFFIX_NB);
         return file.exists();
     }
 
+    public static boolean isChapterCached(String bookName, String sourceName, String fileName) {
+        return isChapterCached(bookName + File.separator + sourceName, fileName);
+    }
 
     public static BookSearchBean getSearchBook(BookBean book) {
         BookSearchBean bean = new BookSearchBean();
