@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,15 +23,15 @@ import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.model.local.BookSourceRepository;
 import com.thmub.newbook.presenter.BookDetailPresenter;
 import com.thmub.newbook.presenter.contract.BookDetailContract;
-import com.thmub.newbook.ui.adapter.BookDetailAdapter;
+import com.thmub.newbook.ui.adapter.DetailCatalogAdapter;
+import com.thmub.newbook.ui.adapter.DetailFindAdapter;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
-import com.thmub.newbook.utils.SnackbarUtils;
+import com.thmub.newbook.widget.DashlineItemDivider;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -61,12 +62,25 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     TextView mTvType;
     @BindView(R.id.book_detail_tv_word_count)
     TextView mTvWordCount;
-    @BindView(R.id.book_detail_rv_content)
-    RecyclerView mRvContent;
+
     @BindView(R.id.book_detail_tv_add)
     TextView bookDetailTvAdd;
     @BindView(R.id.book_detail_tv_open)
     TextView bookDetailTvOpen;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.book_detail_tv_desc)
+    TextView bookDetailTvDesc;
+    @BindView(R.id.fl_download_book)
+    FrameLayout flDownloadBook;
+    @BindView(R.id.fl_add_bookcase)
+    FrameLayout flAddBookcase;
+    @BindView(R.id.fl_open_book)
+    FrameLayout flOpenBook;
+    @BindView(R.id.book_detail_rv_catalog)
+    RecyclerView bookDetailRvCatalog;
+    @BindView(R.id.book_detail_rv_find)
+    RecyclerView bookDetailRvFind;
 
     private SourceExchangeDialog mSourceDialog;
     /****************************Variable*********************************/
@@ -75,7 +89,8 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
 
     private boolean isCollected;
 
-    private BookDetailAdapter mAdapter;
+    private DetailCatalogAdapter mCatalogAdapter;
+    private DetailFindAdapter mFindAdapter;
 
     /**************************Initialization******************************/
     @Override
@@ -109,11 +124,16 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
 
         initBookInfo();
 
-        //Recycler
-        mAdapter = new BookDetailAdapter();
-        mAdapter.addItem(new BookChapterBean(mSearchBook.getDesc()));
-        mRvContent.setLayoutManager(new LinearLayoutManager(mContext));
-        mRvContent.setAdapter(mAdapter);
+        //catalog
+        mCatalogAdapter = new DetailCatalogAdapter();
+        bookDetailRvCatalog.setLayoutManager(new LinearLayoutManager(mContext));
+        bookDetailRvCatalog.setAdapter(mCatalogAdapter);
+        bookDetailRvCatalog.addItemDecoration(new DashlineItemDivider());
+
+        //find books
+        mFindAdapter = new DetailFindAdapter();
+        bookDetailRvFind.setLayoutManager(new GridLayoutManager(mContext, 4));
+        bookDetailRvFind.setAdapter(mFindAdapter);
 
         //Button
         if (isCollected) {
@@ -134,11 +154,18 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         mTvAuthor.setText(mSearchBook.getAuthor());
         mTvType.setText(mSearchBook.getBookLink());
         mTvWordCount.setText(mSearchBook.getSourceName());
+        bookDetailTvDesc.setText("\t\t\t\t" + mSearchBook.getDesc());
     }
 
     @Override
     protected void initClick() {
         super.initClick();
+        //推荐书籍
+        mFindAdapter.setOnItemClickListener((view, pos) -> {
+            startActivity(new Intent(mContext, BookDetailActivity.class)
+                    .putExtra(BookDetailActivity.EXTRA_BOOK, mFindAdapter.getItem(pos)));
+        });
+        //换源对话框
         mSourceDialog.setListener(bean -> {
             mSearchBook = bean;
             mShelfBook = mSearchBook.getShelfBook();
@@ -159,24 +186,33 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     protected void processLogic() {
         super.processLogic();
         mPresenter.loadCatalogs(mShelfBook);
+        mPresenter.loadFindBooks(mSearchBook);
     }
 
     @Override
     public void finishLoadCatalogs(List<BookChapterBean> items) {
-        mShelfBook.setBookChapterList(items);
+//        mShelfBook.setBookChapterList(items);
+//
+//        //设置详情页
+//        List<BookChapterBean> list = new ArrayList<>();
+//        //最新十章
+//        int size = items.size();
+//        if (size > 10)
+//            //subList中有些坑，取值范围是 fromIndex <= field < toIndex
+//            list.addAll(items.subList(size - 10, size));
+//        else
+//            list.addAll(items);
+//        Collections.reverse(list);
 
-        //设置详情页
-        List<BookChapterBean> list = new ArrayList<>();
-        //最新十章
-        int size = items.size();
-        if (size > 10)
-            //subList中有些坑，取值范围是 fromIndex <= field < toIndex
-            list.addAll(items.subList(size - 10, size));
+        mCatalogAdapter.addItems(items);
+    }
+
+    @Override
+    public void finishLoadFindBooks(List<BookSearchBean> items) {
+        if (items.size() > 8)
+            mFindAdapter.addItems(items.subList(0, 8));
         else
-            list.addAll(items);
-        Collections.reverse(list);
-
-        mAdapter.addItems(list);
+            mFindAdapter.addItems(items);
     }
 
     @Override
@@ -221,7 +257,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
                 break;
             case R.id.action_reload:  //重新加载
                 initWidget();
-                mPresenter.loadCatalogs(mShelfBook);
+                processLogic();
                 break;
             case R.id.action_open_link:  //打开链接
                 Uri uri = Uri.parse(mShelfBook.getLink());
@@ -263,20 +299,19 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
      *
      * @param view
      */
-    @OnClick({R.id.fl_add_bookcase, R.id.fl_open_book})
+    @OnClick({R.id.fl_add_bookcase, R.id.fl_open_book, R.id.book_detail_tv_find_more})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.book_detail_tv_find_more:  //发现
+
+                break;
             case R.id.fl_add_bookcase:  //加入书架
                 addToShelf();
                 break;
             case R.id.fl_open_book:  //开始阅读
-                if (mShelfBook.getBookChapterListSize() > 0) {
-                    startActivityForResult(new Intent(mContext, ReadActivity.class)
-                            .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook)
-                            .putExtra(ReadActivity.EXTRA_IS_COLLECTED, isCollected), REQUEST_CODE_READ);
-                } else {
-                    SnackbarUtils.show(mContext, "无法加载书籍目录");
-                }
+                startActivityForResult(new Intent(mContext, ReadActivity.class)
+                        .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook)
+                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, isCollected), REQUEST_CODE_READ);
                 break;
         }
     }
@@ -299,6 +334,5 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
             isCollected = true;
         }
     }
-
 
 }

@@ -89,6 +89,8 @@ public class BookShelfRepository {
                 .where(ShelfBookBeanDao.Properties.Title.eq(bookName))
                 .where(ShelfBookBeanDao.Properties.Author.eq(author))
                 .unique();
+        if (bean != null)
+            bean.__setDaoSession(mSession);
         return bean;
     }
 
@@ -102,6 +104,8 @@ public class BookShelfRepository {
         ShelfBookBean bean = mShelfBookDao.queryBuilder()
                 .where(ShelfBookBeanDao.Properties.Link.eq(bookLink))
                 .unique();
+        if (bean != null)
+            bean.__setDaoSession(mSession);
         return bean;
     }
 

@@ -63,16 +63,16 @@ public class DownloadService extends Service {
         super.onCreate();
         Log.i("DownService","=======onCreate");
         isRunning = true;
-        //创建 Notification.Builder 对象
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, App.channelIdDownload)
-                .setSmallIcon(R.mipmap.ic_download)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                .setOngoing(false)
-                .setContentTitle("离线下载")
-                .setContentText("下载选择的章节到本地");
-        //发送通知
-        Notification notification = builder.build();
-        startForeground(notificationId, notification);
+//        //创建 Notification.Builder 对象
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, App.channelIdDownload)
+//                .setSmallIcon(R.mipmap.ic_download)
+//                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+//                .setOngoing(false)
+//                .setContentTitle("离线下载")
+//                .setContentText("下载选择的章节到本地");
+//        //发送通知
+//        Notification notification = builder.build();
+//        startForeground(notificationId, notification);
 
         threadsNum = SharedPreUtils.getInstance().getInt("threads_num", 4);
         executor = Executors.newFixedThreadPool(threadsNum);
@@ -298,21 +298,21 @@ public class DownloadService extends Service {
 
         currentTime = System.currentTimeMillis();
 
-        Intent mainIntent = new Intent(this, DownloadActivity.class);
-        PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //创建 Notification.Builder 对象
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, App.channelIdDownload)
-                .setSmallIcon(R.mipmap.ic_download)
-                //通知栏大图标
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                //点击通知后自动清除
-                .setAutoCancel(true)
-                .setContentTitle("正在下载：" + downloadChapterBean.getBookTitle())
-                .setContentText(downloadChapterBean.getChapterTitle() == null ? "  " : downloadChapterBean.getChapterTitle())
-                .setContentIntent(mainPendingIntent);
-        builder.addAction(R.mipmap.ic_stop, "取消", getChancelPendingIntent());
-        //发送通知
-        startForeground(notificationId, builder.build());
+//        Intent mainIntent = new Intent(this, DownloadActivity.class);
+//        PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        //创建 Notification.Builder 对象
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, App.channelIdDownload)
+//                .setSmallIcon(R.mipmap.ic_download)
+//                //通知栏大图标
+//                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+//                //点击通知后自动清除
+//                .setAutoCancel(true)
+//                .setContentTitle("正在下载：" + downloadChapterBean.getBookTitle())
+//                .setContentText(downloadChapterBean.getChapterTitle() == null ? "  " : downloadChapterBean.getChapterTitle())
+//                .setContentIntent(mainPendingIntent);
+//        builder.addAction(R.mipmap.ic_stop, "取消", getChancelPendingIntent());
+//        //发送通知
+//        startForeground(notificationId, builder.build());
     }
 
     private void finishSelf() {

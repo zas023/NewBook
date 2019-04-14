@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!--简介-->
+    <TextView
+        android:id="@+id/book_detail_tv_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-10dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:padding="15dp"
+        android:textColor="@color/textPrimary"
+        android:textSize="15sp"
+        android:text="简介: "/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/divider_wide" />
+
+    <!--书籍推荐-->
+    <RelativeLayout
+        android:id="@+id/book_detail_rl_catalog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/book_detail_tv_catalog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="最新章节"
+            android:textColor="@color/textPrimary"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="15dp"
+            android:text="更多"
+            android:textColor="@color/textAssist"
+            android:textSize="15sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/book_detail_rv_catalog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/book_detail_tv_catalog"
+            android:foregroundGravity="center" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/divider_wide" />
+
+    <!--书籍推荐-->
+    <RelativeLayout
+        android:id="@+id/book_detail_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/book_detail_tv_find"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="推荐书籍"
+            android:textColor="@color/textPrimary"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/book_detail_tv_find_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="15dp"
+            android:text="更多"
+            android:textColor="@color/textAssist"
+            android:textSize="15sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/book_detail_rv_find"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/book_detail_tv_find"
+            android:foregroundGravity="center" />
+    </RelativeLayout>
+
+    <!--底部空白，给底部bottom预留位置-->
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="56dp"-->
+    <!--android:background="@color/divider_wide" />-->
+
+</LinearLayout>

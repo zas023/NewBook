@@ -1,7 +1,11 @@
 package com.thmub.newbook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+
+import com.thmub.newbook.service.BookDownloadService;
+import com.thmub.newbook.service.DownloadService;
 
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
@@ -25,6 +29,8 @@ public class App extends MultiDexApplication {
         sInstance = this;
         //默认初始化Bmob
         Bmob.initialize(this, "3f3b7628bf00914940a6919da16b33bf");
+        //初始化下载服务
+        startService(new Intent(getContext(), BookDownloadService.class));
     }
 
     @Override

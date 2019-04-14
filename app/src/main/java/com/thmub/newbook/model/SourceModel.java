@@ -84,6 +84,17 @@ public class SourceModel implements ISourceModel {
     }
 
     @Override
+    public Observable<List<BookChapterBean>> parseCatalogFromEnd(ShelfBookBean book, int num) {
+        if (!initBookSourceBean()) {
+            return Observable.create(emitter -> {
+                emitter.onNext(null);
+                emitter.onComplete();
+            });
+        }
+        return sourceModel.parseCatalogFromEnd(book,num);
+    }
+
+    @Override
     public Observable<BookContentBean> parseContent(BookChapterBean chapter) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+import com.futuremind.recyclerviewfastscroll.SectionTitleProvider;
 import com.thmub.newbook.R;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
@@ -24,7 +25,7 @@ import static com.thmub.newbook.utils.UiUtils.getContext;
  * Created by Zhouas666 on 2019-03-27
  * Github: https://github.com/zas023
  */
-public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHolder> {
+public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHolder> implements SectionTitleProvider {
 
     private ShelfBookBean mShelfBook;
 
@@ -74,7 +75,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
 
         holder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         holder.tvTitle.setText(getContext().getString(R.string.read_catalog_title
-                , position+1, data.getChapterTitle()));
+                , position + 1, data.getChapterTitle()));
         //选中
         if (currentSelected == position) {
             holder.tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.md_red_400));
@@ -106,6 +107,11 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
 
     public interface OnItemClickListener {
         void onItemClick(int index, int page);
+    }
+
+    @Override
+    public String getSectionTitle(int position) {
+        return mShelfBook.getChapter(position).getChapterTitle().substring(0, 1);
     }
 
 }

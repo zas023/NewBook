@@ -5,4 +5,24 @@ package com.thmub.newbook.bean.event;
  * Github: https://github.com/zas023
  */
 public class DownloadEvent {
+
+    public String bookLink;
+
+    public String message;
+
+    public int status;
+
+    public DownloadEvent() {
+    }
+
+    public DownloadEvent(String bookLink, String message) {
+        this.bookLink = bookLink;
+        this.message = message;
+    }
+
+    public DownloadEvent(String bookLink, String message, int status) {
+        this.bookLink = bookLink;
+        this.message = message;
+        this.status = status;
+    }
 }

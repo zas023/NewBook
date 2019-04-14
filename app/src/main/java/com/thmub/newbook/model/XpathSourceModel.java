@@ -34,6 +34,12 @@ public class XpathSourceModel implements ISourceModel {
         this.bookSourceBean = bean;
     }
 
+    /**
+     * 发现书籍
+     *
+     * @param findRule
+     * @return
+     */
     @Override
     public Observable<List<BookSearchBean>> findBook(String findRule) {
         return Observable.create(emitter -> {
@@ -42,6 +48,12 @@ public class XpathSourceModel implements ISourceModel {
         });
     }
 
+    /**
+     * 搜索书籍
+     *
+     * @param keyword
+     * @return
+     */
     @Override
     public Observable<List<BookSearchBean>> searchBook(String keyword) {
         if (isEmpty(bookSourceBean.getSearchLink())) {
@@ -116,6 +128,12 @@ public class XpathSourceModel implements ISourceModel {
         });
     }
 
+    /**
+     * 解析目录
+     *
+     * @param book
+     * @return
+     */
     @Override
     public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book) {
         String catalogLink = book.getCatalogLink();
@@ -140,6 +158,64 @@ public class XpathSourceModel implements ISourceModel {
 
             List<BookChapterBean> catalogList = new ArrayList<>();
             for (int i = 0, size = rsTitles.size(); i < size; i++) {
+                BookChapterBean bean = new BookChapterBean();
+
+                //章节名称
+                String title = rsTitles.get(i).toString();
+                title = StringUtils.fullToHalf(title)
+                        .replaceAll("\\s", "")
+                        .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
+                        .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
+                bean.setChapterTitle(title);
+                //章节链接
+                String chapterLink = rsLinks.get(i).toString();
+                if (RegexUtils.checkURL(chapterLink))
+                    bean.setChapterLink(chapterLink);
+                else
+                    bean.setChapterLink(bookSourceBean.getRootLink() + chapterLink);
+                //章节序号
+                bean.setChapterIndex(i);
+                //书籍链接
+                bean.setBookLink(catalogLink);
+
+                catalogList.add(bean);
+
+                Log.i("XpathSourceModel", bean.toString());
+            }
+            emitter.onNext(catalogList);
+            emitter.onComplete();
+        });
+    }
+
+    /**
+     * 有后向前加载目录
+     *
+     * @param book
+     * @return
+     */
+    public Observable<List<BookChapterBean>> parseCatalogFromEnd(ShelfBookBean book, int num) {
+        String catalogLink = book.getCatalogLink();
+        if (isEmpty(catalogLink)) {
+            return Observable.create(emitter -> {
+                emitter.onNext(null);
+                emitter.onComplete();
+            });
+        }
+        return Observable.create(emitter -> {
+            JXDocument jxDocument = null;
+            try {
+                jxDocument = JXDocument.create(
+                        OkHttpUtils.getHtml(catalogLink
+                                , bookSourceBean.getEncodeType().split("&")[0]));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            List<Object> rsTitles = jxDocument.sel(bookSourceBean.getRuleCatalogTitle());
+            List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleCatalogLink());
+
+            List<BookChapterBean> catalogList = new ArrayList<>();
+            for (int i = rsTitles.size(), flag = Math.max(0, rsTitles.size() - num-1); i > flag; i--) {
                 BookChapterBean bean = new BookChapterBean();
 
                 //章节名称

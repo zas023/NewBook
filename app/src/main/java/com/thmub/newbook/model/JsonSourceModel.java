@@ -52,6 +52,12 @@ public class JsonSourceModel implements ISourceModel {
         return str;
     }
 
+    /**
+     * 同类书籍
+     *
+     * @param findLink
+     * @return
+     */
     @Override
     public Observable<List<BookSearchBean>> findBook(String findLink) {
         if (isEmpty(findLink)) {
@@ -63,6 +69,12 @@ public class JsonSourceModel implements ISourceModel {
         return parseBook(findLink, bookSourceBean.getRuleSearchBook());
     }
 
+    /**
+     * 搜索书籍
+     *
+     * @param keyword
+     * @return
+     */
     @Override
     public Observable<List<BookSearchBean>> searchBook(String keyword) {
         if (isEmpty(bookSourceBean.getSearchLink())) {
@@ -99,34 +111,58 @@ public class JsonSourceModel implements ISourceModel {
             String titleJson = bookSourceBean.getRuleSearchTitle();
             String coverJson = bookSourceBean.getRuleSearchCover();
             String bookLinkJson = bookSourceBean.getRuleSearchLink();
+            String findLinkJson = bookSourceBean.getRuleFindLink();
             String authorJson = bookSourceBean.getRuleSearchAuthor();
             String descJson = bookSourceBean.getRuleSearchDesc();
 
             String[] bookRules = bookJson.split("\\$");
-            String[] titleRules = titleJson.split("@");
-            if (titleRules.length > 1) {
-                titleJson = titleRules[0];
-                titleRules = titleRules[1].split("#");
+            String[] titleRules = null;
+            if (titleJson != null) {
+                titleRules = titleJson.split("@");
+                if (titleRules.length > 1) {
+                    titleJson = titleRules[0];
+                    titleRules = titleRules[1].split("#");
+                }
             }
-            String[] coverRules = coverJson.split("@");
-            if (coverRules.length > 1) {
-                coverJson = coverRules[0];
-                coverRules = coverRules[1].split("#");
+            String[] coverRules = null;
+            if (coverJson != null) {
+                coverRules = coverJson.split("@");
+                if (coverRules.length > 1) {
+                    coverJson = coverRules[0];
+                    coverRules = coverRules[1].split("#");
+                }
             }
-            String[] linkRules = bookLinkJson.split("@");
-            if (linkRules.length > 1) {
-                bookLinkJson = linkRules[0];
-                linkRules = linkRules[1].split("#");
+            String[] linkRules = null;
+            if (bookLinkJson != null) {
+                linkRules = bookLinkJson.split("@");
+                if (linkRules.length > 1) {
+                    bookLinkJson = linkRules[0];
+                    linkRules = linkRules[1].split("#");
+                }
             }
-            String[] authorRules = authorJson.split("@");
-            if (linkRules.length > 1) {
-                authorJson = authorRules[0];
-                authorRules = authorRules[1].split("#");
+            String[] findLinkRules = null;
+            if (findLinkJson != null) {
+                findLinkRules = findLinkJson.split("@");
+                if (findLinkRules.length > 1) {
+                    findLinkJson = findLinkRules[0];
+                    findLinkRules = findLinkRules[1].split("#");
+                }
             }
-            String[] descRules = descJson.split("@");
-            if (linkRules.length > 1) {
-                descJson = descRules[0];
-                descRules = descRules[1].split("#");
+            String[] authorRules = null;
+            if (authorJson != null) {
+                authorRules = authorJson.split("@");
+                if (authorRules.length > 1) {
+                    authorJson = authorRules[0];
+                    authorRules = authorRules[1].split("#");
+                }
+            }
+            String[] descRules = null;
+            if (descJson != null) {
+                descRules = descJson.split("@");
+                if (descRules.length > 1) {
+                    descJson = descRules[0];
+                    descRules = descRules[1].split("#");
+                }
             }
 
             JsonParser parser = new JsonParser();  //创建JSON解析器
@@ -148,6 +184,11 @@ public class JsonSourceModel implements ISourceModel {
                 link = executeOp(linkRules, link);
                 bean.setBookLink(link);
                 bean.setCatalogLink(link);
+                //发现
+                if (findLinkJson != null) {
+                    String findLink = book.get(findLinkJson).getAsString();
+                    bean.setFindLink(executeOp(findLinkRules, findLink));
+                }
                 //封面
                 String cover = book.get(coverJson).getAsString();
                 bean.setCover(executeOp(coverRules, cover));
@@ -170,6 +211,16 @@ public class JsonSourceModel implements ISourceModel {
             emitter.onComplete();
 
         });
+    }
+
+    private String[] analyseRule(String ruleJson) {
+        if (ruleJson == null) return null;
+        String[] rules = ruleJson.split("@");
+        if (rules.length > 1) {
+            ruleJson = rules[0];
+            rules = rules[1].split("#");
+        }
+        return rules;
     }
 
     @Override
@@ -245,6 +296,93 @@ public class JsonSourceModel implements ISourceModel {
         });
     }
 
+    /**
+     * 从后向前加载目录
+     *
+     * @param book
+     * @param num
+     * @return
+     */
+    public Observable<List<BookChapterBean>> parseCatalogFromEnd(ShelfBookBean book, int num) {
+        if (book != null && isEmpty(book.getCatalogLink())) {
+            return Observable.create(emitter -> {
+                emitter.onNext(null);
+                emitter.onComplete();
+            });
+        }
+        return Observable.create(emitter -> {
+            String jsonStr = null;
+            try {
+                jsonStr = OkHttpUtils.getHtml(book.getCatalogLink()
+                        , bookSourceBean.getEncodeType().split("&")[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String chapterJson = bookSourceBean.getRuleCatalogChapter();
+            String titleJson = bookSourceBean.getRuleCatalogTitle();
+            String linkJson = bookSourceBean.getRuleCatalogLink();
+
+            String[] chapterRules = chapterJson.split("\\$");
+            String[] titleRules = titleJson.split("@");
+            if (titleRules.length > 1) {
+                titleJson = titleRules[0];
+                titleRules = titleRules[1].split("#");
+            }
+            String[] linkRules = linkJson.split("@");
+            if (linkRules.length > 1) {
+                linkJson = linkRules[0];
+                linkRules = linkRules[1].split("#");
+            }
+
+            JsonParser parser = new JsonParser();
+            JsonObject object = (JsonObject) parser.parse(jsonStr);
+            for (int i = 0; i < chapterRules.length - 1; i++) {
+                object = object.get(chapterRules[i]).getAsJsonObject();
+            }
+            JsonArray chapters = object.get(chapterRules[chapterRules.length - 1]).getAsJsonArray();
+            List<BookChapterBean> chapterList = new ArrayList<>();
+
+            //注意i > flag，不能i >= flag
+            for (int i = chapters.size() - 1, flag = Math.max(0, chapters.size() - num - 1); i > flag; i--) {
+                BookChapterBean bean = new BookChapterBean();
+
+                JsonObject chapter = chapters.get(i).getAsJsonObject();
+
+                //章节名称
+                String title = chapter.get(titleJson).getAsString();
+                title = StringUtils.fullToHalf(executeOp(titleRules, title))
+                        .replaceAll("\\s", "")
+                        .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
+                        .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
+                bean.setChapterTitle(title);
+                //章节链接
+                String link = chapter.get(linkJson).getAsString();
+                bean.setChapterLink(executeOp(linkRules, link));
+                //章节序号
+                bean.setChapterIndex(i);
+                //章节对应的书籍
+                bean.setBookLink(book.getLink());
+                bean.setBookTitle(book.getTitle());
+                //对应书源
+                bean.setTag(book.getSourceName());
+
+                chapterList.add(bean);
+
+                Log.i("JsonSourceModel", bean.toString());
+            }
+
+            emitter.onNext(chapterList);
+            emitter.onComplete();
+        });
+    }
+
+    /**
+     * 章节内容
+     *
+     * @param chapter
+     * @return
+     */
     @Override
     public Observable<BookContentBean> parseContent(BookChapterBean chapter) {
         if (isEmpty(chapter.getChapterLink())) {

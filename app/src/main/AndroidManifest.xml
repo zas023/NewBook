@@ -42,6 +42,7 @@
         <activity android:name=".ui.activity.StoreNodeActivity" />
 
         <service android:name=".service.DownloadService" />
+        <service android:name=".service.BookDownloadService" />
 
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"

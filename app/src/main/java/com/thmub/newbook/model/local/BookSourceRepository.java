@@ -135,7 +135,7 @@ public class BookSourceRepository {
      */
     public BookSourceBean getBookSourceWithFind() {
         return mBookSourceDao.queryBuilder()
-                .where(BookSourceBeanDao.Properties.RuleFindBook.isNotNull())
+                .where(BookSourceBeanDao.Properties.RuleFindLink.isNotNull())
                 .unique();
     }
 

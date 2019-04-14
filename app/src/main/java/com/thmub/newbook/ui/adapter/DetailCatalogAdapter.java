@@ -3,7 +3,7 @@ package com.thmub.newbook.ui.adapter;
 import com.thmub.newbook.base.adapter.IViewHolder;
 import com.thmub.newbook.base.adapter.QuickAdapter;
 import com.thmub.newbook.bean.BookChapterBean;
-import com.thmub.newbook.ui.adapter.holder.BookDetailInfoHolder;
+import com.thmub.newbook.ui.adapter.holder.DetailCatalogHolder;
 
 /**
  * Created by Zhouas666 on 2019-04-02
@@ -11,10 +11,10 @@ import com.thmub.newbook.ui.adapter.holder.BookDetailInfoHolder;
  * <p>
  * 书籍详情页adapter
  */
-public class BookDetailAdapter extends QuickAdapter<BookChapterBean> {
+public class DetailCatalogAdapter extends QuickAdapter<BookChapterBean> {
 
     @Override
     protected IViewHolder<BookChapterBean> createViewHolder(int viewType) {
-        return new BookDetailInfoHolder();
+        return new DetailCatalogHolder();
     }
 }

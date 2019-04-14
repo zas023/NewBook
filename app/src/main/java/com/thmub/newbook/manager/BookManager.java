@@ -192,6 +192,8 @@ public class BookManager {
         bean.setBookLink(String.format(Constant.URL_BOOK_LINK, id));
         //目录地址
         bean.setCatalogLink(String.format(Constant.URL_CATALOG_LINK, id));
+        //发现地址
+        bean.setFindLink(String.format(Constant.URL_FIND_LINK, id));
 
         //书籍封面
         String cover = book.getCover();

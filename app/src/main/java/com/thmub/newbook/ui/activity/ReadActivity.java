@@ -1,7 +1,6 @@
 package com.thmub.newbook.ui.activity;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.futuremind.recyclerviewfastscroll.FastScroller;
 import com.google.android.material.appbar.AppBarLayout;
 import com.gyf.barlibrary.ImmersionBar;
 import com.thmub.newbook.R;
@@ -29,21 +29,22 @@ import com.thmub.newbook.manager.ReadSettingManager;
 import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
-import com.thmub.newbook.service.DownloadService;
 import com.thmub.newbook.ui.adapter.CatalogAdapter;
 import com.thmub.newbook.ui.dialog.CopyContentDialog;
-import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 import com.thmub.newbook.ui.dialog.ReadSettingDialog;
+import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 import com.thmub.newbook.utils.BatteryUtils;
 import com.thmub.newbook.utils.NetworkUtils;
 import com.thmub.newbook.utils.StringUtils;
 import com.thmub.newbook.utils.SystemBarUtils;
 import com.thmub.newbook.utils.UiUtils;
+import com.thmub.newbook.widget.DashlineItemDivider;
 import com.thmub.newbook.widget.animation.PageAnimation;
 import com.thmub.newbook.widget.page.PageLoader;
 import com.thmub.newbook.widget.page.PageView;
 import com.thmub.newbook.widget.page.TxtChapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
@@ -100,6 +101,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     TextView readTvSetting;
     @BindView(R.id.read_ll_bottom_menu)
     LinearLayout readLlBottomMenu;
+    @BindView(R.id.read_fast_scroller)
+    FastScroller readFastScroller;
 
 
     private ReadSettingDialog mSettingDialog;
@@ -134,6 +137,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         super.initData(savedInstanceState);
         mShelfBook = getIntent().getParcelableExtra(EXTRA_BOOK);
         isCollected = getIntent().getBooleanExtra(EXTRA_IS_COLLECTED, false);
+        //如果没有搜藏，则mShelfBook的chapterList==null
+        //在getChapterList的时候 GreenDao会报错
+        if (!isCollected)
+            mShelfBook.setBookChapterList(new ArrayList<>());
         mPageLoader = pageView.getPageLoader(this, mShelfBook);
         //重置书籍更新提示状态
         mShelfBook.setIsUpdate(false);
@@ -165,6 +172,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         readRvCatalog.getLayoutManager().scrollToPosition(mShelfBook.getCurChapter());
         readRvCatalog.setAdapter(mAdapter);
         readRvCatalog.setBackground(readSettingManager.getTextBackground(this));
+        //虚线分割
+        readRvCatalog.addItemDecoration(new DashlineItemDivider());
+        //scroller
+        readFastScroller.setRecyclerView(readRvCatalog);
 
         // PageView
         pageView.setBackground(readSettingManager.getTextBackground(this));
@@ -246,7 +257,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         });
 
         //catalog
-        mAdapter.setListener((index, page) -> mPageLoader.skipToChapter(index, 0));
+        mAdapter.setListener((index, page) -> {
+            mPageLoader.skipToChapter(index, 0);
+            readDrawer.closeDrawer(GravityCompat.START);
+        });
 
         //监听底部设置菜单
         mSettingDialog.setOnDismissListener(
@@ -506,7 +520,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         downloadBook.setStart(start);
         downloadBook.setEnd(end);
         downloadBook.setFinalDate(System.currentTimeMillis());
-        DownloadService.addDownload(mContext, downloadBook);
+        //DownloadService.addDownload(mContext, downloadBook);
+        //BookDownloadService.post(downloadBook);
     }
 
     /**
@@ -610,5 +625,4 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         setResult(Activity.RESULT_OK, new Intent().putExtra(BookDetailActivity.RESULT_IS_COLLECTED, isCollected));
         super.finish();
     }
-
 }

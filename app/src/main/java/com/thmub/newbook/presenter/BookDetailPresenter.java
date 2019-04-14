@@ -1,6 +1,7 @@
 package com.thmub.newbook.presenter;
 
 import com.thmub.newbook.base.RxPresenter;
+import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.model.SourceModel;
@@ -13,6 +14,8 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.text.TextUtils.isEmpty;
 
 /**
  * Created by Zhouas666 on 2019-03-28
@@ -55,8 +58,9 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
 
     @Override
     public void loadCatalogs(ShelfBookBean bookBean) {
+        //加载最新10章
         SourceModel.getInstance(bookBean.getSourceName())
-                .parseCatalog(bookBean)
+                .parseCatalogFromEnd(bookBean, 10)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BookChapterBean>>() {
@@ -68,6 +72,39 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
                     @Override
                     public void onNext(List<BookChapterBean> bookChapterBeans) {
                         mView.finishLoadCatalogs(bookChapterBeans);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void loadFindBooks(BookSearchBean bookBean) {
+        if (bookBean.getFindLink() == null || isEmpty(bookBean.getFindLink())) {
+//            mView.finishLoadFindBooks(null);
+            return;
+        }
+        SourceModel.getInstance(bookBean.getSourceName())
+                .findBook(bookBean.getFindLink())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<BookSearchBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(List<BookSearchBean> bookChapterBeans) {
+                        mView.finishLoadFindBooks(bookChapterBeans);
                     }
 
                     @Override

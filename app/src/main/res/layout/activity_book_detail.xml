@@ -37,17 +37,15 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <!--详情简介-->
-    <FrameLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="56dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/book_detail_rv_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
+        <include layout="@layout/layout_book_detail_content" />
+        
+    </androidx.core.widget.NestedScrollView>
 
     <!--底部button-->
     <FrameLayout
