@@ -32,18 +32,18 @@ public class BookSourceBean implements Parcelable {
 
     //书源规则
     //搜索
+    private String ruleSearchLink;  //指目录链接
     private String ruleSearchBook;
     private String ruleSearchTitle;
     private String ruleSearchAuthor;
     private String ruleSearchDesc;
     private String ruleSearchCover;
-    private String ruleSearchLink;
     //发现
     private String ruleFindBook;
     //目录
+    private String ruleCatalogLink;   //指章节内容链接
     private String ruleCatalogChapter;
     private String ruleCatalogTitle;
-    private String ruleCatalogLink;
     //章节
     private String ruleChapterContent;
 
@@ -57,26 +57,26 @@ public class BookSourceBean implements Parcelable {
     //是否选择
     private boolean isSelected;
 
-    @Generated(hash = 2145846218)
-    public BookSourceBean(String rootLink, String sourceName, String sourceType, String encodeType, String searchLink, String ruleSearchBook,
-            String ruleSearchTitle, String ruleSearchAuthor, String ruleSearchDesc, String ruleSearchCover, String ruleSearchLink,
-            String ruleFindBook, String ruleCatalogChapter, String ruleCatalogTitle, String ruleCatalogLink, String ruleChapterContent,
-            int orderNumber, int weight, boolean isSelected) {
+    @Generated(hash = 961459504)
+    public BookSourceBean(String rootLink, String sourceName, String sourceType, String encodeType, String searchLink, String ruleSearchLink,
+            String ruleSearchBook, String ruleSearchTitle, String ruleSearchAuthor, String ruleSearchDesc, String ruleSearchCover, String ruleFindBook,
+            String ruleCatalogLink, String ruleCatalogChapter, String ruleCatalogTitle, String ruleChapterContent, int orderNumber, int weight,
+            boolean isSelected) {
         this.rootLink = rootLink;
         this.sourceName = sourceName;
         this.sourceType = sourceType;
         this.encodeType = encodeType;
         this.searchLink = searchLink;
+        this.ruleSearchLink = ruleSearchLink;
         this.ruleSearchBook = ruleSearchBook;
         this.ruleSearchTitle = ruleSearchTitle;
         this.ruleSearchAuthor = ruleSearchAuthor;
         this.ruleSearchDesc = ruleSearchDesc;
         this.ruleSearchCover = ruleSearchCover;
-        this.ruleSearchLink = ruleSearchLink;
         this.ruleFindBook = ruleFindBook;
+        this.ruleCatalogLink = ruleCatalogLink;
         this.ruleCatalogChapter = ruleCatalogChapter;
         this.ruleCatalogTitle = ruleCatalogTitle;
-        this.ruleCatalogLink = ruleCatalogLink;
         this.ruleChapterContent = ruleChapterContent;
         this.orderNumber = orderNumber;
         this.weight = weight;

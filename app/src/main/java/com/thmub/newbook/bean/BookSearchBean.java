@@ -23,15 +23,18 @@ public class BookSearchBean implements Parcelable {
     //封面地址
     private String cover;
     //小说地址(章节地址)
-    private String link;
+    private String bookLink;
     //发现地址(同类小说)
     private String findLink;
+    //目录链接
+    private String catalogLink;
     //分类
     private String kind;
     //最新章节
     private String latestChapter;
     //来源
-    private String source;
+    private String sourceName;
+    private String sourceLink;
 
     //是否选择当前源（换源标记）
     private boolean selected;
@@ -48,11 +51,13 @@ public class BookSearchBean implements Parcelable {
         author = in.readString();
         desc = in.readString();
         cover = in.readString();
-        link = in.readString();
+        bookLink = in.readString();
         findLink = in.readString();
+        catalogLink = in.readString();
         kind = in.readString();
         latestChapter = in.readString();
-        source = in.readString();
+        sourceName = in.readString();
+        sourceLink = in.readString();
         selected = in.readByte() != 0;
         sourceUrls = in.createStringArrayList();
     }
@@ -103,12 +108,20 @@ public class BookSearchBean implements Parcelable {
         this.cover = cover;
     }
 
-    public String getLink() {
-        return link;
+    public String getCatalogLink() {
+        return catalogLink;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setCatalogLink(String catalogLink) {
+        this.catalogLink = catalogLink;
+    }
+
+    public String getBookLink() {
+        return bookLink;
+    }
+
+    public void setBookLink(String bookLink) {
+        this.bookLink = bookLink;
     }
 
     public String getKind() {
@@ -135,13 +148,21 @@ public class BookSearchBean implements Parcelable {
         this.findLink = findLink;
     }
 
-    public String getSource() {
-        return source;
+    public String getSourceName() {
+        return sourceName;
     }
 
-    public void setSource(String source) {
-        this.source = source;
-        addSource(source);
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+        addSource(sourceName);
+    }
+
+    public String getSourceLink() {
+        return sourceLink;
+    }
+
+    public void setSourceLink(String sourceLink) {
+        this.sourceLink = sourceLink;
     }
 
     public boolean isSelected() {
@@ -177,12 +198,14 @@ public class BookSearchBean implements Parcelable {
     /*************************************************************/
     public ShelfBookBean getShelfBook() {
         ShelfBookBean shelfBookBean = new ShelfBookBean();
-        shelfBookBean.setLink(link);
+        shelfBookBean.setLink(bookLink);
+        shelfBookBean.setCatalogLink(catalogLink);
         shelfBookBean.setTitle(title);
         shelfBookBean.setAuthor(author);
         shelfBookBean.setCover(cover);
         shelfBookBean.setDesc(desc);
-        shelfBookBean.setSource(source);
+        shelfBookBean.setSourceName(sourceName);
+        shelfBookBean.setSourceLink(sourceLink);
         return shelfBookBean;
     }
 
@@ -197,16 +220,35 @@ public class BookSearchBean implements Parcelable {
         dest.writeString(author);
         dest.writeString(desc);
         dest.writeString(cover);
-        dest.writeString(link);
+        dest.writeString(bookLink);
         dest.writeString(findLink);
+        dest.writeString(catalogLink);
         dest.writeString(kind);
         dest.writeString(latestChapter);
-        dest.writeString(source);
+        dest.writeString(sourceName);
+        dest.writeString(sourceLink);
         dest.writeByte((byte) (selected ? 1 : 0));
         dest.writeStringList(sourceUrls);
     }
 
     /*************************************************************/
 
-
+    @Override
+    public String toString() {
+        return "BookSearchBean{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", desc='" + desc + '\'' +
+                ", cover='" + cover + '\'' +
+                ", bookLink='" + bookLink + '\'' +
+                ", findLink='" + findLink + '\'' +
+                ", catalogLink='" + catalogLink + '\'' +
+                ", kind='" + kind + '\'' +
+                ", latestChapter='" + latestChapter + '\'' +
+                ", sourceName='" + sourceName + '\'' +
+                ", sourceLink='" + sourceLink + '\'' +
+                ", selected=" + selected +
+                ", sourceUrls=" + sourceUrls +
+                '}';
+    }
 }

@@ -5,6 +5,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.adapter.ViewHolderImpl;
 import com.thmub.newbook.bean.ShelfBookBean;
@@ -43,7 +45,10 @@ public class BookShelfHolder extends ViewHolderImpl<ShelfBookBean> {
 
     @Override
     public void onBind(ShelfBookBean data, int pos) {
-        Glide.with(getContext()).load(data.getCover()).into(itemIvCover);
+        Glide.with(getContext()).load(data.getCover())
+                //设置圆角
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
+                .into(itemIvCover);
         itemTvTitle.setText(data.getTitle());
         itemTvAuthor.setText(data.getAuthor());
 

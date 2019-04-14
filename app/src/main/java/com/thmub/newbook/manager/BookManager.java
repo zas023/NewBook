@@ -1,12 +1,10 @@
 package com.thmub.newbook.manager;
 
-import com.google.gson.JsonObject;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.zhui.BookBean;
 import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.utils.FileUtils;
 import com.thmub.newbook.utils.RegexUtils;
-import com.thmub.newbook.utils.RxUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -185,19 +183,23 @@ public class BookManager {
         bean.setTitle(book.getTitle());
 
         String id = book.get_id();
-        bean.setLink(String.format(Constant.URL_CATALOG_LINK, id));
+        //书籍地址
+        bean.setBookLink(String.format(Constant.URL_BOOK_LINK, id));
+        //目录地址
+        bean.setCatalogLink(String.format(Constant.URL_CATALOG_LINK, id));
 
+        //书籍封面
         String cover = book.getCover();
         if (RegexUtils.checkURL(cover))
             bean.setCover(cover);
         else
             bean.setCover(String.format(Constant.URL_COVER_LINK, cover));
-
+        //作者
         bean.setAuthor(book.getAuthor());
-
+        //简介
         bean.setDesc(book.getLongIntro());
-
-        bean.setSource("追书神器");
+        //书源
+        bean.setSourceName("追书神器");
 
         return bean;
     }

@@ -9,7 +9,9 @@ import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.BookContentBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.BookSourceBean;
+import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.utils.OkHttpUtils;
+import com.thmub.newbook.utils.StringUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -96,7 +98,7 @@ public class JsonSourceModel implements ISourceModel {
             String bookJson = bookRule;
             String titleJson = bookSourceBean.getRuleSearchTitle();
             String coverJson = bookSourceBean.getRuleSearchCover();
-            String linkJson = bookSourceBean.getRuleSearchLink();
+            String bookLinkJson = bookSourceBean.getRuleSearchLink();
             String authorJson = bookSourceBean.getRuleSearchAuthor();
             String descJson = bookSourceBean.getRuleSearchDesc();
 
@@ -111,9 +113,9 @@ public class JsonSourceModel implements ISourceModel {
                 coverJson = coverRules[0];
                 coverRules = coverRules[1].split("#");
             }
-            String[] linkRules = linkJson.split("@");
+            String[] linkRules = bookLinkJson.split("@");
             if (linkRules.length > 1) {
-                linkJson = linkRules[0];
+                bookLinkJson = linkRules[0];
                 linkRules = linkRules[1].split("#");
             }
             String[] authorRules = authorJson.split("@");
@@ -138,23 +140,26 @@ public class JsonSourceModel implements ISourceModel {
                 BookSearchBean bean = new BookSearchBean();
 
                 JsonObject book = books.get(i).getAsJsonObject();
-
+                //书名
                 String title = book.get(titleJson).getAsString();
                 bean.setTitle(executeOp(titleRules, title));
-
-                String link = book.get(linkJson).getAsString();
-                bean.setLink(executeOp(linkRules, link));
-
+                //书籍链接(目录链接)
+                String link = book.get(bookLinkJson).getAsString();
+                link = executeOp(linkRules, link);
+                bean.setBookLink(link);
+                bean.setCatalogLink(link);
+                //封面
                 String cover = book.get(coverJson).getAsString();
                 bean.setCover(executeOp(coverRules, cover));
-
+                //作者
                 String author = book.get(authorJson).getAsString();
                 bean.setAuthor(executeOp(authorRules, author));
-
+                //简介
                 String desc = book.get(descJson).getAsString();
                 bean.setDesc(executeOp(descRules, desc));
-
-                bean.setSource(bookSourceBean.getSourceName());
+                //来源
+                bean.setSourceName(bookSourceBean.getSourceName());
+                bean.setSourceLink(bookSourceBean.getRootLink());
 
                 bookList.add(bean);
 
@@ -168,8 +173,8 @@ public class JsonSourceModel implements ISourceModel {
     }
 
     @Override
-    public Observable<List<BookChapterBean>> parseCatalog(String catalogLink) {
-        if (isEmpty(catalogLink)) {
+    public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book) {
+        if (book != null && isEmpty(book.getCatalogLink())) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);
                 emitter.onComplete();
@@ -178,7 +183,7 @@ public class JsonSourceModel implements ISourceModel {
         return Observable.create(emitter -> {
             String jsonStr = null;
             try {
-                jsonStr = OkHttpUtils.getHtml(catalogLink
+                jsonStr = OkHttpUtils.getHtml(book.getCatalogLink()
                         , bookSourceBean.getEncodeType().split("&")[0]);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -212,15 +217,27 @@ public class JsonSourceModel implements ISourceModel {
 
                 JsonObject chapter = chapters.get(i).getAsJsonObject();
 
+                //章节名称
                 String title = chapter.get(titleJson).getAsString();
-                bean.setChapterTitle(executeOp(titleRules, title));
-
+                title = StringUtils.fullToHalf(executeOp(titleRules, title))
+                        .replaceAll("\\s", "")
+                        .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
+                        .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
+                bean.setChapterTitle(title);
+                //章节链接
                 String link = chapter.get(linkJson).getAsString();
                 bean.setChapterLink(executeOp(linkRules, link));
-
+                //章节序号
                 bean.setChapterIndex(i);
+                //章节对应的书籍
+                bean.setBookLink(book.getLink());
+                bean.setBookTitle(book.getTitle());
+                //对应书源
+                bean.setTag(book.getSourceName());
 
                 chapterList.add(bean);
+
+                Log.i("JsonSourceModel", bean.toString());
             }
 
             emitter.onNext(chapterList);

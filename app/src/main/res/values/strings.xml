@@ -15,6 +15,20 @@
     <string name="activity_setting">设置</string>
     <string name="activity_about">关于</string>
 
+    <!--Array-->
+    <!--CollBook的长按点击-->
+    <string-array name="menu_net_book">
+        <item>@string/menu_action_top</item>
+        <item>@string/menu_action_cache</item>
+        <item>@string/menu_action_delete</item>
+        <item>@string/menu_action_batch</item>
+    </string-array>
+
+    <string-array name="menu_local_book">
+        <item>@string/menu_action_top</item>
+        <item>@string/menu_action_delete</item>
+        <item>@string/menu_action_batch</item>
+    </string-array>
 
     <!--store-->
     <string name="store_node_nsrm">男生热门</string>
@@ -63,9 +77,27 @@
     <string name="common_sure">确定</string>
     <string name="common_cancel">取消</string>
 
-    <!--网络相关-->
 
+    <!--网络相关-->
     <string name="net_error_tip">似乎没有网络哦</string>
+
+    <!--menu 菜单-->
+    <!--<string name="menu_action_search">搜索</string>-->
+    <!--<string name="menu_action_login">请登录</string>-->
+    <!--<string name="menu_action_message">我的消息</string>-->
+    <!--<string name="menu_action_download">下载列表</string>-->
+    <!--<string name="menu_action_sync">同步书架</string>-->
+    <!--<string name="menu_action_scan">扫描本地书籍</string>-->
+    <!--<string name="menu_action_transfer">WIFI传书</string>-->
+    <!--<string name="menu_action_feedback">意见反馈</string>-->
+    <!--<string name="menu_action_about">关于</string>-->
+    <!--<string name="menu_action_night_mode">夜间模式</string>-->
+    <!--<string name="menu_action_setting">设置</string>-->
+
+    <string name="menu_action_top">置顶</string>
+    <string name="menu_action_cache">缓存</string>
+    <string name="menu_action_delete">删除</string>
+    <string name="menu_action_batch">批量管理</string>
 
     <!--fragment_title:主页的名字-->
     <string name="fragment_title_bookshelf">书架</string>

@@ -27,6 +27,7 @@ import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
 import com.thmub.newbook.ui.adapter.CatalogAdapter;
+import com.thmub.newbook.ui.dialog.CopyContentDialog;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 import com.thmub.newbook.ui.dialog.ReadSettingDialog;
 import com.thmub.newbook.utils.BatteryUtils;
@@ -365,8 +366,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             case R.id.action_add_bookmark:  //添加书签
                 break;
             case R.id.action_copy_content:  //复制内容
+                new CopyContentDialog(this, mPageLoader.getContent()).show();
                 break;
             case R.id.action_refresh_catalog:  //刷新目录
+                mPageLoader.refreshChapterList();
                 break;
             default:
                 break;

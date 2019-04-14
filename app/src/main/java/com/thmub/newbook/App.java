@@ -14,6 +14,9 @@ import cn.bmob.v3.Bmob;
 
 public class App extends MultiDexApplication {
 
+    public final static String channelIdDownload = "channel_download";
+    public final static String channelIdReadAloud = "channel_read_aloud";
+
     private static App sInstance;
 
     @Override

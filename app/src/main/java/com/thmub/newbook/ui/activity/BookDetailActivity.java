@@ -1,7 +1,9 @@
 package com.thmub.newbook.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,16 +11,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.model.local.BookShelfRepository;
+import com.thmub.newbook.model.local.BookSourceRepository;
 import com.thmub.newbook.presenter.BookDetailPresenter;
 import com.thmub.newbook.presenter.contract.BookDetailContract;
 import com.thmub.newbook.ui.adapter.BookDetailAdapter;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
+import com.thmub.newbook.utils.SnackbarUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +48,9 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     /****************************Constant*********************************/
     public static final String RESULT_IS_COLLECTED = "result_is_collected";
     public static final String EXTRA_BOOK = "extra_book";
+
+    public static final int REQUEST_CODE_READ = 0;
+    public static final int REQUEST_CODE_SOURCE = 1;
 
     /*****************************View***********************************/
     @BindView(R.id.book_detail_iv_cover)
@@ -78,6 +87,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         mSearchBook = getIntent().getParcelableExtra(EXTRA_BOOK);
+        Log.i(TAG, mSearchBook.toString());
         //查找书架，判断是否是已收藏
         mShelfBook = BookShelfRepository.getInstance().getShelfBook(mSearchBook.getTitle(), mSearchBook.getAuthor());
         if (mShelfBook == null)
@@ -118,10 +128,12 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
 
     //Book title info
     private void initBookInfo() {
-        Glide.with(mContext).load(mSearchBook.getCover()).into(mIvCover);
+        Glide.with(mContext).load(mSearchBook.getCover())
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
+                .into(mIvCover);
         mTvAuthor.setText(mSearchBook.getAuthor());
-        mTvType.setText(mSearchBook.getLink());
-        mTvWordCount.setText(mSearchBook.getSource());
+        mTvType.setText(mSearchBook.getBookLink());
+        mTvWordCount.setText(mSearchBook.getSourceName());
     }
 
     @Override
@@ -129,7 +141,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         super.initClick();
         mSourceDialog.setListener(bean -> {
             mSearchBook = bean;
-            mShelfBook=mSearchBook.getShelfBook();
+            mShelfBook = mSearchBook.getShelfBook();
             initBookInfo();
             mPresenter.loadCatalogs(mShelfBook);
             mSourceDialog.dismiss();
@@ -202,10 +214,19 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
                 mSourceDialog.show();
                 break;
             case R.id.action_edit_source:  //编辑源
-
+                startActivity(new Intent(mContext, SourceEditActivity.class)
+                        .putExtra(SourceEditActivity.EXTRA_BOOK_SOURCE
+                                , BookSourceRepository.getInstance()
+                                        .getBookSourceByName(mShelfBook.getSourceName())));
                 break;
             case R.id.action_reload:  //重新加载
-
+                initWidget();
+                mPresenter.loadCatalogs(mShelfBook);
+                break;
+            case R.id.action_open_link:  //打开链接
+                Uri uri = Uri.parse(mShelfBook.getLink());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -213,6 +234,13 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 响应上层返回结果
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -242,9 +270,13 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
                 addToShelf();
                 break;
             case R.id.fl_open_book:  //开始阅读
-                startActivity(new Intent(mContext, ReadActivity.class)
-                        .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook)
-                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, isCollected));
+                if (mShelfBook.getBookChapterListSize() > 0) {
+                    startActivityForResult(new Intent(mContext, ReadActivity.class)
+                            .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook)
+                            .putExtra(ReadActivity.EXTRA_IS_COLLECTED, isCollected), REQUEST_CODE_READ);
+                } else {
+                    SnackbarUtils.show(mContext, "无法加载书籍目录");
+                }
                 break;
         }
     }

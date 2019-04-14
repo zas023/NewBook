@@ -4,6 +4,7 @@ import com.thmub.newbook.bean.BookContentBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.BookSourceBean;
 import com.thmub.newbook.bean.BookChapterBean;
+import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.model.local.BookSourceRepository;
 
 import java.util.List;
@@ -72,14 +73,14 @@ public class SourceModel implements ISourceModel {
     }
 
     @Override
-    public Observable<List<BookChapterBean>> parseCatalog(String catalogLink) {
+    public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean bookBean) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);
                 emitter.onComplete();
             });
         }
-        return sourceModel.parseCatalog(catalogLink);
+        return sourceModel.parseCatalog(bookBean);
     }
 
     @Override

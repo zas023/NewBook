@@ -3,6 +3,7 @@ package com.thmub.newbook.model;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.BookContentBean;
 import com.thmub.newbook.bean.BookSearchBean;
+import com.thmub.newbook.bean.ShelfBookBean;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public  interface ISourceModel {
 
     Observable<List<BookSearchBean>> searchBook(String keyword);
 
-    Observable<List<BookChapterBean>> parseCatalog(String catalogLink);
+    Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book);
 
     Observable<BookContentBean> parseContent(BookChapterBean chapter);
 }

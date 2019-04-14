@@ -90,7 +90,7 @@ public class TestJson {
             bean.setTitle(executeOp(titleRules, title));
 
             String link = book.get(linkJson).getAsString();
-            bean.setLink(executeOp(linkRules, link));
+            bean.setCatalogLink(executeOp(linkRules, link));
 
             String cover = book.get(coverJson).getAsString();
             bean.setCover(executeOp(coverRules, cover));

@@ -29,16 +29,16 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         public final static Property SourceType = new Property(2, String.class, "sourceType", false, "SOURCE_TYPE");
         public final static Property EncodeType = new Property(3, String.class, "encodeType", false, "ENCODE_TYPE");
         public final static Property SearchLink = new Property(4, String.class, "searchLink", false, "SEARCH_LINK");
-        public final static Property RuleSearchBook = new Property(5, String.class, "ruleSearchBook", false, "RULE_SEARCH_BOOK");
-        public final static Property RuleSearchTitle = new Property(6, String.class, "ruleSearchTitle", false, "RULE_SEARCH_TITLE");
-        public final static Property RuleSearchAuthor = new Property(7, String.class, "ruleSearchAuthor", false, "RULE_SEARCH_AUTHOR");
-        public final static Property RuleSearchDesc = new Property(8, String.class, "ruleSearchDesc", false, "RULE_SEARCH_DESC");
-        public final static Property RuleSearchCover = new Property(9, String.class, "ruleSearchCover", false, "RULE_SEARCH_COVER");
-        public final static Property RuleSearchLink = new Property(10, String.class, "ruleSearchLink", false, "RULE_SEARCH_LINK");
+        public final static Property RuleSearchLink = new Property(5, String.class, "ruleSearchLink", false, "RULE_SEARCH_LINK");
+        public final static Property RuleSearchBook = new Property(6, String.class, "ruleSearchBook", false, "RULE_SEARCH_BOOK");
+        public final static Property RuleSearchTitle = new Property(7, String.class, "ruleSearchTitle", false, "RULE_SEARCH_TITLE");
+        public final static Property RuleSearchAuthor = new Property(8, String.class, "ruleSearchAuthor", false, "RULE_SEARCH_AUTHOR");
+        public final static Property RuleSearchDesc = new Property(9, String.class, "ruleSearchDesc", false, "RULE_SEARCH_DESC");
+        public final static Property RuleSearchCover = new Property(10, String.class, "ruleSearchCover", false, "RULE_SEARCH_COVER");
         public final static Property RuleFindBook = new Property(11, String.class, "ruleFindBook", false, "RULE_FIND_BOOK");
-        public final static Property RuleCatalogChapter = new Property(12, String.class, "ruleCatalogChapter", false, "RULE_CATALOG_CHAPTER");
-        public final static Property RuleCatalogTitle = new Property(13, String.class, "ruleCatalogTitle", false, "RULE_CATALOG_TITLE");
-        public final static Property RuleCatalogLink = new Property(14, String.class, "ruleCatalogLink", false, "RULE_CATALOG_LINK");
+        public final static Property RuleCatalogLink = new Property(12, String.class, "ruleCatalogLink", false, "RULE_CATALOG_LINK");
+        public final static Property RuleCatalogChapter = new Property(13, String.class, "ruleCatalogChapter", false, "RULE_CATALOG_CHAPTER");
+        public final static Property RuleCatalogTitle = new Property(14, String.class, "ruleCatalogTitle", false, "RULE_CATALOG_TITLE");
         public final static Property RuleChapterContent = new Property(15, String.class, "ruleChapterContent", false, "RULE_CHAPTER_CONTENT");
         public final static Property OrderNumber = new Property(16, int.class, "orderNumber", false, "ORDER_NUMBER");
         public final static Property Weight = new Property(17, int.class, "weight", false, "WEIGHT");
@@ -63,16 +63,16 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
                 "\"SOURCE_TYPE\" TEXT," + // 2: sourceType
                 "\"ENCODE_TYPE\" TEXT," + // 3: encodeType
                 "\"SEARCH_LINK\" TEXT," + // 4: searchLink
-                "\"RULE_SEARCH_BOOK\" TEXT," + // 5: ruleSearchBook
-                "\"RULE_SEARCH_TITLE\" TEXT," + // 6: ruleSearchTitle
-                "\"RULE_SEARCH_AUTHOR\" TEXT," + // 7: ruleSearchAuthor
-                "\"RULE_SEARCH_DESC\" TEXT," + // 8: ruleSearchDesc
-                "\"RULE_SEARCH_COVER\" TEXT," + // 9: ruleSearchCover
-                "\"RULE_SEARCH_LINK\" TEXT," + // 10: ruleSearchLink
+                "\"RULE_SEARCH_LINK\" TEXT," + // 5: ruleSearchLink
+                "\"RULE_SEARCH_BOOK\" TEXT," + // 6: ruleSearchBook
+                "\"RULE_SEARCH_TITLE\" TEXT," + // 7: ruleSearchTitle
+                "\"RULE_SEARCH_AUTHOR\" TEXT," + // 8: ruleSearchAuthor
+                "\"RULE_SEARCH_DESC\" TEXT," + // 9: ruleSearchDesc
+                "\"RULE_SEARCH_COVER\" TEXT," + // 10: ruleSearchCover
                 "\"RULE_FIND_BOOK\" TEXT," + // 11: ruleFindBook
-                "\"RULE_CATALOG_CHAPTER\" TEXT," + // 12: ruleCatalogChapter
-                "\"RULE_CATALOG_TITLE\" TEXT," + // 13: ruleCatalogTitle
-                "\"RULE_CATALOG_LINK\" TEXT," + // 14: ruleCatalogLink
+                "\"RULE_CATALOG_LINK\" TEXT," + // 12: ruleCatalogLink
+                "\"RULE_CATALOG_CHAPTER\" TEXT," + // 13: ruleCatalogChapter
+                "\"RULE_CATALOG_TITLE\" TEXT," + // 14: ruleCatalogTitle
                 "\"RULE_CHAPTER_CONTENT\" TEXT," + // 15: ruleChapterContent
                 "\"ORDER_NUMBER\" INTEGER NOT NULL ," + // 16: orderNumber
                 "\"WEIGHT\" INTEGER NOT NULL ," + // 17: weight
@@ -114,34 +114,34 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(5, searchLink);
         }
  
+        String ruleSearchLink = entity.getRuleSearchLink();
+        if (ruleSearchLink != null) {
+            stmt.bindString(6, ruleSearchLink);
+        }
+ 
         String ruleSearchBook = entity.getRuleSearchBook();
         if (ruleSearchBook != null) {
-            stmt.bindString(6, ruleSearchBook);
+            stmt.bindString(7, ruleSearchBook);
         }
  
         String ruleSearchTitle = entity.getRuleSearchTitle();
         if (ruleSearchTitle != null) {
-            stmt.bindString(7, ruleSearchTitle);
+            stmt.bindString(8, ruleSearchTitle);
         }
  
         String ruleSearchAuthor = entity.getRuleSearchAuthor();
         if (ruleSearchAuthor != null) {
-            stmt.bindString(8, ruleSearchAuthor);
+            stmt.bindString(9, ruleSearchAuthor);
         }
  
         String ruleSearchDesc = entity.getRuleSearchDesc();
         if (ruleSearchDesc != null) {
-            stmt.bindString(9, ruleSearchDesc);
+            stmt.bindString(10, ruleSearchDesc);
         }
  
         String ruleSearchCover = entity.getRuleSearchCover();
         if (ruleSearchCover != null) {
-            stmt.bindString(10, ruleSearchCover);
-        }
- 
-        String ruleSearchLink = entity.getRuleSearchLink();
-        if (ruleSearchLink != null) {
-            stmt.bindString(11, ruleSearchLink);
+            stmt.bindString(11, ruleSearchCover);
         }
  
         String ruleFindBook = entity.getRuleFindBook();
@@ -149,19 +149,19 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(12, ruleFindBook);
         }
  
+        String ruleCatalogLink = entity.getRuleCatalogLink();
+        if (ruleCatalogLink != null) {
+            stmt.bindString(13, ruleCatalogLink);
+        }
+ 
         String ruleCatalogChapter = entity.getRuleCatalogChapter();
         if (ruleCatalogChapter != null) {
-            stmt.bindString(13, ruleCatalogChapter);
+            stmt.bindString(14, ruleCatalogChapter);
         }
  
         String ruleCatalogTitle = entity.getRuleCatalogTitle();
         if (ruleCatalogTitle != null) {
-            stmt.bindString(14, ruleCatalogTitle);
-        }
- 
-        String ruleCatalogLink = entity.getRuleCatalogLink();
-        if (ruleCatalogLink != null) {
-            stmt.bindString(15, ruleCatalogLink);
+            stmt.bindString(15, ruleCatalogTitle);
         }
  
         String ruleChapterContent = entity.getRuleChapterContent();
@@ -202,34 +202,34 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(5, searchLink);
         }
  
+        String ruleSearchLink = entity.getRuleSearchLink();
+        if (ruleSearchLink != null) {
+            stmt.bindString(6, ruleSearchLink);
+        }
+ 
         String ruleSearchBook = entity.getRuleSearchBook();
         if (ruleSearchBook != null) {
-            stmt.bindString(6, ruleSearchBook);
+            stmt.bindString(7, ruleSearchBook);
         }
  
         String ruleSearchTitle = entity.getRuleSearchTitle();
         if (ruleSearchTitle != null) {
-            stmt.bindString(7, ruleSearchTitle);
+            stmt.bindString(8, ruleSearchTitle);
         }
  
         String ruleSearchAuthor = entity.getRuleSearchAuthor();
         if (ruleSearchAuthor != null) {
-            stmt.bindString(8, ruleSearchAuthor);
+            stmt.bindString(9, ruleSearchAuthor);
         }
  
         String ruleSearchDesc = entity.getRuleSearchDesc();
         if (ruleSearchDesc != null) {
-            stmt.bindString(9, ruleSearchDesc);
+            stmt.bindString(10, ruleSearchDesc);
         }
  
         String ruleSearchCover = entity.getRuleSearchCover();
         if (ruleSearchCover != null) {
-            stmt.bindString(10, ruleSearchCover);
-        }
- 
-        String ruleSearchLink = entity.getRuleSearchLink();
-        if (ruleSearchLink != null) {
-            stmt.bindString(11, ruleSearchLink);
+            stmt.bindString(11, ruleSearchCover);
         }
  
         String ruleFindBook = entity.getRuleFindBook();
@@ -237,19 +237,19 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(12, ruleFindBook);
         }
  
+        String ruleCatalogLink = entity.getRuleCatalogLink();
+        if (ruleCatalogLink != null) {
+            stmt.bindString(13, ruleCatalogLink);
+        }
+ 
         String ruleCatalogChapter = entity.getRuleCatalogChapter();
         if (ruleCatalogChapter != null) {
-            stmt.bindString(13, ruleCatalogChapter);
+            stmt.bindString(14, ruleCatalogChapter);
         }
  
         String ruleCatalogTitle = entity.getRuleCatalogTitle();
         if (ruleCatalogTitle != null) {
-            stmt.bindString(14, ruleCatalogTitle);
-        }
- 
-        String ruleCatalogLink = entity.getRuleCatalogLink();
-        if (ruleCatalogLink != null) {
-            stmt.bindString(15, ruleCatalogLink);
+            stmt.bindString(15, ruleCatalogTitle);
         }
  
         String ruleChapterContent = entity.getRuleChapterContent();
@@ -274,16 +274,16 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // sourceType
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // encodeType
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // searchLink
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // ruleSearchBook
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // ruleSearchTitle
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // ruleSearchAuthor
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // ruleSearchDesc
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // ruleSearchCover
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // ruleSearchLink
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // ruleSearchLink
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // ruleSearchBook
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // ruleSearchTitle
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // ruleSearchAuthor
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // ruleSearchDesc
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // ruleSearchCover
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // ruleFindBook
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // ruleCatalogChapter
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // ruleCatalogTitle
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // ruleCatalogLink
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // ruleCatalogLink
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // ruleCatalogChapter
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // ruleCatalogTitle
             cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // ruleChapterContent
             cursor.getInt(offset + 16), // orderNumber
             cursor.getInt(offset + 17), // weight
@@ -299,16 +299,16 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         entity.setSourceType(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setEncodeType(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setSearchLink(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setRuleSearchBook(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setRuleSearchTitle(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setRuleSearchAuthor(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setRuleSearchDesc(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setRuleSearchCover(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setRuleSearchLink(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setRuleSearchLink(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setRuleSearchBook(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setRuleSearchTitle(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setRuleSearchAuthor(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setRuleSearchDesc(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setRuleSearchCover(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setRuleFindBook(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setRuleCatalogChapter(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setRuleCatalogTitle(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setRuleCatalogLink(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setRuleCatalogLink(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setRuleCatalogChapter(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setRuleCatalogTitle(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
         entity.setRuleChapterContent(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
         entity.setOrderNumber(cursor.getInt(offset + 16));
         entity.setWeight(cursor.getInt(offset + 17));

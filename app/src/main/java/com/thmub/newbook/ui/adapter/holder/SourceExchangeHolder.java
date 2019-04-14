@@ -12,6 +12,8 @@ import com.thmub.newbook.bean.BookSearchBean;
 /**
  * Created by Zhouas666 on 2019-04-11
  * Github: https://github.com/zas023
+ * <p>
+ * 换源对话框中的holder
  */
 public class SourceExchangeHolder extends ViewHolderImpl<BookSearchBean> {
 
@@ -33,8 +35,8 @@ public class SourceExchangeHolder extends ViewHolderImpl<BookSearchBean> {
 
     @Override
     public void onBind(BookSearchBean data, int pos) {
-        itemSourceTvTitle.setText(data.getSource());
-        itemSourceTvChapter.setText(data.getLink());
+        itemSourceTvTitle.setText(data.getSourceName());
+        itemSourceTvChapter.setText(data.getBookLink());
         if (data.isSelected())
             itemSourceIv.setVisibility(View.VISIBLE);
         else

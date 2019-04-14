@@ -24,7 +24,8 @@ public class BookChapterBean implements Parcelable {
 
     @Index
     private String bookLink; //对应小说的link,做外键对应ShelfBookBean;
-    private String tag;
+    private String bookTitle;
+    private String tag;  //此处记为书源名称
     @Id
     private String chapterLink;  //对应章节的link
     private String chapterTitle;  //章节名称
@@ -41,8 +42,40 @@ public class BookChapterBean implements Parcelable {
     }
 
     public BookChapterBean(String title) {
-        this.chapterTitle=title;
+        this.chapterTitle = title;
     }
+
+    protected BookChapterBean(Parcel in) {
+        bookLink = in.readString();
+        bookTitle = in.readString();
+        tag = in.readString();
+        chapterLink = in.readString();
+        chapterTitle = in.readString();
+        chapterIndex = in.readInt();
+        if (in.readByte() == 0) {
+            start = null;
+        } else {
+            start = in.readLong();
+        }
+        if (in.readByte() == 0) {
+            end = null;
+        } else {
+            end = in.readLong();
+        }
+        unreadble = in.readByte() != 0;
+    }
+
+    public static final Creator<BookChapterBean> CREATOR = new Creator<BookChapterBean>() {
+        @Override
+        public BookChapterBean createFromParcel(Parcel in) {
+            return new BookChapterBean(in);
+        }
+
+        @Override
+        public BookChapterBean[] newArray(int size) {
+            return new BookChapterBean[size];
+        }
+    };
 
     public String getBookLink() {
         return bookLink;
@@ -61,11 +94,7 @@ public class BookChapterBean implements Parcelable {
     }
 
     public String getChapterTitle() {
-        return chapterTitle == null ? ""
-                : StringUtils.fullToHalf(chapterTitle).replaceAll("\\s", "")
-                .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
-                .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
-        // 所有非字母数字中日韩文字 CJK区+扩展A-F区
+        return chapterTitle == null ? "" : chapterTitle;
     }
 
     public void setChapterTitle(String chapterTitle) {
@@ -121,42 +150,23 @@ public class BookChapterBean implements Parcelable {
         this.unreadble = unreadble;
     }
 
-
-    @Override
-    public String toString() {
-        return "BookChapterBean{" +
-                "bookLink='" + bookLink + '\'' +
-                ", tag='" + tag + '\'' +
-                ", chapterLink='" + chapterLink + '\'' +
-                ", chapterTitle='" + chapterTitle + '\'' +
-                ", chapterIndex=" + chapterIndex +
-                ", start=" + start +
-                ", end=" + end +
-                ", unreadble=" + unreadble +
-                '}';
+    public boolean getUnreadble() {
+        return this.unreadble;
     }
 
-    public BookChapterBean(Parcel in) {
-        bookLink = in.readString();
-        chapterTitle = in.readString();
-        chapterLink = in.readString();
-        chapterIndex = in.readInt();
-        if (in.readByte() == 0) {
-            start = null;
-        } else {
-            start = in.readLong();
-        }
-        if (in.readByte() == 0) {
-            end = null;
-        } else {
-            end = in.readLong();
-        }
+    public String getBookTitle() {
+        return bookTitle;
     }
 
-    @Generated(hash = 2068245067)
-    public BookChapterBean(String bookLink, String tag, String chapterLink, String chapterTitle, int chapterIndex,
-            Long start, Long end, boolean unreadble) {
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
+    }
+
+    @Generated(hash = 2122905696)
+    public BookChapterBean(String bookLink, String bookTitle, String tag, String chapterLink, String chapterTitle,
+                           int chapterIndex, Long start, Long end, boolean unreadble) {
         this.bookLink = bookLink;
+        this.bookTitle = bookTitle;
         this.tag = tag;
         this.chapterLink = chapterLink;
         this.chapterTitle = chapterTitle;
@@ -166,18 +176,6 @@ public class BookChapterBean implements Parcelable {
         this.unreadble = unreadble;
     }
 
-    public static final Creator<BookChapterBean> CREATOR = new Creator<BookChapterBean>() {
-        @Override
-        public BookChapterBean createFromParcel(Parcel in) {
-            return new BookChapterBean(in);
-        }
-
-        @Override
-        public BookChapterBean[] newArray(int size) {
-            return new BookChapterBean[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -186,8 +184,10 @@ public class BookChapterBean implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(bookLink);
-        dest.writeString(chapterTitle);
+        dest.writeString(bookTitle);
+        dest.writeString(tag);
         dest.writeString(chapterLink);
+        dest.writeString(chapterTitle);
         dest.writeInt(chapterIndex);
         if (start == null) {
             dest.writeByte((byte) 0);
@@ -201,9 +201,21 @@ public class BookChapterBean implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeLong(end);
         }
+        dest.writeByte((byte) (unreadble ? 1 : 0));
     }
 
-    public boolean getUnreadble() {
-        return this.unreadble;
+    @Override
+    public String toString() {
+        return "BookChapterBean{" +
+                "bookLink='" + bookLink + '\'' +
+                ", bookTitle='" + bookTitle + '\'' +
+                ", tag='" + tag + '\'' +
+                ", chapterLink='" + chapterLink + '\'' +
+                ", chapterTitle='" + chapterTitle + '\'' +
+                ", chapterIndex=" + chapterIndex +
+                ", start=" + start +
+                ", end=" + end +
+                ", unreadble=" + unreadble +
+                '}';
     }
 }

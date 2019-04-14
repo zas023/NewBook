@@ -40,7 +40,7 @@ public class SearchBookAdapter extends QuickAdapter<BookSearchBean> {
                 for (BookSearchBean searchBook : mList) {
                     if (temp.getTitle().equals(searchBook.getTitle())
                             && temp.getAuthor().equals(searchBook.getAuthor())) {
-                        searchBook.addSource(temp.getSource());
+                        searchBook.addSource(temp.getSourceName());
                         isExsit = true;
                     }
                 }

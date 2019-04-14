@@ -23,6 +23,7 @@ import com.thmub.newbook.utils.UiUtils;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
@@ -203,6 +204,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.action_sync:  //同步书架
                 break;
         }
+        //关窗
+        drawer.closeDrawer(GravityCompat.START);
         return super.onOptionsItemSelected(item);
     }
 }

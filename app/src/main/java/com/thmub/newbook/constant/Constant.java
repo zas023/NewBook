@@ -10,7 +10,7 @@ import java.io.File;
  */
 public class Constant {
     //BookCachePath (因为getCachePath引用了Context，所以必须是静态变量，不能够是静态常量)
-    public static String BOOK_CACHE_PATH = FileUtils.getCachePath()+File.separator + "book_cache"+ File.separator ;
+    public static String BOOK_CACHE_PATH = FileUtils.getCachePath() + File.separator + "book_cache" + File.separator;
     //文件阅读记录保存的路径
     public static String BOOK_RECORD_PATH = FileUtils.getCachePath() + File.separator + "book_record" + File.separator;
 
@@ -23,6 +23,7 @@ public class Constant {
     public static final String API_BASE_URL = "http://api.zhuishushenqi.com";
     public static final String IMG_BASE_URL = "http://statics.zhuishushenqi.com";
     //URL
+    public static final String URL_BOOK_LINK = "http://api.zhuishushenqi.com/book/%s";
     public static final String URL_CATALOG_LINK = "http://api.zhuishushenqi.com/mix-atoc/%s?view=chapters";
     public static final String URL_COVER_LINK = "http://statics.zhuishushenqi.com%s";
 }

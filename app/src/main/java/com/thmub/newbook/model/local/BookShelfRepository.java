@@ -9,6 +9,7 @@ import com.thmub.newbook.model.dao.DaoSession;
 import com.thmub.newbook.model.dao.ShelfBookBeanDao;
 import com.thmub.newbook.utils.FileUtils;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -92,6 +93,19 @@ public class BookShelfRepository {
     }
 
     /**
+     * 根据书籍链接查找书籍
+     *
+     * @param bookLink
+     * @return
+     */
+    public ShelfBookBean getShelfBook(String bookLink) {
+        ShelfBookBean bean = mShelfBookDao.queryBuilder()
+                .where(ShelfBookBeanDao.Properties.Link.eq(bookLink))
+                .unique();
+        return bean;
+    }
+
+    /**
      * 获取所有本地图书
      *
      * @return
@@ -138,7 +152,7 @@ public class BookShelfRepository {
             //
             removeChapters(book.getLink());
             //
-            removeFile(book.getTitle() + "-" + book.getSource());
+            removeFile(book.getTitle() + File.separator + book.getSourceName());
             emitter.onNext(1);
             emitter.onComplete();
         });

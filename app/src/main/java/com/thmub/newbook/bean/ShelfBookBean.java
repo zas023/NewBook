@@ -37,8 +37,13 @@ public class ShelfBookBean implements Parcelable {
     //封面地址
     private String cover;
 
-    //书源名称
-    private String source;
+    //书源
+    private String sourceName;
+    private String sourceLink;
+
+    //目录地址
+    private String catalogLink;
+
 
     //最新章节名称
     private String latestChapter;
@@ -65,28 +70,26 @@ public class ShelfBookBean implements Parcelable {
 
     @ToMany(referencedJoinProperty = "bookLink")
     private List<BookChapterBean> bookChapterList;
-    /**
-     * Used to resolve relations
-     */
+    /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
-    /**
-     * Used for active entity operations.
-     */
+    /** Used for active entity operations. */
     @Generated(hash = 1521811562)
     private transient ShelfBookBeanDao myDao;
 
 
-    @Generated(hash = 281309507)
-    public ShelfBookBean(String link, String title, String author, String desc, String cover, String source,
-                         String latestChapter, int chapterCount, String updated, String lastRead, String curChapterTitle,
-                         Integer curChapter, Integer curChapterPage, boolean isUpdate, boolean isLocal) {
+    @Generated(hash = 1615889161)
+    public ShelfBookBean(String link, String title, String author, String desc, String cover, String sourceName,
+            String sourceLink, String catalogLink, String latestChapter, int chapterCount, String updated, String lastRead,
+            String curChapterTitle, Integer curChapter, Integer curChapterPage, boolean isUpdate, boolean isLocal) {
         this.link = link;
         this.title = title;
         this.author = author;
         this.desc = desc;
         this.cover = cover;
-        this.source = source;
+        this.sourceName = sourceName;
+        this.sourceLink = sourceLink;
+        this.catalogLink = catalogLink;
         this.latestChapter = latestChapter;
         this.chapterCount = chapterCount;
         this.updated = updated;
@@ -108,7 +111,9 @@ public class ShelfBookBean implements Parcelable {
         author = in.readString();
         desc = in.readString();
         cover = in.readString();
-        source = in.readString();
+        sourceName = in.readString();
+        sourceLink = in.readString();
+        catalogLink = in.readString();
         latestChapter = in.readString();
         chapterCount = in.readInt();
         updated = in.readString();
@@ -183,12 +188,28 @@ public class ShelfBookBean implements Parcelable {
         this.cover = cover;
     }
 
-    public String getSource() {
-        return source;
+    public String getSourceName() {
+        return sourceName;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getSourceLink() {
+        return sourceLink;
+    }
+
+    public void setSourceLink(String sourceLink) {
+        this.sourceLink = sourceLink;
+    }
+
+    public String getCatalogLink() {
+        return catalogLink;
+    }
+
+    public void setCatalogLink(String catalogLink) {
+        this.catalogLink = catalogLink;
     }
 
     public Integer getCurChapter() {
@@ -311,9 +332,7 @@ public class ShelfBookBean implements Parcelable {
         return bookChapterList;
     }
 
-    /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
-     */
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     @Generated(hash = 1077762221)
     public synchronized void resetBookChapterList() {
         bookChapterList = null;
@@ -355,9 +374,7 @@ public class ShelfBookBean implements Parcelable {
         myDao.update(this);
     }
 
-    /**
-     * called by internal mechanisms, do not call yourself.
-     */
+    /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 53859549)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
@@ -376,7 +393,9 @@ public class ShelfBookBean implements Parcelable {
         dest.writeString(author);
         dest.writeString(desc);
         dest.writeString(cover);
-        dest.writeString(source);
+        dest.writeString(sourceName);
+        dest.writeString(sourceLink);
+        dest.writeString(catalogLink);
         dest.writeString(latestChapter);
         dest.writeInt(chapterCount);
         dest.writeString(updated);
@@ -397,29 +416,5 @@ public class ShelfBookBean implements Parcelable {
         dest.writeByte((byte) (isUpdate ? 1 : 0));
         dest.writeByte((byte) (isLocal ? 1 : 0));
         dest.writeTypedList(bookChapterList);
-    }
-
-    @Override
-    public String toString() {
-        return "ShelfBookBean{" +
-                "link='" + link + '\'' +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", desc='" + desc + '\'' +
-                ", cover='" + cover + '\'' +
-                ", source='" + source + '\'' +
-                ", latestChapter='" + latestChapter + '\'' +
-                ", chapterCount=" + chapterCount +
-                ", updated='" + updated + '\'' +
-                ", lastRead='" + lastRead + '\'' +
-                ", curChapterTitle='" + curChapterTitle + '\'' +
-                ", curChapter=" + curChapter +
-                ", curChapterPage=" + curChapterPage +
-                ", isUpdate=" + isUpdate +
-                ", isLocal=" + isLocal +
-                ", bookChapterList=" + bookChapterList +
-                ", daoSession=" + daoSession +
-                ", myDao=" + myDao +
-                '}';
     }
 }

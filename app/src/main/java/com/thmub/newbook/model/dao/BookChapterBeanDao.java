@@ -28,13 +28,14 @@ public class BookChapterBeanDao extends AbstractDao<BookChapterBean, String> {
      */
     public static class Properties {
         public final static Property BookLink = new Property(0, String.class, "bookLink", false, "BOOK_LINK");
-        public final static Property Tag = new Property(1, String.class, "tag", false, "TAG");
-        public final static Property ChapterLink = new Property(2, String.class, "chapterLink", true, "CHAPTER_LINK");
-        public final static Property ChapterTitle = new Property(3, String.class, "chapterTitle", false, "CHAPTER_TITLE");
-        public final static Property ChapterIndex = new Property(4, int.class, "chapterIndex", false, "CHAPTER_INDEX");
-        public final static Property Start = new Property(5, Long.class, "start", false, "START");
-        public final static Property End = new Property(6, Long.class, "end", false, "END");
-        public final static Property Unreadble = new Property(7, boolean.class, "unreadble", false, "UNREADBLE");
+        public final static Property BookTitle = new Property(1, String.class, "bookTitle", false, "BOOK_TITLE");
+        public final static Property Tag = new Property(2, String.class, "tag", false, "TAG");
+        public final static Property ChapterLink = new Property(3, String.class, "chapterLink", true, "CHAPTER_LINK");
+        public final static Property ChapterTitle = new Property(4, String.class, "chapterTitle", false, "CHAPTER_TITLE");
+        public final static Property ChapterIndex = new Property(5, int.class, "chapterIndex", false, "CHAPTER_INDEX");
+        public final static Property Start = new Property(6, Long.class, "start", false, "START");
+        public final static Property End = new Property(7, Long.class, "end", false, "END");
+        public final static Property Unreadble = new Property(8, boolean.class, "unreadble", false, "UNREADBLE");
     }
 
     private Query<BookChapterBean> shelfBookBean_BookChapterListQuery;
@@ -52,13 +53,14 @@ public class BookChapterBeanDao extends AbstractDao<BookChapterBean, String> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BOOK_CHAPTER_BEAN\" (" + //
                 "\"BOOK_LINK\" TEXT," + // 0: bookLink
-                "\"TAG\" TEXT," + // 1: tag
-                "\"CHAPTER_LINK\" TEXT PRIMARY KEY NOT NULL ," + // 2: chapterLink
-                "\"CHAPTER_TITLE\" TEXT," + // 3: chapterTitle
-                "\"CHAPTER_INDEX\" INTEGER NOT NULL ," + // 4: chapterIndex
-                "\"START\" INTEGER," + // 5: start
-                "\"END\" INTEGER," + // 6: end
-                "\"UNREADBLE\" INTEGER NOT NULL );"); // 7: unreadble
+                "\"BOOK_TITLE\" TEXT," + // 1: bookTitle
+                "\"TAG\" TEXT," + // 2: tag
+                "\"CHAPTER_LINK\" TEXT PRIMARY KEY NOT NULL ," + // 3: chapterLink
+                "\"CHAPTER_TITLE\" TEXT," + // 4: chapterTitle
+                "\"CHAPTER_INDEX\" INTEGER NOT NULL ," + // 5: chapterIndex
+                "\"START\" INTEGER," + // 6: start
+                "\"END\" INTEGER," + // 7: end
+                "\"UNREADBLE\" INTEGER NOT NULL );"); // 8: unreadble
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_BOOK_CHAPTER_BEAN_BOOK_LINK ON BOOK_CHAPTER_BEAN" +
                 " (\"BOOK_LINK\" ASC);");
@@ -79,32 +81,37 @@ public class BookChapterBeanDao extends AbstractDao<BookChapterBean, String> {
             stmt.bindString(1, bookLink);
         }
  
+        String bookTitle = entity.getBookTitle();
+        if (bookTitle != null) {
+            stmt.bindString(2, bookTitle);
+        }
+ 
         String tag = entity.getTag();
         if (tag != null) {
-            stmt.bindString(2, tag);
+            stmt.bindString(3, tag);
         }
  
         String chapterLink = entity.getChapterLink();
         if (chapterLink != null) {
-            stmt.bindString(3, chapterLink);
+            stmt.bindString(4, chapterLink);
         }
  
         String chapterTitle = entity.getChapterTitle();
         if (chapterTitle != null) {
-            stmt.bindString(4, chapterTitle);
+            stmt.bindString(5, chapterTitle);
         }
-        stmt.bindLong(5, entity.getChapterIndex());
+        stmt.bindLong(6, entity.getChapterIndex());
  
         Long start = entity.getStart();
         if (start != null) {
-            stmt.bindLong(6, start);
+            stmt.bindLong(7, start);
         }
  
         Long end = entity.getEnd();
         if (end != null) {
-            stmt.bindLong(7, end);
+            stmt.bindLong(8, end);
         }
-        stmt.bindLong(8, entity.getUnreadble() ? 1L: 0L);
+        stmt.bindLong(9, entity.getUnreadble() ? 1L: 0L);
     }
 
     @Override
@@ -116,50 +123,56 @@ public class BookChapterBeanDao extends AbstractDao<BookChapterBean, String> {
             stmt.bindString(1, bookLink);
         }
  
+        String bookTitle = entity.getBookTitle();
+        if (bookTitle != null) {
+            stmt.bindString(2, bookTitle);
+        }
+ 
         String tag = entity.getTag();
         if (tag != null) {
-            stmt.bindString(2, tag);
+            stmt.bindString(3, tag);
         }
  
         String chapterLink = entity.getChapterLink();
         if (chapterLink != null) {
-            stmt.bindString(3, chapterLink);
+            stmt.bindString(4, chapterLink);
         }
  
         String chapterTitle = entity.getChapterTitle();
         if (chapterTitle != null) {
-            stmt.bindString(4, chapterTitle);
+            stmt.bindString(5, chapterTitle);
         }
-        stmt.bindLong(5, entity.getChapterIndex());
+        stmt.bindLong(6, entity.getChapterIndex());
  
         Long start = entity.getStart();
         if (start != null) {
-            stmt.bindLong(6, start);
+            stmt.bindLong(7, start);
         }
  
         Long end = entity.getEnd();
         if (end != null) {
-            stmt.bindLong(7, end);
+            stmt.bindLong(8, end);
         }
-        stmt.bindLong(8, entity.getUnreadble() ? 1L: 0L);
+        stmt.bindLong(9, entity.getUnreadble() ? 1L: 0L);
     }
 
     @Override
     public String readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2);
+        return cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3);
     }    
 
     @Override
     public BookChapterBean readEntity(Cursor cursor, int offset) {
         BookChapterBean entity = new BookChapterBean( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // bookLink
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // tag
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // chapterLink
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // chapterTitle
-            cursor.getInt(offset + 4), // chapterIndex
-            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // start
-            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // end
-            cursor.getShort(offset + 7) != 0 // unreadble
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // bookTitle
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // tag
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // chapterLink
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // chapterTitle
+            cursor.getInt(offset + 5), // chapterIndex
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // start
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // end
+            cursor.getShort(offset + 8) != 0 // unreadble
         );
         return entity;
     }
@@ -167,13 +180,14 @@ public class BookChapterBeanDao extends AbstractDao<BookChapterBean, String> {
     @Override
     public void readEntity(Cursor cursor, BookChapterBean entity, int offset) {
         entity.setBookLink(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setTag(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setChapterLink(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setChapterTitle(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setChapterIndex(cursor.getInt(offset + 4));
-        entity.setStart(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
-        entity.setEnd(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
-        entity.setUnreadble(cursor.getShort(offset + 7) != 0);
+        entity.setBookTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setTag(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setChapterLink(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setChapterTitle(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setChapterIndex(cursor.getInt(offset + 5));
+        entity.setStart(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setEnd(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setUnreadble(cursor.getShort(offset + 8) != 0);
      }
     
     @Override

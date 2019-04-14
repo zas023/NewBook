@@ -116,7 +116,7 @@ public class SourceExchangeDialog extends Dialog {
                 //确保只有一个结果
                 if (items != null && items.size() == 1) {
                     BookSearchBean bean = items.get(0);
-                    if (bean.getSource().equals(mShelfBook.getSource())) {
+                    if (bean.getSourceName().equals(mShelfBook.getSourceName())) {
                         bean.setSelected(true);
                         sourceIndex = mAdapter.getItemSize();
                     }

@@ -10,5 +10,8 @@
     <item
         android:id="@+id/action_reload"
         android:title="重新加载" />
+    <item
+        android:id="@+id/action_open_link"
+        android:title="打开链接" />
 
 </menu>

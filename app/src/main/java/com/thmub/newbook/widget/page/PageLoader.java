@@ -836,7 +836,6 @@ public abstract class PageLoader {
     /**
      * 绘制背景
      */
-    @SuppressLint("DefaultLocale")
     private synchronized void drawBackground(final Canvas canvas, TxtChapter txtChapter, TxtPage txtPage) {
         if (canvas == null) return;
 
@@ -1255,7 +1254,7 @@ public abstract class PageLoader {
                 tip = "目录为空";
                 break;
             case CHANGE_SOURCE:
-                tip = "换源";
+                tip = "正在换源";
         }
         return tip;
     }
