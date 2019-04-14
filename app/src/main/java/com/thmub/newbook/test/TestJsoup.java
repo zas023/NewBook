@@ -18,8 +18,8 @@ public class TestJsoup {
 
     public static void main(String[] args) {
         TestJsoup test=new TestJsoup();
-        test.testSite();
-//        test.testCatalog();
+//        test.testSite();
+        test.testCatalog();
 //        test.testContent();
     }
 

@@ -175,18 +175,17 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         });
     }
 
-    /**************************Transaction********************************/
-    @Override
-    protected BookDetailContract.Presenter bindPresenter() {
-        return new BookDetailPresenter();
-    }
-
-
     @Override
     protected void processLogic() {
         super.processLogic();
         mPresenter.loadCatalogs(mShelfBook);
         mPresenter.loadFindBooks(mSearchBook);
+    }
+
+    /**************************Transaction********************************/
+    @Override
+    protected BookDetailContract.Presenter bindPresenter() {
+        return new BookDetailPresenter();
     }
 
     @Override

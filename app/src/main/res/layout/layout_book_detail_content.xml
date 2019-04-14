@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="-10dp"
         android:ellipsize="end"
-        android:maxLines="4"
+        android:maxLines="8"
         android:padding="15dp"
+        android:text="简介: "
         android:textColor="@color/textPrimary"
-        android:textSize="15sp"
-        android:text="简介: "/>
+        android:textSize="15sp" />
 
     <View
         android:layout_width="match_parent"

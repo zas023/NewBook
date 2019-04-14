@@ -147,8 +147,7 @@ public class XpathSourceModel implements ISourceModel {
             JXDocument jxDocument = null;
             try {
                 jxDocument = JXDocument.create(
-                        OkHttpUtils.getHtml(catalogLink
-                                , bookSourceBean.getEncodeType().split("&")[0]));
+                        OkHttpUtils.getHtml(catalogLink, bookSourceBean.getEncodeType().split("&")[0]));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -205,17 +204,15 @@ public class XpathSourceModel implements ISourceModel {
             JXDocument jxDocument = null;
             try {
                 jxDocument = JXDocument.create(
-                        OkHttpUtils.getHtml(catalogLink
-                                , bookSourceBean.getEncodeType().split("&")[0]));
+                        OkHttpUtils.getHtml(book.getCatalogLink(), bookSourceBean.getEncodeType().split("&")[0]));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             List<Object> rsTitles = jxDocument.sel(bookSourceBean.getRuleCatalogTitle());
             List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleCatalogLink());
 
             List<BookChapterBean> catalogList = new ArrayList<>();
-            for (int i = rsTitles.size(), flag = Math.max(0, rsTitles.size() - num-1); i > flag; i--) {
+            for (int i = rsTitles.size()-1, flag = Math.max(0, rsTitles.size() - num-1); i > flag; i--) {
                 BookChapterBean bean = new BookChapterBean();
 
                 //章节名称
