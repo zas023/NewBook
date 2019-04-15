@@ -38,13 +38,72 @@ public class XpathSourceModel implements ISourceModel {
     /**
      * 发现书籍
      *
-     * @param findRule
+     * @param findLink
      * @return
      */
     @Override
-    public Observable<List<BookSearchBean>> findBook(String findRule) {
+    public Observable<List<BookSearchBean>> findBook(String findLink) {
+        Log.i("XpathSourceModel", "findBook:"+findLink);
+        if (isEmpty(findLink) || isEmpty(bookSourceBean.getRuleFindBookTitle())
+                || isEmpty(bookSourceBean.getRuleFindBookLink())) {
+            return Observable.create(emitter -> {
+                emitter.onNext(null);
+                emitter.onComplete();
+            });
+        }
         return Observable.create(emitter -> {
-            emitter.onNext(null);
+            JXDocument jxDocument = null;
+            try {
+                jxDocument = JXDocument.create(
+                        OkHttpUtils.getHtml(findLink, bookSourceBean.getEncodeType().split("&")[0]));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //null+" aa" 会生成 "null aa",需要处理掉
+            //返回结果时进行了判断,为空则返回空字符串而非空引用
+            String ruleBook = bookSourceBean.getRuleFindBooks();
+            //书名（必填）
+            List<Object> rsTitles = jxDocument.sel((ruleBook + bookSourceBean.getRuleFindBookTitle()));
+            //封面
+            List<Object> rsCovers = null;
+            if (bookSourceBean.getRuleFindCover() != null)
+                rsCovers = jxDocument.sel(ruleBook + bookSourceBean.getRuleFindCover());
+            //书籍链接（必填）
+            List<Object> rsLinks = jxDocument.sel(ruleBook + bookSourceBean.getRuleFindBookLink());
+            List<BookSearchBean> bookList = new ArrayList<>();
+            for (int i = 0, size = rsTitles.size(); i < size; i++) {
+
+                BookSearchBean bean = new BookSearchBean();
+
+                //书籍名称
+                bean.setTitle(rsTitles.get(i).toString());
+                //书籍封面
+                if (rsCovers != null) {
+                    //检查链接是否完整，这里取了一个巧，因为几乎所有网站均采用网站host加爬取的地址构成一个完整的链接地址
+                    String coverUrl = rsCovers.get(i).toString();
+                    if (RegexUtils.checkURL(coverUrl))
+                        bean.setCover(coverUrl);
+                    else
+                        bean.setCover(bookSourceBean.getRootLink() + coverUrl);
+                }
+                //书籍链接
+                if (rsLinks != null) {
+                    String bookUrl = rsLinks.get(i).toString();
+                    if (RegexUtils.checkURL(bookUrl))
+                        bean.setBookLink(bookUrl);
+                    else
+                        bean.setBookLink(bookSourceBean.getRootLink() + bookUrl);
+                }
+                //对应书源
+                bean.setSourceTag(bookSourceBean.getSourceName());
+
+                bookList.add(bean);
+
+                Log.i("XpathSourceModel", bean.toString());
+            }
+
+            emitter.onNext(bookList);
             emitter.onComplete();
         });
     }
@@ -57,7 +116,10 @@ public class XpathSourceModel implements ISourceModel {
      */
     @Override
     public Observable<List<BookSearchBean>> searchBook(String keyword) {
-        if (isEmpty(bookSourceBean.getSearchLink())) {
+
+        Log.i("XpathSourceModel", "searchBook:"+keyword);
+        if (isEmpty(bookSourceBean.getSearchLink()) || isEmpty(bookSourceBean.getRuleSearchTitle())
+                || isEmpty(bookSourceBean.getRuleSearchAuthor()) || isEmpty(bookSourceBean.getRuleSearchLink())) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);
                 emitter.onComplete();
@@ -73,47 +135,60 @@ public class XpathSourceModel implements ISourceModel {
             else
                 encodeType = encodes[1];
             try {
-                htmlStr = OkHttpUtils.getHtml(bookSourceBean.getRootLink()
-                        + String.format(bookSourceBean.getSearchLink()
+                htmlStr = OkHttpUtils.getHtml(bookSourceBean.getRootLink() + String.format(bookSourceBean.getSearchLink()
                         , URLEncoder.encode(keyword, encodeType)), encodeType);
                 jxDocument = JXDocument.create(htmlStr);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            List<Object> rsTitles = jxDocument.sel(bookSourceBean.getRuleSearchTitle());
-            List<Object> rsCovers = jxDocument.sel(bookSourceBean.getRuleSearchCover());
-            //目录地址，一般小说目录地址与书籍详情地址相同
-            List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleSearchLink());
-            List<Object> rsAuthors = jxDocument.sel(bookSourceBean.getRuleSearchAuthor());
-            List<Object> rsDescs = jxDocument.sel(bookSourceBean.getRuleSearchDesc());
-
+            //null+" aa" 会生成 "null aa",需要处理掉
+            //返回结果时进行了判断,为空则返回空字符串而非空引用
+            String ruleBook = bookSourceBean.getRuleSearchBooks();
+            //书名
+            List<Object> rsTitles = jxDocument.sel((ruleBook + bookSourceBean.getRuleSearchTitle()));
+            //作者
+            List<Object> rsAuthors = jxDocument.sel(ruleBook + bookSourceBean.getRuleSearchAuthor());
+            //书籍链接
+            List<Object> rsLinks = jxDocument.sel(ruleBook + bookSourceBean.getRuleSearchLink());
+            //上面三项为必填项，否则搜书无效
+            //封面
+            List<Object> rsCovers = null;
+            if (bookSourceBean.getRuleSearchCover() != null)
+                rsCovers = jxDocument.sel(ruleBook + bookSourceBean.getRuleSearchCover());
+            //简介
+            List<Object> rsDescs = null;
+            if (bookSourceBean.getRuleSearchDesc() != null)
+                rsDescs = jxDocument.sel(ruleBook + bookSourceBean.getRuleSearchDesc());
             List<BookSearchBean> bookList = new ArrayList<>();
             for (int i = 0, size = rsTitles.size(); i < size; i++) {
+
                 BookSearchBean bean = new BookSearchBean();
 
                 //书籍名称
                 bean.setTitle(rsTitles.get(i).toString());
-                //书籍封面
-                //检查链接是否完整
-                String coverUrl = rsCovers.get(i).toString();
-                if (RegexUtils.checkURL(coverUrl))
-                    bean.setCover(coverUrl);
-                else
-                    bean.setCover(bookSourceBean.getRootLink() + coverUrl);
-                //书籍和目录链接
-                String bookUrl = rsLinks.get(i).toString();
-                if (RegexUtils.checkURL(bookUrl)) {
-                    bean.setBookLink(bookUrl);
-                    bean.setCatalogLink(bookUrl);
-                } else {
-                    bean.setBookLink(bookSourceBean.getRootLink() + bookUrl);
-                    bean.setCatalogLink(bookSourceBean.getRootLink() + bookUrl);
-                }
                 //作者
                 bean.setAuthor(rsAuthors.get(i).toString());
                 //简介
                 bean.setDesc(rsDescs.get(i).toString());
+
+                //书籍封面
+                if (rsCovers != null) {
+                    //检查链接是否完整，这里取了一个巧，因为几乎所有网站均采用网站host加爬取的地址构成一个完整的链接地址
+                    String coverUrl = rsCovers.get(i).toString();
+                    if (RegexUtils.checkURL(coverUrl))
+                        bean.setCover(coverUrl);
+                    else
+                        bean.setCover(bookSourceBean.getRootLink() + coverUrl);
+                }
+                //书籍链接
+                if (rsLinks != null) {
+                    String bookUrl = rsLinks.get(i).toString();
+                    if (RegexUtils.checkURL(bookUrl))
+                        bean.setBookLink(bookUrl);
+                    else
+                        bean.setBookLink(bookSourceBean.getRootLink() + bookUrl);
+                }
 
                 //对应书源
                 bean.setSourceTag(bookSourceBean.getSourceName());
@@ -128,9 +203,86 @@ public class XpathSourceModel implements ISourceModel {
         });
     }
 
+    /**
+     * 书籍详情
+     *
+     * @param bookBean
+     * @return
+     */
     @Override
     public Observable<BookDetailBean> parseBook(BookSearchBean bookBean) {
-        return null;
+        Log.i("XpathSourceModel", "parseBook:"+bookBean.toString());
+        String bookLink = bookBean.getBookLink();
+        if (isEmpty(bookLink)) {
+            return Observable.create(emitter -> {
+                emitter.onNext(null);
+                emitter.onComplete();
+            });
+        }
+        return Observable.create(emitter -> {
+            JXDocument jxDocument = null;
+            try {
+                jxDocument = JXDocument.create(
+                        OkHttpUtils.getHtml(bookLink, bookSourceBean.getEncodeType().split("&")[0]));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            BookDetailBean bean = new BookDetailBean(bookBean);
+            //null+" aa" 会生成 "null aa",需要处理掉
+            //返回结果时进行了判断,为空则返回空字符串而非空引用
+            String ruleBook = bookSourceBean.getRuleDetailBook();
+            //书名
+            if (bookSourceBean.getRuleDetailTitle() != null)
+                bean.setTitle(jxDocument.selOne((ruleBook + bookSourceBean.getRuleDetailTitle())).toString());
+            //作者
+            if (bookSourceBean.getRuleDetailAuthor() != null)
+                bean.setAuthor(jxDocument.selOne((ruleBook + bookSourceBean.getRuleDetailAuthor())).toString());
+
+            //封面
+            String coverLink;
+            if (bookSourceBean.getRuleDetailCover() != null) {
+                coverLink = jxDocument.selOne((ruleBook + bookSourceBean.getRuleDetailCover())).toString();
+                if (RegexUtils.checkURL(coverLink))
+                    bean.setCover(coverLink);
+                else
+                    bean.setCover(bookSourceBean.getRootLink() + coverLink);
+            }
+            //简介
+            if (bookSourceBean.getRuleDetailDesc() != null) {
+                bean.setDesc(jxDocument.selOne((ruleBook + bookSourceBean.getRuleDetailDesc())).toString());
+            }
+
+            //目录链接,如果没有规则，说明书籍地址就是目录地址
+            String catalogLink;
+            if (bookSourceBean.getRuleCatalogLink() != null) {
+                catalogLink = jxDocument.selOne((ruleBook + bookSourceBean.getRuleCatalogLink())).toString();
+                if (RegexUtils.checkURL(catalogLink))
+                    bean.setCatalogLink(catalogLink);
+                else
+                    bean.setCatalogLink(bookSourceBean.getRootLink() + catalogLink);
+            } else {
+                bean.setCatalogLink(bookLink);
+            }
+            //发现书籍链接
+            String findLink;
+            if (bookSourceBean.getRuleFindLink() != null) {
+                findLink = jxDocument.selOne((ruleBook + bookSourceBean.getRuleFindLink())).toString();
+                if (RegexUtils.checkURL(findLink))
+                    bean.setFindLink(findLink);
+                else
+                    bean.setFindLink(bookSourceBean.getRootLink() + findLink);
+            } else {
+                bean.setFindLink(bookLink);
+            }
+            //对应书源
+            bean.setSourceTag(bookSourceBean.getSourceName());
+
+            Log.i("XpathSourceModel", bean.toString());
+
+            emitter.onNext(bean);
+            emitter.onComplete();
+        });
     }
 
     /**
@@ -217,7 +369,7 @@ public class XpathSourceModel implements ISourceModel {
             List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleChapterLink());
 
             List<BookChapterBean> catalogList = new ArrayList<>();
-            for (int i = rsTitles.size()-1, flag = Math.max(0, rsTitles.size() - num-1); i > flag; i--) {
+            for (int i = rsTitles.size() - 1, flag = Math.max(0, rsTitles.size() - num - 1); i > flag; i--) {
                 BookChapterBean bean = new BookChapterBean();
 
                 //章节名称

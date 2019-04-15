@@ -29,7 +29,7 @@ public class TestCrawler {
     public void testSearch() {
 
         SearchEngine searchEngine = new SearchEngine();
-        searchEngine.initSearchEngine(BookSourceManager.getInstance().getBookSourceList());
+//        searchEngine.initSearchEngine(BookSourceManager.getInstance().getBookSourceList());
         searchEngine.setOnSearchListener(new SearchEngine.OnSearchListener() {
 
             @Override

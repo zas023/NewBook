@@ -85,7 +85,6 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
                 });
     }
 
-
     @Override
     public void loadCatalogs(ShelfBookBean bookBean) {
         //加载最新10章
@@ -117,7 +116,7 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
     }
 
     @Override
-    public void loadFindBooks(BookSearchBean bookBean) {
+    public void loadFindBooks(BookDetailBean bookBean) {
         if (bookBean.getFindLink() == null || isEmpty(bookBean.getFindLink())) {
 //            mView.finishLoadFindBooks(null);
             return;

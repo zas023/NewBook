@@ -89,6 +89,7 @@
     <string name="common_tip">提示</string>
     <string name="common_sure">确定</string>
     <string name="common_cancel">取消</string>
+    <string name="common_loading">正在加载</string>
 
 
     <!--网络相关-->

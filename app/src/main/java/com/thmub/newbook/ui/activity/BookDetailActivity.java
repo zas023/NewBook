@@ -105,13 +105,6 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         super.initData(savedInstanceState);
         mSearchBook = getIntent().getParcelableExtra(EXTRA_BOOK);
         mDetailBook = new BookDetailBean(mSearchBook);
-        //查找书架，判断是否是已收藏
-        mShelfBook = BookShelfRepository.getInstance().getShelfBook(mDetailBook.getTitle(), mDetailBook.getAuthor());
-        if (mShelfBook == null) {
-
-        } else {
-            isCollected = true;
-        }
     }
 
     @Override
@@ -197,11 +190,16 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     @Override
     public void finishLoadDetailBook(BookDetailBean item) {
         mDetailBook = item;
-        mShelfBook=mDetailBook.getShelfBook();
+        //查找书架，判断是否是已收藏
+        mShelfBook = BookShelfRepository.getInstance().getShelfBook(mDetailBook.getTitle(), mDetailBook.getAuthor());
+        if (mShelfBook == null) {
+            mShelfBook=mDetailBook.getShelfBook();
+        } else {
+            isCollected = true;
+        }
         initBookInfo();
         mPresenter.loadCatalogs(mShelfBook);
-        Log.i(TAG,mShelfBook.toString());
-        mPresenter.loadFindBooks(mSearchBook);
+        mPresenter.loadFindBooks(mDetailBook);
     }
 
     @Override

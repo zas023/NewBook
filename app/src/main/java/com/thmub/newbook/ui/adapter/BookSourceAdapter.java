@@ -10,6 +10,8 @@ import java.util.Collections;
 /**
  * Created by Zhouas666 on 2019-03-30
  * Github: https://github.com/zas023
+ * <p>
+ * 书源管理adapter
  */
 public class BookSourceAdapter extends QuickAdapter<BookSourceBean> {
 

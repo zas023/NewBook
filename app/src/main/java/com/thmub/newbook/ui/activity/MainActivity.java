@@ -13,8 +13,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseActivity;
-import com.thmub.newbook.manager.BookSourceManager;
-import com.thmub.newbook.model.local.BookSourceRepository;
 import com.thmub.newbook.ui.adapter.TabFragmentPageAdapter;
 import com.thmub.newbook.ui.fragment.BookShelfFragment;
 import com.thmub.newbook.ui.fragment.BookStoreFragment;
@@ -94,14 +92,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
-        //如果没有书源，则添加默认书源
-        if (BookSourceRepository.getInstance().getAllBookSource().size() == 0)
-            BookSourceRepository.getInstance()
-                    .saveBookSourceWithAsync(BookSourceManager.getInstance().getBookSourceList());
 
         tabAdapter = new TabFragmentPageAdapter(getSupportFragmentManager());
         tabAdapter.addFragment(new BookShelfFragment(), "书架");
         tabAdapter.addFragment(new BookStoreFragment(), "书城");
+
     }
 
     @Override

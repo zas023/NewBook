@@ -5,8 +5,11 @@
         android:id="@+id/action_new"
         android:title="新建书源" />
     <item
-        android:id="@+id/action_import"
-        android:title="导入书源" />
+        android:id="@+id/action_local_import"
+        android:title="本地导入" />
+    <item
+        android:id="@+id/action_net_import"
+        android:title="网络导入" />
     <item
         android:id="@+id/action_sort"
         android:title="智能排序" />

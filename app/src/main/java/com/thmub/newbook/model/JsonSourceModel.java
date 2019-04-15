@@ -97,41 +97,42 @@ public class JsonSourceModel implements ISourceModel {
      * @return
      */
     public Observable<BookDetailBean> parseBook(BookSearchBean bookBean) {
+        Log.i("JsonSourceModel", "parseBook:" + bookBean.toString());
         return Observable.create(emitter -> {
-
-            String jsonStr = null, encodeType;
-            //获取书源搜索地址的编码
-            String[] encodes = bookSourceBean.getEncodeType().split("&");
-            if (encodes.length == 1)
-                encodeType = encodes[0];
-            else
-                encodeType = encodes[1];
-
+            String jsonStr = null;
             try {
-                jsonStr = OkHttpUtils.getHtml(bookBean.getBookLink(), encodeType);
+                jsonStr = OkHttpUtils.getHtml(bookBean.getBookLink(), bookSourceBean.getEncodeType());
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             String bookJson = bookSourceBean.getRuleDetailBook();
             String titleJson = bookSourceBean.getRuleDetailTitle();
+            if (titleJson == null)
+                titleJson = bookSourceBean.getRuleSearchTitle();
             String authorJson = bookSourceBean.getRuleDetailAuthor();
+            if (authorJson == null)
+                authorJson = bookSourceBean.getRuleSearchAuthor();
             String coverJson = bookSourceBean.getRuleDetailCover();
+            if (coverJson == null)
+                coverJson = bookSourceBean.getRuleSearchCover();
             String descJson = bookSourceBean.getRuleDetailDesc();
+            if (descJson == null)
+                descJson = bookSourceBean.getRuleSearchDesc();
             String catalogLinkJson = bookSourceBean.getRuleCatalogLink();
             String findLinkJson = bookSourceBean.getRuleFindLink();
 
             JsonParser parser = new JsonParser();  //创建JSON解析器
             JsonObject book = (JsonObject) parser.parse(jsonStr);  //创建JsonObject对象
             //定位到书籍详情字段
-            if (bookJson != null) {
+            if (bookJson != null&&!isEmpty(bookJson)) {
                 String[] bookRules = bookJson.split("\\$");
                 for (int i = 0; i < bookRules.length; i++) {
                     book = book.get(bookRules[i]).getAsJsonObject();
                 }
             }
-
             BookDetailBean bean = new BookDetailBean(bookBean);
+            Log.i("JsonSourceModel", "parseBook1:" + bookBean.getBookLink());
             //书名
             if (titleJson != null) {
                 String[] titleRules = titleJson.split("@");
@@ -141,6 +142,7 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setTitle(executeOp(titleRules, book.get(titleJson).getAsString()));
             }
+            Log.i("JsonSourceModel", "parseBook2:" + bean.toString());
             //封面
             if (coverJson != null) {
                 String[] coverRules = coverJson.split("@");
@@ -150,6 +152,7 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setCover(executeOp(coverRules, book.get(coverJson).getAsString()));
             }
+            Log.i("JsonSourceModel", "parseBook3:" + bean.toString());
             //作者
             if (authorJson != null) {
                 String[] authorRules = authorJson.split("@");
@@ -159,6 +162,7 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setAuthor(executeOp(authorRules, book.get(authorJson).getAsString()));
             }
+            Log.i("JsonSourceModel", "parseBook4:" + bean.toString());
             //简介
             if (descJson != null) {
                 String[] descRules = descJson.split("@");
@@ -168,7 +172,7 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setDesc(executeOp(descRules, book.get(descJson).getAsString()));
             }
-
+            Log.i("JsonSourceModel", "parseBook5:" + bean.toString());
             //目录
             if (catalogLinkJson != null) {
                 String[] catalogLinkRules = catalogLinkJson.split("@");
@@ -178,6 +182,7 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setCatalogLink(executeOp(catalogLinkRules, book.get(catalogLinkJson).getAsString()));
             }
+            Log.i("JsonSourceModel", "parseBook6:" + bean.toString());
             //发现
             if (findLinkJson != null) {
                 String[] findLinkRules = findLinkJson.split("@");
@@ -232,7 +237,10 @@ public class JsonSourceModel implements ISourceModel {
             String authorJson = bookSourceBean.getRuleSearchAuthor();
             String descJson = bookSourceBean.getRuleSearchDesc();
 
-            String[] bookRules = bookJson.split("\\$");
+            String[] bookRules = null;
+            if (bookJson != null) {
+                bookRules = bookJson.split("\\$");
+            }
             String[] titleRules = null;
             if (titleJson != null) {
                 titleRules = titleJson.split("@");
@@ -283,11 +291,16 @@ public class JsonSourceModel implements ISourceModel {
             }
 
             JsonParser parser = new JsonParser();  //创建JSON解析器
-            JsonObject object = (JsonObject) parser.parse(jsonStr);  //创建JsonObject对象
-            for (int i = 0; i < bookRules.length - 1; i++) {
-                object = object.get(bookRules[i]).getAsJsonObject();
+            JsonArray books;
+            if (bookRules == null) {
+                books = (JsonArray) parser.parse(jsonStr);  //创建JsonObject对象
+            } else {
+                JsonObject object = (JsonObject) parser.parse(jsonStr);  //创建JsonObject对象
+                for (int i = 0; i < bookRules.length - 1; i++) {
+                    object = object.get(bookRules[i]).getAsJsonObject();
+                }
+                books = object.get(bookRules[bookRules.length - 1]).getAsJsonArray();
             }
-            JsonArray books = object.get(bookRules[bookRules.length - 1]).getAsJsonArray();
             List<BookSearchBean> bookList = new ArrayList<>();
             for (int i = 0; i < books.size(); i++) {
                 BookSearchBean bean = new BookSearchBean();

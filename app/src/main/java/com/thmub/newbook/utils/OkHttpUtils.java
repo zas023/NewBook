@@ -27,7 +27,7 @@ public class OkHttpUtils {
      * 同步获取html文件，默认编码gbk
      */
     public static String getHtml(String url) throws IOException {
-        return getHtml(url, "gbk");
+        return getHtml(url, "utf-8");
     }
 
     public static String getHtml(String url, String encodeType) throws IOException {
@@ -44,7 +44,7 @@ public class OkHttpUtils {
         Request.Builder builder = new Request.Builder()
                 .addHeader("accept", "*/*")
                 .addHeader("connection", "Keep-Alive")
-                .addHeader("Charsert", "gbk")
+                .addHeader("Charsert", "utf-8")
                 .addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36");
 
         if (requestBody != null) {

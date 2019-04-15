@@ -32,9 +32,10 @@ public class DetailFindHolder extends ViewHolderImpl<BookSearchBean> {
 
     @Override
     public void onBind(BookSearchBean data, int pos) {
-        Glide.with(getContext()).load(data.getCover())
-                .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
-                .into(itemIvCover);
+        if (data.getCover() != null)
+            Glide.with(getContext()).load(data.getCover())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
+                    .into(itemIvCover);
         itemTvTitle.setText(data.getTitle());
     }
 }

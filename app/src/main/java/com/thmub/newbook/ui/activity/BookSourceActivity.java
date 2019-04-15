@@ -2,9 +2,11 @@ package com.thmub.newbook.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
@@ -13,6 +15,7 @@ import com.thmub.newbook.model.local.BookSourceRepository;
 import com.thmub.newbook.presenter.BookSourcePresenter;
 import com.thmub.newbook.presenter.contract.BookSourceContract;
 import com.thmub.newbook.ui.adapter.BookSourceAdapter;
+import com.thmub.newbook.utils.ProgressUtils;
 import com.thmub.newbook.utils.SnackbarUtils;
 import com.thmub.newbook.utils.UiUtils;
 import com.thmub.newbook.widget.ItemDragCallback;
@@ -20,6 +23,7 @@ import com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView;
 
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -112,7 +116,16 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
 
     @Override
     public void finishLoadBookSource(List<BookSourceBean> items) {
+        mAdapter.clear();
         mAdapter.addItems(items);
+    }
+
+    @Override
+    public void finishImportBookSource(List<BookSourceBean> items) {
+
+        BookSourceRepository.getInstance().saveBookSourceWithAsync(items);
+        ProgressUtils.dismiss();
+        mPresenter.loadBookSource();
     }
 
     @Override
@@ -143,8 +156,22 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
         switch (item.getItemId()) {
             case android.R.id.home:    //左侧返回键
                 exit();
-            case R.id.action_new:
+            case R.id.action_new:   //新建书源
                 startActivityForResult(new Intent(mContext, SourceEditActivity.class), REQUEST_CODE);
+                break;
+            case R.id.action_local_import:  //本地导入
+
+                break;
+            case R.id.action_net_import:  //网络导入
+                final EditText et = new EditText(this);
+                new AlertDialog.Builder(this).setTitle("请输入书源地址")
+                        .setView(et)
+                        .setPositiveButton("确定", (dialogInterface, i) -> {
+                            ProgressUtils.show(mContext);
+                            mPresenter.importWebSource(et.getText().toString());
+                        }).setNegativeButton("取消", null).show();
+                break;
+            case R.id.action_sort:  //智能排序
                 break;
             default:
                 break;

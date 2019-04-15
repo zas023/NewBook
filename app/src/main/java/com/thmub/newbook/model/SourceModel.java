@@ -36,9 +36,9 @@ public class SourceModel implements ISourceModel {
         if (sourceModel == null) {
             BookSourceBean sourceBean = BookSourceRepository.getInstance().getBookSourceByName(name);
             if (sourceBean != null) {
-                if (sourceBean.getSourceType().equals("Xpath"))
+                if (sourceBean.getSourceType().equals("xpath"))
                     sourceModel = new XpathSourceModel(sourceBean);
-                else if (sourceBean.getSourceType().equals("Json"))
+                else if (sourceBean.getSourceType().equals("json"))
                     sourceModel = new JsonSourceModel(sourceBean);
                 else
                     return false;
@@ -52,14 +52,14 @@ public class SourceModel implements ISourceModel {
     }
 
     @Override
-    public Observable<List<BookSearchBean>> findBook(String findRule) {
+    public Observable<List<BookSearchBean>> findBook(String findLink) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);
                 emitter.onComplete();
             });
         }
-        return sourceModel.findBook(findRule);
+        return sourceModel.findBook(findLink);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class SourceModel implements ISourceModel {
                 emitter.onComplete();
             });
         }
-        return sourceModel.parseCatalogFromEnd(book,num);
+        return sourceModel.parseCatalogFromEnd(book, num);
     }
 
     @Override

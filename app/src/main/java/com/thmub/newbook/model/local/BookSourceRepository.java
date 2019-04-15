@@ -1,7 +1,5 @@
 package com.thmub.newbook.model.local;
 
-import android.util.Log;
-
 import com.thmub.newbook.bean.BookSourceBean;
 import com.thmub.newbook.model.dao.BookSourceBeanDao;
 import com.thmub.newbook.model.dao.DaoDbHelper;
@@ -73,12 +71,11 @@ public class BookSourceRepository {
      * @param beans
      */
     public void saveBookSourceWithAsync(List<BookSourceBean> beans) {
-
-        Log.i(TAG, "" + beans.size());
-        mSession.startAsyncSession()
-                .runInTx(() ->
-                        mBookSourceDao.insertOrReplaceInTx(beans)
-                );
+        mBookSourceDao.insertOrReplaceInTx(beans);
+//        mSession.startAsyncSession()
+//                .runInTx(() ->
+//                        mBookSourceDao.insertOrReplaceInTx(beans)
+//                );
     }
 
     /*****************************Get*************************************/

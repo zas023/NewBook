@@ -29,14 +29,14 @@ public interface BookDetailContract {
         //移出书架
         void removeShelfBook(ShelfBookBean bookBean);
 
-        //加载同类书籍
+        //加载书籍
         void loadDetailBook(BookSearchBean bookBean);
 
         //加载目录
         void loadCatalogs(ShelfBookBean bookBean);
 
         //加载同类书籍
-        void loadFindBooks(BookSearchBean bookBean);
+        void loadFindBooks(BookDetailBean bookBean);
     }
 
 }

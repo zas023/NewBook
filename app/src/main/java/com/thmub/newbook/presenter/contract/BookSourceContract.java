@@ -13,11 +13,15 @@ public interface BookSourceContract {
 
     interface View extends BaseContract.BaseView {
         void finishLoadBookSource(List<BookSourceBean> items);
+
+        void finishImportBookSource(List<BookSourceBean> items);
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {
         //添加到书架上
         void loadBookSource();
+
+        void importWebSource(String url);
     }
 
 }

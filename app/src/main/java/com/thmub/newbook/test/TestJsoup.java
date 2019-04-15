@@ -19,8 +19,8 @@ public class TestJsoup {
     public static void main(String[] args) {
         TestJsoup test=new TestJsoup();
 //        test.testSite();
-        test.testCatalog();
-//        test.testContent();
+//        test.testCatalog();
+        test.testContent();
     }
 
     public void testSite(){
@@ -112,12 +112,14 @@ public class TestJsoup {
     }
 
     private static void testContent() {
-        String url = "https://www.biquge5.com/7_7397/2765210.html";
+        String url = "https://www.xbiquge6.com/82_82960/";
         String xpathTitle = "//*[@id=\"wrapper\"]/div[5]/div/div[2]";
         String xpathContent = "//*[@id=\"content\"]/text()";
+
+        String xpath="//div[@id='info']/p[1]/text()";
+
         JXDocument jxDocument = JXDocument.createByUrl(url);
         System.out.println(jxDocument.toString());
-        List<Object> rs = jxDocument.sel(xpathContent);
-        System.out.println(rs.size());
+        System.out.println(jxDocument.selOne(xpathContent).toString());
     }
 }

@@ -1,18 +1,24 @@
 package com.thmub.newbook.test;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.BookContentBean;
 import com.thmub.newbook.bean.BookSearchBean;
+import com.thmub.newbook.bean.BookSourceBean;
 import com.thmub.newbook.utils.OkHttpUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Zhouas666 on 2019-04-12
@@ -23,11 +29,27 @@ public class TestJson {
     public static void main(String[] args) {
         TestJson test = new TestJson();
 
+        test.testGson();
+
 //        test.testSite();
 
-        test.testCatalog();
+//        test.testCatalog();
 
 //        test.testContent();
+    }
+
+    public void testGson(){
+        String jsonStr = null;
+
+        try {
+            jsonStr = OkHttpUtils.getHtml("https://thmub.com/source.txt", "utf-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(jsonStr);
+        Gson gson=new Gson();
+        List<BookSourceBean> list=gson.fromJson(jsonStr, new TypeToken<List<BookSourceBean>>() {}.getType());
+        System.out.println(list.size());
     }
 
     public void testSite() {
@@ -110,7 +132,6 @@ public class TestJson {
     public String executeOp(String[] rules, String str) {
         if (rules == null) return str;
         for (int j = 0; j < rules.length; j++) {
-            System.out.println(rules[j]);
             if (rules[j].equals("UrlEncode")) {
                 try {
                     str = URLEncoder.encode(str, "utf-8");
