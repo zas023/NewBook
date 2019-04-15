@@ -29,7 +29,7 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
     public void checkBookUpdate(List<ShelfBookBean> items) {
         if (items == null || items.isEmpty()) return;
         for (ShelfBookBean book: items){
-            SourceModel.getInstance(book.getSourceName())
+            SourceModel.getInstance(book.getSourceTag())
                     .parseCatalog(book)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

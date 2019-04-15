@@ -2,6 +2,7 @@ package com.thmub.newbook.model;
 
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.BookContentBean;
+import com.thmub.newbook.bean.BookDetailBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 
@@ -15,9 +16,11 @@ import io.reactivex.Observable;
  */
 public interface ISourceModel {
 
-    Observable<List<BookSearchBean>> findBook(String findRule);
+    Observable<List<BookSearchBean>> findBook(String findLink);
 
     Observable<List<BookSearchBean>> searchBook(String keyword);
+
+    Observable<BookDetailBean> parseBook(BookSearchBean bookBean);
 
     Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book);
 

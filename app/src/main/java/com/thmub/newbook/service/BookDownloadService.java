@@ -133,7 +133,7 @@ public class BookDownloadService extends BaseService {
             if (!book.getBookChapterList().isEmpty()) {
                 for (int i = downloadBook.getStart(); i <= downloadBook.getEnd(); i++) {
                     BookChapterBean chapter = book.getChapter(i);
-                    if (!BookManager.isChapterCached(book.getTitle(), book.getSourceName(),
+                    if (!BookManager.isChapterCached(book.getTitle(), book.getSourceTag(),
                             BookManager.formatFileName(chapter.getChapterIndex(), chapter.getChapterTitle()))) {
                         downloadChapters.add(chapter);
                         downloaChapter(chapter);

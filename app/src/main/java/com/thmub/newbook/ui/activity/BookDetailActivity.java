@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookChapterBean;
+import com.thmub.newbook.bean.BookDetailBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.model.local.BookShelfRepository;
@@ -85,6 +86,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     private SourceExchangeDialog mSourceDialog;
     /****************************Variable*********************************/
     private BookSearchBean mSearchBook;
+    private BookDetailBean mDetailBook;
     private ShelfBookBean mShelfBook;
 
     private boolean isCollected;
@@ -102,13 +104,14 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         mSearchBook = getIntent().getParcelableExtra(EXTRA_BOOK);
-        Log.i(TAG, mSearchBook.toString());
+        mDetailBook = new BookDetailBean(mSearchBook);
         //查找书架，判断是否是已收藏
-        mShelfBook = BookShelfRepository.getInstance().getShelfBook(mSearchBook.getTitle(), mSearchBook.getAuthor());
-        if (mShelfBook == null)
-            mShelfBook = mSearchBook.getShelfBook();
-        else
+        mShelfBook = BookShelfRepository.getInstance().getShelfBook(mDetailBook.getTitle(), mDetailBook.getAuthor());
+        if (mShelfBook == null) {
+
+        } else {
             isCollected = true;
+        }
     }
 
     @Override
@@ -148,13 +151,17 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
 
     //Book title info
     private void initBookInfo() {
-        Glide.with(mContext).load(mSearchBook.getCover())
+
+        if (mShelfBook == null)
+            return;
+
+        Glide.with(mContext).load(mShelfBook.getCover())
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
                 .into(mIvCover);
-        mTvAuthor.setText(mSearchBook.getAuthor());
-        mTvType.setText(mSearchBook.getBookLink());
-        mTvWordCount.setText(mSearchBook.getSourceName());
-        bookDetailTvDesc.setText("\t\t\t\t" + mSearchBook.getDesc());
+        mTvAuthor.setText(mShelfBook.getAuthor());
+        mTvType.setText(mShelfBook.getLink());
+        mTvWordCount.setText(mShelfBook.getSourceTag());
+        bookDetailTvDesc.setText("\t\t\t\t" + mShelfBook.getDesc());
     }
 
     @Override
@@ -178,8 +185,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     @Override
     protected void processLogic() {
         super.processLogic();
-        mPresenter.loadCatalogs(mShelfBook);
-        mPresenter.loadFindBooks(mSearchBook);
+        mPresenter.loadDetailBook(mSearchBook);
     }
 
     /**************************Transaction********************************/
@@ -189,20 +195,17 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     }
 
     @Override
-    public void finishLoadCatalogs(List<BookChapterBean> items) {
-//        mShelfBook.setBookChapterList(items);
-//
-//        //设置详情页
-//        List<BookChapterBean> list = new ArrayList<>();
-//        //最新十章
-//        int size = items.size();
-//        if (size > 10)
-//            //subList中有些坑，取值范围是 fromIndex <= field < toIndex
-//            list.addAll(items.subList(size - 10, size));
-//        else
-//            list.addAll(items);
-//        Collections.reverse(list);
+    public void finishLoadDetailBook(BookDetailBean item) {
+        mDetailBook = item;
+        mShelfBook=mDetailBook.getShelfBook();
+        initBookInfo();
+        mPresenter.loadCatalogs(mShelfBook);
+        Log.i(TAG,mShelfBook.toString());
+        mPresenter.loadFindBooks(mSearchBook);
+    }
 
+    @Override
+    public void finishLoadCatalogs(List<BookChapterBean> items) {
         mCatalogAdapter.addItems(items);
     }
 
@@ -252,7 +255,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
                 startActivity(new Intent(mContext, SourceEditActivity.class)
                         .putExtra(SourceEditActivity.EXTRA_BOOK_SOURCE
                                 , BookSourceRepository.getInstance()
-                                        .getBookSourceByName(mShelfBook.getSourceName())));
+                                        .getBookSourceByName(mShelfBook.getSourceTag())));
                 break;
             case R.id.action_reload:  //重新加载
                 initWidget();

@@ -65,7 +65,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
         } else {
             //判断是否缓存
             if (data.getChapterLink() != null && BookManager.isChapterCached(
-                    mShelfBook.getTitle() + File.separator + mShelfBook.getSourceName(),
+                    mShelfBook.getTitle() + File.separator + mShelfBook.getSourceTag(),
                     BookManager.formatFileName(data.getChapterIndex(), data.getChapterTitle()))) {
                 drawable = ContextCompat.getDrawable(getContext(), R.drawable.selector_category_load);
             } else {

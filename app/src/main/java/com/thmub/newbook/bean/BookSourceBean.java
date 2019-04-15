@@ -23,7 +23,7 @@ public class BookSourceBean implements Parcelable {
     private String rootLink;    //利用url的唯一性
     //书源名称
     private String sourceName;
-    //书源类型（Xpath,Json)
+    //书源类型（xpath,json)
     private String sourceType;
     //编码格式
     private String encodeType;
@@ -32,18 +32,27 @@ public class BookSourceBean implements Parcelable {
 
     //书源规则
     //搜索
-    private String ruleSearchLink;  //指目录链接
-    private String ruleSearchBook;  //搜索结果列表
+    private String ruleSearchBooks;  //搜索结果列表
     private String ruleSearchTitle;
     private String ruleSearchAuthor;
     private String ruleSearchDesc;
     private String ruleSearchCover;
-    //发现
-    private String ruleFindLink; //相关书籍（要求书籍规则同于搜索，大多Json源符合此要求)
+    private String ruleSearchLink;  //书籍详情链接
+
+    //详情
+    private String ruleDetailBook;  //书籍详情（主要用于Json数据的定位）
+    private String ruleDetailTitle;
+    private String ruleDetailAuthor;
+    private String ruleDetailDesc;
+    private String ruleDetailCover;
+    private String ruleFindLink;    //发现书籍链接地址
+    private String ruleCatalogLink;   //指章节列表链接
+
     //目录
-    private String ruleCatalogLink;   //指章节内容链接
-    private String ruleCatalogChapter;
-    private String ruleCatalogTitle;
+    private String ruleChapters;
+    private String ruleChapterLink;
+    private String ruleChapterTitle;
+
     //章节
     private String ruleChapterContent;
 
@@ -57,34 +66,45 @@ public class BookSourceBean implements Parcelable {
     //是否选择
     private boolean isSelected;
 
-    @Generated(hash = 1075072519)
-    public BookSourceBean(String rootLink, String sourceName, String sourceType, String encodeType, String searchLink, String ruleSearchLink, String ruleSearchBook,
-            String ruleSearchTitle, String ruleSearchAuthor, String ruleSearchDesc, String ruleSearchCover, String ruleFindLink, String ruleCatalogLink,
-            String ruleCatalogChapter, String ruleCatalogTitle, String ruleChapterContent, int orderNumber, int weight, boolean isSelected) {
+    @Generated(hash = 1245792113)
+    public BookSourceBean(String rootLink, String sourceName, String sourceType, String encodeType,
+            String searchLink, String ruleSearchBooks, String ruleSearchTitle, String ruleSearchAuthor,
+            String ruleSearchDesc, String ruleSearchCover, String ruleSearchLink, String ruleDetailBook,
+            String ruleDetailTitle, String ruleDetailAuthor, String ruleDetailDesc, String ruleDetailCover,
+            String ruleFindLink, String ruleCatalogLink, String ruleChapters, String ruleChapterLink,
+            String ruleChapterTitle, String ruleChapterContent, int orderNumber, int weight, boolean isSelected) {
         this.rootLink = rootLink;
         this.sourceName = sourceName;
         this.sourceType = sourceType;
         this.encodeType = encodeType;
         this.searchLink = searchLink;
-        this.ruleSearchLink = ruleSearchLink;
-        this.ruleSearchBook = ruleSearchBook;
+        this.ruleSearchBooks = ruleSearchBooks;
         this.ruleSearchTitle = ruleSearchTitle;
         this.ruleSearchAuthor = ruleSearchAuthor;
         this.ruleSearchDesc = ruleSearchDesc;
         this.ruleSearchCover = ruleSearchCover;
+        this.ruleSearchLink = ruleSearchLink;
+        this.ruleDetailBook = ruleDetailBook;
+        this.ruleDetailTitle = ruleDetailTitle;
+        this.ruleDetailAuthor = ruleDetailAuthor;
+        this.ruleDetailDesc = ruleDetailDesc;
+        this.ruleDetailCover = ruleDetailCover;
         this.ruleFindLink = ruleFindLink;
         this.ruleCatalogLink = ruleCatalogLink;
-        this.ruleCatalogChapter = ruleCatalogChapter;
-        this.ruleCatalogTitle = ruleCatalogTitle;
+        this.ruleChapters = ruleChapters;
+        this.ruleChapterLink = ruleChapterLink;
+        this.ruleChapterTitle = ruleChapterTitle;
         this.ruleChapterContent = ruleChapterContent;
         this.orderNumber = orderNumber;
         this.weight = weight;
         this.isSelected = isSelected;
     }
 
+
     @Generated(hash = 1512565980)
     public BookSourceBean() {
     }
+
 
     protected BookSourceBean(Parcel in) {
         rootLink = in.readString();
@@ -92,16 +112,22 @@ public class BookSourceBean implements Parcelable {
         sourceType = in.readString();
         encodeType = in.readString();
         searchLink = in.readString();
-        ruleSearchBook = in.readString();
+        ruleSearchBooks = in.readString();
         ruleSearchTitle = in.readString();
         ruleSearchAuthor = in.readString();
         ruleSearchDesc = in.readString();
         ruleSearchCover = in.readString();
         ruleSearchLink = in.readString();
+        ruleDetailBook = in.readString();
+        ruleDetailTitle = in.readString();
+        ruleDetailAuthor = in.readString();
+        ruleDetailDesc = in.readString();
+        ruleDetailCover = in.readString();
         ruleFindLink = in.readString();
-        ruleCatalogChapter = in.readString();
-        ruleCatalogTitle = in.readString();
         ruleCatalogLink = in.readString();
+        ruleChapters = in.readString();
+        ruleChapterLink = in.readString();
+        ruleChapterTitle = in.readString();
         ruleChapterContent = in.readString();
         orderNumber = in.readInt();
         weight = in.readInt();
@@ -120,14 +146,6 @@ public class BookSourceBean implements Parcelable {
         }
     };
 
-    public String getSourceName() {
-        return sourceName;
-    }
-
-    public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
-    }
-
     public String getRootLink() {
         return rootLink;
     }
@@ -136,12 +154,12 @@ public class BookSourceBean implements Parcelable {
         this.rootLink = rootLink;
     }
 
-    public String getSearchLink() {
-        return searchLink;
+    public String getSourceName() {
+        return sourceName;
     }
 
-    public void setSearchLink(String searchLink) {
-        this.searchLink = searchLink;
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
     }
 
     public String getSourceType() {
@@ -160,13 +178,20 @@ public class BookSourceBean implements Parcelable {
         this.encodeType = encodeType;
     }
 
-
-    public String getRuleSearchBook() {
-        return ruleSearchBook;
+    public String getSearchLink() {
+        return searchLink;
     }
 
-    public void setRuleSearchBook(String ruleSearchBook) {
-        this.ruleSearchBook = ruleSearchBook;
+    public void setSearchLink(String searchLink) {
+        this.searchLink = searchLink;
+    }
+
+    public String getRuleSearchBooks() {
+        return ruleSearchBooks;
+    }
+
+    public void setRuleSearchBooks(String ruleSearchBooks) {
+        this.ruleSearchBooks = ruleSearchBooks;
     }
 
     public String getRuleSearchTitle() {
@@ -209,6 +234,46 @@ public class BookSourceBean implements Parcelable {
         this.ruleSearchLink = ruleSearchLink;
     }
 
+    public String getRuleDetailBook() {
+        return ruleDetailBook;
+    }
+
+    public void setRuleDetailBook(String ruleDetailBook) {
+        this.ruleDetailBook = ruleDetailBook;
+    }
+
+    public String getRuleDetailTitle() {
+        return ruleDetailTitle;
+    }
+
+    public void setRuleDetailTitle(String ruleDetailTitle) {
+        this.ruleDetailTitle = ruleDetailTitle;
+    }
+
+    public String getRuleDetailAuthor() {
+        return ruleDetailAuthor;
+    }
+
+    public void setRuleDetailAuthor(String ruleDetailAuthor) {
+        this.ruleDetailAuthor = ruleDetailAuthor;
+    }
+
+    public String getRuleDetailDesc() {
+        return ruleDetailDesc;
+    }
+
+    public void setRuleDetailDesc(String ruleDetailDesc) {
+        this.ruleDetailDesc = ruleDetailDesc;
+    }
+
+    public String getRuleDetailCover() {
+        return ruleDetailCover;
+    }
+
+    public void setRuleDetailCover(String ruleDetailCover) {
+        this.ruleDetailCover = ruleDetailCover;
+    }
+
     public String getRuleFindLink() {
         return ruleFindLink;
     }
@@ -217,28 +282,36 @@ public class BookSourceBean implements Parcelable {
         this.ruleFindLink = ruleFindLink;
     }
 
-    public String getRuleCatalogChapter() {
-        return ruleCatalogChapter;
-    }
-
-    public void setRuleCatalogChapter(String ruleCatalogChapter) {
-        this.ruleCatalogChapter = ruleCatalogChapter;
-    }
-
-    public String getRuleCatalogTitle() {
-        return ruleCatalogTitle;
-    }
-
-    public void setRuleCatalogTitle(String ruleCatalogTitle) {
-        this.ruleCatalogTitle = ruleCatalogTitle;
-    }
-
     public String getRuleCatalogLink() {
         return ruleCatalogLink;
     }
 
     public void setRuleCatalogLink(String ruleCatalogLink) {
         this.ruleCatalogLink = ruleCatalogLink;
+    }
+
+    public String getRuleChapters() {
+        return ruleChapters;
+    }
+
+    public void setRuleChapters(String ruleChapters) {
+        this.ruleChapters = ruleChapters;
+    }
+
+    public String getRuleChapterLink() {
+        return ruleChapterLink;
+    }
+
+    public void setRuleChapterLink(String ruleChapterLink) {
+        this.ruleChapterLink = ruleChapterLink;
+    }
+
+    public String getRuleChapterTitle() {
+        return ruleChapterTitle;
+    }
+
+    public void setRuleChapterTitle(String ruleChapterTitle) {
+        this.ruleChapterTitle = ruleChapterTitle;
     }
 
     public String getRuleChapterContent() {
@@ -295,16 +368,22 @@ public class BookSourceBean implements Parcelable {
         dest.writeString(sourceType);
         dest.writeString(encodeType);
         dest.writeString(searchLink);
-        dest.writeString(ruleSearchBook);
+        dest.writeString(ruleSearchBooks);
         dest.writeString(ruleSearchTitle);
         dest.writeString(ruleSearchAuthor);
         dest.writeString(ruleSearchDesc);
         dest.writeString(ruleSearchCover);
         dest.writeString(ruleSearchLink);
+        dest.writeString(ruleDetailBook);
+        dest.writeString(ruleDetailTitle);
+        dest.writeString(ruleDetailAuthor);
+        dest.writeString(ruleDetailDesc);
+        dest.writeString(ruleDetailCover);
         dest.writeString(ruleFindLink);
-        dest.writeString(ruleCatalogChapter);
-        dest.writeString(ruleCatalogTitle);
         dest.writeString(ruleCatalogLink);
+        dest.writeString(ruleChapters);
+        dest.writeString(ruleChapterLink);
+        dest.writeString(ruleChapterTitle);
         dest.writeString(ruleChapterContent);
         dest.writeInt(orderNumber);
         dest.writeInt(weight);

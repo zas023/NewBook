@@ -156,7 +156,7 @@ public class BookShelfRepository {
             //
             removeChapters(book.getLink());
             //
-            removeFile(book.getTitle() + File.separator + book.getSourceName());
+            removeFile(book.getTitle() + File.separator + book.getSourceTag());
             emitter.onNext(1);
             emitter.onComplete();
         });

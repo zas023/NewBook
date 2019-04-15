@@ -50,7 +50,7 @@ public class TestCrawler {
                     for (BookSearchBean searchBook : copyDataS) {
                         if (temp.getTitle().equals(searchBook.getTitle())
                                 && temp.getAuthor().equals(searchBook.getAuthor())) {
-                            searchBook.addSource(temp.getSourceName());
+                            searchBook.addSource(temp.getSourceTag());
                             isExsit = true;
                         }
                     }

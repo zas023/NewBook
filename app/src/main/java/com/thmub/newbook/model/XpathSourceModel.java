@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.BookContentBean;
+import com.thmub.newbook.bean.BookDetailBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.BookSourceBean;
 import com.thmub.newbook.bean.ShelfBookBean;
@@ -115,8 +116,7 @@ public class XpathSourceModel implements ISourceModel {
                 bean.setDesc(rsDescs.get(i).toString());
 
                 //对应书源
-                bean.setSourceName(bookSourceBean.getSourceName());
-                bean.setSourceLink(bookSourceBean.getRootLink());
+                bean.setSourceTag(bookSourceBean.getSourceName());
 
                 bookList.add(bean);
 
@@ -126,6 +126,11 @@ public class XpathSourceModel implements ISourceModel {
             emitter.onNext(bookList);
             emitter.onComplete();
         });
+    }
+
+    @Override
+    public Observable<BookDetailBean> parseBook(BookSearchBean bookBean) {
+        return null;
     }
 
     /**
@@ -152,8 +157,8 @@ public class XpathSourceModel implements ISourceModel {
                 e.printStackTrace();
             }
 
-            List<Object> rsTitles = jxDocument.sel(bookSourceBean.getRuleCatalogTitle());
-            List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleCatalogLink());
+            List<Object> rsTitles = jxDocument.sel(bookSourceBean.getRuleChapterTitle());
+            List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleChapterLink());
 
             List<BookChapterBean> catalogList = new ArrayList<>();
             for (int i = 0, size = rsTitles.size(); i < size; i++) {
@@ -208,8 +213,8 @@ public class XpathSourceModel implements ISourceModel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            List<Object> rsTitles = jxDocument.sel(bookSourceBean.getRuleCatalogTitle());
-            List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleCatalogLink());
+            List<Object> rsTitles = jxDocument.sel(bookSourceBean.getRuleChapterTitle());
+            List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleChapterLink());
 
             List<BookChapterBean> catalogList = new ArrayList<>();
             for (int i = rsTitles.size()-1, flag = Math.max(0, rsTitles.size() - num-1); i > flag; i--) {

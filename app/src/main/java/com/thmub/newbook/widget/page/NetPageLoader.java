@@ -57,7 +57,7 @@ public class NetPageLoader extends PageLoader {
             skipToChapter(bookShelfBean.getCurChapter(), bookShelfBean.getCurChapterPage());
         } else {
             //如果shelfBook中没有章节列表，则从网络加载
-            SourceModel.getInstance(bookShelfBean.getSourceName())
+            SourceModel.getInstance(bookShelfBean.getSourceTag())
                     .parseCatalog(bookShelfBean)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -107,7 +107,7 @@ public class NetPageLoader extends PageLoader {
         }
         //判断是否需要从网络请求章节
         if (NetworkUtils.isNetWorkAvailable() && !hasChapterData(bookShelfBean.getChapter(chapterIndex))) {
-            SourceModel.getInstance(bookShelfBean.getSourceName())
+            SourceModel.getInstance(bookShelfBean.getSourceTag())
                     .parseContent(bookShelfBean.getChapter(chapterIndex))
                     .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -122,7 +122,7 @@ public class NetPageLoader extends PageLoader {
                             //保存章节内容
                             BookManager.getInstance()
                                     .saveChapter(bookShelfBean.getTitle()
-                                                    + File.separator + bookShelfBean.getSourceName()
+                                                    + File.separator + bookShelfBean.getSourceTag()
                                             , bookShelfBean.getChapter(chapterIndex).getChapterIndex()
                                             , bookShelfBean.getChapter(chapterIndex).getChapterTitle()
                                             , bookContentBean.getChapterContent());
@@ -171,7 +171,7 @@ public class NetPageLoader extends PageLoader {
     @Override
     protected String getChapterContent(BookChapterBean chapter) throws Exception {
 
-        File file = BookManager.getBookFile(bookShelfBean.getTitle() + File.separator + bookShelfBean.getSourceName(),
+        File file = BookManager.getBookFile(bookShelfBean.getTitle() + File.separator + bookShelfBean.getSourceTag(),
                 BookManager.formatFileName(chapter.getChapterIndex(), chapter.getChapterTitle()));
         if (!file.exists()) return null;
         byte[] contentByte = FileUtils.getBytes(file);
@@ -186,7 +186,7 @@ public class NetPageLoader extends PageLoader {
      */
     @Override
     protected boolean hasChapterData(BookChapterBean chapter) {
-        return BookManager.isChapterCached(bookShelfBean.getTitle() + File.separator + bookShelfBean.getSourceName(),
+        return BookManager.isChapterCached(bookShelfBean.getTitle() + File.separator + bookShelfBean.getSourceTag(),
                 BookManager.formatFileName(chapter.getChapterIndex(), chapter.getChapterTitle()));
     }
 
@@ -224,7 +224,7 @@ public class NetPageLoader extends PageLoader {
     @Override
     public void updateCatalog() {
         Toast.makeText(mPageView.getActivity(), "目录更新中", Toast.LENGTH_SHORT).show();
-        SourceModel.getInstance(bookShelfBean.getSourceName())
+        SourceModel.getInstance(bookShelfBean.getSourceTag())
                 .parseCatalog(bookShelfBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

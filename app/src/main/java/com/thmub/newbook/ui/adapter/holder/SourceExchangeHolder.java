@@ -35,7 +35,7 @@ public class SourceExchangeHolder extends ViewHolderImpl<BookSearchBean> {
 
     @Override
     public void onBind(BookSearchBean data, int pos) {
-        itemSourceTvTitle.setText(data.getSourceName());
+        itemSourceTvTitle.setText(data.getSourceTag());
         itemSourceTvChapter.setText(data.getBookLink());
         if (data.isSelected())
             itemSourceIv.setVisibility(View.VISIBLE);

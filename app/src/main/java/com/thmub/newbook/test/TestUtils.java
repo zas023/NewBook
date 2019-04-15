@@ -27,7 +27,7 @@ public class TestUtils {
         bean.setRuleSearchDesc("//div[@class='result-game-item-detail']//p[@class='result-game-item-desc']/text()");
         bean.setRuleSearchCover("//div[@class='result-game-item-pic']//a//img/@src");
 
-        bean.setRuleCatalogTitle("//div[@id='list']//dl//dd//a/text()");
+        bean.setRuleChapterLink("//div[@id='list']//dl//dd//a/text()");
         bean.setRuleCatalogLink("//div[@id='list']//dl//dd//a/@href");
 
         bean.setRuleChapterContent("//div[@id='content']/text()");

@@ -38,8 +38,7 @@ public class ShelfBookBean implements Parcelable {
     private String cover;
 
     //书源
-    private String sourceName;
-    private String sourceLink;
+    private String sourceTag;
 
     //目录地址
     private String catalogLink;
@@ -78,17 +77,16 @@ public class ShelfBookBean implements Parcelable {
     private transient ShelfBookBeanDao myDao;
 
 
-    @Generated(hash = 1615889161)
-    public ShelfBookBean(String link, String title, String author, String desc, String cover, String sourceName,
-            String sourceLink, String catalogLink, String latestChapter, int chapterCount, String updated, String lastRead,
+    @Generated(hash = 1712768311)
+    public ShelfBookBean(String link, String title, String author, String desc, String cover, String sourceTag,
+            String catalogLink, String latestChapter, int chapterCount, String updated, String lastRead,
             String curChapterTitle, Integer curChapter, Integer curChapterPage, boolean isUpdate, boolean isLocal) {
         this.link = link;
         this.title = title;
         this.author = author;
         this.desc = desc;
         this.cover = cover;
-        this.sourceName = sourceName;
-        this.sourceLink = sourceLink;
+        this.sourceTag = sourceTag;
         this.catalogLink = catalogLink;
         this.latestChapter = latestChapter;
         this.chapterCount = chapterCount;
@@ -111,8 +109,7 @@ public class ShelfBookBean implements Parcelable {
         author = in.readString();
         desc = in.readString();
         cover = in.readString();
-        sourceName = in.readString();
-        sourceLink = in.readString();
+        sourceTag = in.readString();
         catalogLink = in.readString();
         latestChapter = in.readString();
         chapterCount = in.readInt();
@@ -188,21 +185,14 @@ public class ShelfBookBean implements Parcelable {
         this.cover = cover;
     }
 
-    public String getSourceName() {
-        return sourceName;
+    public String getSourceTag() {
+        return sourceTag;
     }
 
-    public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
+    public void setSourceTag(String sourceTag) {
+        this.sourceTag = sourceTag;
     }
 
-    public String getSourceLink() {
-        return sourceLink;
-    }
-
-    public void setSourceLink(String sourceLink) {
-        this.sourceLink = sourceLink;
-    }
 
     public String getCatalogLink() {
         return catalogLink;
@@ -395,8 +385,7 @@ public class ShelfBookBean implements Parcelable {
         dest.writeString(author);
         dest.writeString(desc);
         dest.writeString(cover);
-        dest.writeString(sourceName);
-        dest.writeString(sourceLink);
+        dest.writeString(sourceTag);
         dest.writeString(catalogLink);
         dest.writeString(latestChapter);
         dest.writeInt(chapterCount);

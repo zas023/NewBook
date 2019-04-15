@@ -28,7 +28,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
     @Override
     public void loadCatalogs(ShelfBookBean bookBean, boolean fromNet) {
         if (fromNet) {
-            SourceModel.getInstance(bookBean.getSourceName())
+            SourceModel.getInstance(bookBean.getSourceTag())
                     .parseCatalog(bookBean)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

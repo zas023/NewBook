@@ -206,7 +206,7 @@ public class BookManager {
         //简介
         bean.setDesc(book.getLongIntro());
         //书源
-        bean.setSourceName("追书神器");
+        bean.setSourceTag("追书神器");
 
         return bean;
     }

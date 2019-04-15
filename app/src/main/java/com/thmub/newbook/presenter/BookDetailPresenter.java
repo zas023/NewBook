@@ -1,6 +1,7 @@
 package com.thmub.newbook.presenter;
 
 import com.thmub.newbook.base.RxPresenter;
+import com.thmub.newbook.bean.BookDetailBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.bean.BookChapterBean;
@@ -55,11 +56,40 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
                 });
     }
 
+    @Override
+    public void loadDetailBook(BookSearchBean bookBean) {
+        SourceModel.getInstance(bookBean.getSourceTag())
+                .parseBook(bookBean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BookDetailBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(BookDetailBean bookDetailBean) {
+                        mView.finishLoadDetailBook(bookDetailBean);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
 
     @Override
     public void loadCatalogs(ShelfBookBean bookBean) {
         //加载最新10章
-        SourceModel.getInstance(bookBean.getSourceName())
+        SourceModel.getInstance(bookBean.getSourceTag())
                 .parseCatalogFromEnd(bookBean, 10)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -92,7 +122,7 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
 //            mView.finishLoadFindBooks(null);
             return;
         }
-        SourceModel.getInstance(bookBean.getSourceName())
+        SourceModel.getInstance(bookBean.getSourceTag())
                 .findBook(bookBean.getFindLink())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

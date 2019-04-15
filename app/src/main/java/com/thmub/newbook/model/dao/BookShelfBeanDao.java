@@ -103,7 +103,7 @@ public class BookShelfBeanDao extends AbstractDao<ShelfBookBean, String> {
             stmt.bindString(5, cover);
         }
  
-        String source = entity.getSourceName();
+        String source = entity.getSourceTag();
         if (source != null) {
             stmt.bindString(6, source);
         }
@@ -160,7 +160,7 @@ public class BookShelfBeanDao extends AbstractDao<ShelfBookBean, String> {
             stmt.bindString(5, cover);
         }
  
-        String source = entity.getSourceName();
+        String source = entity.getSourceTag();
         if (source != null) {
             stmt.bindString(6, source);
         }
@@ -212,7 +212,7 @@ public class BookShelfBeanDao extends AbstractDao<ShelfBookBean, String> {
         entity.setAuthor(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setDesc(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setCover(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setSourceName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setSourceTag(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setUpdated(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setLastRead(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setCurChapter(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));

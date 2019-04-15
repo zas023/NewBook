@@ -1,6 +1,7 @@
 package com.thmub.newbook.model;
 
 import com.thmub.newbook.bean.BookContentBean;
+import com.thmub.newbook.bean.BookDetailBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.BookSourceBean;
 import com.thmub.newbook.bean.BookChapterBean;
@@ -70,6 +71,17 @@ public class SourceModel implements ISourceModel {
             });
         }
         return sourceModel.searchBook(keyword);
+    }
+
+    @Override
+    public Observable<BookDetailBean> parseBook(BookSearchBean bookBean) {
+        if (!initBookSourceBean()) {
+            return Observable.create(emitter -> {
+                emitter.onNext(null);
+                emitter.onComplete();
+            });
+        }
+        return sourceModel.parseBook(bookBean);
     }
 
     @Override

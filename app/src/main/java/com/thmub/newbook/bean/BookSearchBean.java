@@ -33,8 +33,7 @@ public class BookSearchBean implements Parcelable {
     //最新章节
     private String latestChapter;
     //来源
-    private String sourceName;
-    private String sourceLink;
+    private String sourceTag;
 
     //是否选择当前源（换源标记）
     private boolean selected;
@@ -56,8 +55,7 @@ public class BookSearchBean implements Parcelable {
         catalogLink = in.readString();
         kind = in.readString();
         latestChapter = in.readString();
-        sourceName = in.readString();
-        sourceLink = in.readString();
+        sourceTag = in.readString();
         selected = in.readByte() != 0;
         sourceUrls = in.createStringArrayList();
     }
@@ -148,21 +146,13 @@ public class BookSearchBean implements Parcelable {
         this.findLink = findLink;
     }
 
-    public String getSourceName() {
-        return sourceName;
+    public String getSourceTag() {
+        return sourceTag;
     }
 
-    public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
+    public void setSourceTag(String sourceName) {
+        this.sourceTag = sourceName;
         addSource(sourceName);
-    }
-
-    public String getSourceLink() {
-        return sourceLink;
-    }
-
-    public void setSourceLink(String sourceLink) {
-        this.sourceLink = sourceLink;
     }
 
     public boolean isSelected() {
@@ -204,8 +194,7 @@ public class BookSearchBean implements Parcelable {
         shelfBookBean.setAuthor(author);
         shelfBookBean.setCover(cover);
         shelfBookBean.setDesc(desc);
-        shelfBookBean.setSourceName(sourceName);
-        shelfBookBean.setSourceLink(sourceLink);
+        shelfBookBean.setSourceTag(sourceTag);
         return shelfBookBean;
     }
 
@@ -225,8 +214,7 @@ public class BookSearchBean implements Parcelable {
         dest.writeString(catalogLink);
         dest.writeString(kind);
         dest.writeString(latestChapter);
-        dest.writeString(sourceName);
-        dest.writeString(sourceLink);
+        dest.writeString(sourceTag);
         dest.writeByte((byte) (selected ? 1 : 0));
         dest.writeStringList(sourceUrls);
     }
@@ -245,8 +233,7 @@ public class BookSearchBean implements Parcelable {
                 ", catalogLink='" + catalogLink + '\'' +
                 ", kind='" + kind + '\'' +
                 ", latestChapter='" + latestChapter + '\'' +
-                ", sourceName='" + sourceName + '\'' +
-                ", sourceLink='" + sourceLink + '\'' +
+                ", sourceName='" + sourceTag + '\'' +
                 ", selected=" + selected +
                 ", sourceUrls=" + sourceUrls +
                 '}';
