@@ -339,16 +339,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     @Override
     public void finishLoadCatalogs(List<BookChapterBean> items, boolean fromNet) {
-//        mShelfBook.setBookChapterList(items);
-//        if (fromNet) {
-//            mPageLoader.changeSourceFinish(mShelfBook);
-//        } else {
-//            mPageLoader.skipToChapter(mShelfBook.getCurChapter(), mShelfBook.getCurChapterPage());
-//        }
+
     }
 
     @Override
-    public void showError() {
+    public void showError(Throwable e) {
 
     }
 

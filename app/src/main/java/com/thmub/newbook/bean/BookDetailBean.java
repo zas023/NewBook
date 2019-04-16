@@ -1,12 +1,15 @@
 package com.thmub.newbook.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Zhouas666 on 2019-04-15
  * Github: https://github.com/zas023
  * <p>
  * 书籍详情bean
  */
-public class BookDetailBean {
+public class BookDetailBean implements Parcelable {
 
     //标题
     private String title;
@@ -38,6 +41,29 @@ public class BookDetailBean {
 
         sourceTag = bean.getSourceTag();
     }
+
+    protected BookDetailBean(Parcel in) {
+        title = in.readString();
+        author = in.readString();
+        desc = in.readString();
+        cover = in.readString();
+        bookLink = in.readString();
+        findLink = in.readString();
+        catalogLink = in.readString();
+        sourceTag = in.readString();
+    }
+
+    public static final Creator<BookDetailBean> CREATOR = new Creator<BookDetailBean>() {
+        @Override
+        public BookDetailBean createFromParcel(Parcel in) {
+            return new BookDetailBean(in);
+        }
+
+        @Override
+        public BookDetailBean[] newArray(int size) {
+            return new BookDetailBean[size];
+        }
+    };
 
     public String getTitle() {
         return title;
@@ -128,5 +154,22 @@ public class BookDetailBean {
                 ", catalogLink='" + catalogLink + '\'' +
                 ", sourceTag='" + sourceTag + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(author);
+        dest.writeString(desc);
+        dest.writeString(cover);
+        dest.writeString(bookLink);
+        dest.writeString(findLink);
+        dest.writeString(catalogLink);
+        dest.writeString(sourceTag);
     }
 }

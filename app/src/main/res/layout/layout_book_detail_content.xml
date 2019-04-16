@@ -38,6 +38,7 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/book_detail_tv_catalog_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"

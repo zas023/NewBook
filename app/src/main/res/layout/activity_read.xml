@@ -158,15 +158,5 @@
             app:fastscroll__handleColor="@color/colorPrimary"/>
 
     </RelativeLayout>
-    <!--<androidx.recyclerview.widget.RecyclerView-->
-    <!--android:id="@+id/read_rv_catalog"-->
-    <!--android:layout_width="240dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_gravity="start"-->
-    <!--android:fastScrollEnabled="true"-->
-    <!--app:fastScrollHorizontalThumbDrawable="@drawable/recycler_thumb_drawable"-->
-    <!--app:fastScrollHorizontalTrackDrawable="@drawable/recycler_line_drawable"-->
-    <!--app:fastScrollVerticalThumbDrawable="@drawable/recycler_thumb_drawable"-->
-    <!--app:fastScrollVerticalTrackDrawable="@drawable/recycler_line_drawable" />-->
 
 </androidx.drawerlayout.widget.DrawerLayout>

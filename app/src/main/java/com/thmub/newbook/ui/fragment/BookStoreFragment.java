@@ -160,7 +160,7 @@ public class BookStoreFragment extends BaseMVPFragment<BookStoreContract.Present
     }
 
     @Override
-    public void showError() {
+    public void showError(Throwable e) {
 
     }
 

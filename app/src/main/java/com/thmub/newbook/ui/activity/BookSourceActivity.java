@@ -17,6 +17,7 @@ import com.thmub.newbook.presenter.contract.BookSourceContract;
 import com.thmub.newbook.ui.adapter.BookSourceAdapter;
 import com.thmub.newbook.utils.ProgressUtils;
 import com.thmub.newbook.utils.SnackbarUtils;
+import com.thmub.newbook.utils.ToastUtils;
 import com.thmub.newbook.utils.UiUtils;
 import com.thmub.newbook.widget.ItemDragCallback;
 import com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView;
@@ -129,7 +130,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
     }
 
     @Override
-    public void showError() {
+    public void showError(Throwable e) {
 
     }
 
@@ -200,7 +201,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE) {
-                SnackbarUtils.show(this, "保存成功");
+                ToastUtils.showSuccess(mContext, "保存成功");
                 mAdapter.clear();
                 mPresenter.loadBookSource();
                 ischanged = true;

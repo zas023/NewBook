@@ -79,6 +79,8 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     //Scroller
     implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+    //Toasty
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
     //Jsoup
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'cn.wanghaomiao:JsoupXpath:2.3.1'

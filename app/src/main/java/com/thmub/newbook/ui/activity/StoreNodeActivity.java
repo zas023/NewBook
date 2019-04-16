@@ -101,7 +101,7 @@ public class StoreNodeActivity extends BaseMVPActivity<StoreNodeContract.Present
     }
 
     @Override
-    public void showError() {
+    public void showError(Throwable e) {
 
     }
 

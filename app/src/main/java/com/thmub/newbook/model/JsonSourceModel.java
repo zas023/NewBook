@@ -132,7 +132,6 @@ public class JsonSourceModel implements ISourceModel {
                 }
             }
             BookDetailBean bean = new BookDetailBean(bookBean);
-            Log.i("JsonSourceModel", "parseBook1:" + bookBean.getBookLink());
             //书名
             if (titleJson != null) {
                 String[] titleRules = titleJson.split("@");
@@ -142,7 +141,6 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setTitle(executeOp(titleRules, book.get(titleJson).getAsString()));
             }
-            Log.i("JsonSourceModel", "parseBook2:" + bean.toString());
             //封面
             if (coverJson != null) {
                 String[] coverRules = coverJson.split("@");
@@ -152,7 +150,6 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setCover(executeOp(coverRules, book.get(coverJson).getAsString()));
             }
-            Log.i("JsonSourceModel", "parseBook3:" + bean.toString());
             //作者
             if (authorJson != null) {
                 String[] authorRules = authorJson.split("@");
@@ -162,7 +159,6 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setAuthor(executeOp(authorRules, book.get(authorJson).getAsString()));
             }
-            Log.i("JsonSourceModel", "parseBook4:" + bean.toString());
             //简介
             if (descJson != null) {
                 String[] descRules = descJson.split("@");
@@ -172,7 +168,6 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setDesc(executeOp(descRules, book.get(descJson).getAsString()));
             }
-            Log.i("JsonSourceModel", "parseBook5:" + bean.toString());
             //目录
             if (catalogLinkJson != null) {
                 String[] catalogLinkRules = catalogLinkJson.split("@");
@@ -182,7 +177,6 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setCatalogLink(executeOp(catalogLinkRules, book.get(catalogLinkJson).getAsString()));
             }
-            Log.i("JsonSourceModel", "parseBook6:" + bean.toString());
             //发现
             if (findLinkJson != null) {
                 String[] findLinkRules = findLinkJson.split("@");
@@ -192,7 +186,6 @@ public class JsonSourceModel implements ISourceModel {
                 }
                 bean.setFindLink(executeOp(findLinkRules, book.get(findLinkJson).getAsString()));
             }
-
 
             //来源
             bean.setSourceTag(bookSourceBean.getSourceName());

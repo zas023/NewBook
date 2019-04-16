@@ -2,14 +2,20 @@ package com.thmub.newbook.base;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.gyf.barlibrary.ImmersionBar;
 import com.thmub.newbook.R;
 import com.thmub.newbook.utils.SharedPreUtils;
@@ -106,7 +112,7 @@ public abstract class BaseActivity extends SwipeBackActivity {
     }
 
     protected void setNightTheme(boolean isNightMode) {
-        SharedPreUtils.getInstance().putBoolean("night_mode",isNightMode);
+        SharedPreUtils.getInstance().putBoolean("night_mode", isNightMode);
         initTheme();
     }
 
@@ -152,7 +158,7 @@ public abstract class BaseActivity extends SwipeBackActivity {
 
     private void initToolbar() {
         //更严谨是通过反射判断是否存在Toolbar
-        mToolbar = (Toolbar) findViewById( R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             supportActionBar(mToolbar);
             setUpToolbar(mToolbar);

@@ -15,7 +15,7 @@ public interface BaseContract {
 
     interface BaseView {
 
-        void showError();
+        void showError(Throwable e);
 
         void complete();
     }

@@ -3,7 +3,7 @@ package com.thmub.newbook.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +29,7 @@ import com.thmub.newbook.ui.adapter.DetailFindAdapter;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 import com.thmub.newbook.widget.DashlineItemDivider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.widget.Toolbar;
@@ -193,7 +194,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         //查找书架，判断是否是已收藏
         mShelfBook = BookShelfRepository.getInstance().getShelfBook(mDetailBook.getTitle(), mDetailBook.getAuthor());
         if (mShelfBook == null) {
-            mShelfBook=mDetailBook.getShelfBook();
+            mShelfBook = mDetailBook.getShelfBook();
         } else {
             isCollected = true;
         }
@@ -221,7 +222,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     }
 
     @Override
-    public void showError() {
+    public void showError(Throwable e) {
 
     }
 
@@ -299,15 +300,24 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
      *
      * @param view
      */
-    @OnClick({R.id.fl_add_bookcase, R.id.fl_open_book, R.id.book_detail_tv_find_more})
+    @OnClick({R.id.fl_add_bookcase, R.id.fl_open_book, R.id.book_detail_tv_find_more
+            , R.id.book_detail_tv_catalog_more})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.book_detail_tv_find_more:  //发现
-
+                startActivity(new Intent(mContext, FindBookActivity.class)
+                        .putExtra(FindBookActivity.EXTRA_BOOK, mDetailBook));
                 break;
+
+            case R.id.book_detail_tv_catalog_more:
+                startActivity(new Intent(mContext, CatalogActivity.class)
+                        .putExtra(CatalogActivity.EXTRA_BOOK, mDetailBook));
+                break;
+
             case R.id.fl_add_bookcase:  //加入书架
                 addToShelf();
                 break;
+
             case R.id.fl_open_book:  //开始阅读
                 startActivityForResult(new Intent(mContext, ReadActivity.class)
                         .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook)

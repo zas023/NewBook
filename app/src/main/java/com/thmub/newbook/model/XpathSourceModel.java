@@ -43,7 +43,7 @@ public class XpathSourceModel implements ISourceModel {
      */
     @Override
     public Observable<List<BookSearchBean>> findBook(String findLink) {
-        Log.i("XpathSourceModel", "findBook:"+findLink);
+        Log.i("XpathSourceModel", "findBook:" + findLink);
         if (isEmpty(findLink) || isEmpty(bookSourceBean.getRuleFindBookTitle())
                 || isEmpty(bookSourceBean.getRuleFindBookLink())) {
             return Observable.create(emitter -> {
@@ -117,7 +117,7 @@ public class XpathSourceModel implements ISourceModel {
     @Override
     public Observable<List<BookSearchBean>> searchBook(String keyword) {
 
-        Log.i("XpathSourceModel", "searchBook:"+keyword);
+        Log.i("XpathSourceModel", "searchBook:" + keyword);
         if (isEmpty(bookSourceBean.getSearchLink()) || isEmpty(bookSourceBean.getRuleSearchTitle())
                 || isEmpty(bookSourceBean.getRuleSearchAuthor()) || isEmpty(bookSourceBean.getRuleSearchLink())) {
             return Observable.create(emitter -> {
@@ -211,7 +211,7 @@ public class XpathSourceModel implements ISourceModel {
      */
     @Override
     public Observable<BookDetailBean> parseBook(BookSearchBean bookBean) {
-        Log.i("XpathSourceModel", "parseBook:"+bookBean.toString());
+        Log.i("XpathSourceModel", "parseBook:" + bookBean.toString());
         String bookLink = bookBean.getBookLink();
         if (isEmpty(bookLink)) {
             return Observable.create(emitter -> {
@@ -236,8 +236,14 @@ public class XpathSourceModel implements ISourceModel {
             if (bookSourceBean.getRuleDetailTitle() != null)
                 bean.setTitle(jxDocument.selOne((ruleBook + bookSourceBean.getRuleDetailTitle())).toString());
             //作者
-            if (bookSourceBean.getRuleDetailAuthor() != null)
-                bean.setAuthor(jxDocument.selOne((ruleBook + bookSourceBean.getRuleDetailAuthor())).toString());
+            if (bookSourceBean.getRuleDetailAuthor() != null) {
+                String author = jxDocument.selOne((ruleBook + bookSourceBean.getRuleDetailAuthor())).toString();
+                //去除有些网站添加的属性
+                if (author.contains("：")) {
+                    author = author.split("：")[1].replace(" ", "");
+                }
+                bean.setAuthor(author);
+            }
 
             //封面
             String coverLink;

@@ -467,7 +467,7 @@ public class PageView extends View {
      * @param msg
      */
     public void showSnackBar(String msg) {
-        SnackbarUtils.show(activity, msg);
+        SnackbarUtils.show(this, msg);
     }
 
     /*****************************Interface******************************/

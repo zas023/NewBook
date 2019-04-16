@@ -40,7 +40,7 @@ public class SourceEditPresenter extends RxPresenter<SourceEditContract.View>
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.showError();
+                        mView.showError(new Throwable("保存失败"));
                     }
 
                     @Override

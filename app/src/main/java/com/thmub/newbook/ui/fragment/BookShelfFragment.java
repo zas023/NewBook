@@ -3,6 +3,7 @@ package com.thmub.newbook.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPFragment;
@@ -13,6 +14,7 @@ import com.thmub.newbook.presenter.contract.BookShelfContract;
 import com.thmub.newbook.ui.activity.ReadActivity;
 import com.thmub.newbook.ui.adapter.BookShelfAdapter;
 import com.thmub.newbook.utils.SnackbarUtils;
+import com.thmub.newbook.utils.ToastUtils;
 import com.thmub.newbook.utils.UiUtils;
 import com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView;
 
@@ -21,6 +23,7 @@ import java.util.List;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Zhouas666 on 2019-03-28
@@ -98,7 +101,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     }
 
     @Override
-    public void showError() {
+    public void showError(Throwable e) {
 
     }
 
@@ -124,7 +127,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     private void onItemMenuClick(String which, ShelfBookBean shelfBook) {
         switch (which) {
             case "置顶":
-                SnackbarUtils.show(mContext, "此功能尚未完成");
+                ToastUtils.showInfo(mContext, "此功能尚未完成");
                 break;
             case "缓存":
 
@@ -133,7 +136,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
 
                 break;
             case "批量管理":
-                SnackbarUtils.show(mContext, "此功能尚未完成");
+                ToastUtils.showWarring(mContext, "此功能尚未完成");
                 break;
             default:
                 break;
