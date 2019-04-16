@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,8 +25,10 @@ import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.DownloadBookBean;
 import com.thmub.newbook.bean.ShelfBookBean;
+import com.thmub.newbook.bean.event.ChapterExchangeEvent;
 import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.manager.ReadSettingManager;
+import com.thmub.newbook.manager.RxBusManager;
 import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
@@ -55,6 +58,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -206,7 +210,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mPageLoader.setOnPageChangeListener(new PageLoader.OnPageChangeListener() {
             @Override
             public void onChapterChange(int pos) {
-//                readRvCatalog.getLayoutManager().scrollToPosition(pos);
+
             }
 
             @Override
@@ -297,6 +301,18 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             mPageLoader.changeSourceFinish(mShelfBook);
             mSourceDialog.dismiss();
         });
+    }
+
+    @Override
+    protected void initEvent() {
+        super.initEvent();
+        //处理从目录页面传回的消息
+        addDisposable(RxBusManager.getInstance()
+                .toObservable(ChapterExchangeEvent.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> {
+                    mPageLoader.skipToChapter(event.getChapterIndex(), event.getPageIndex());
+                }));
     }
 
     @Override

@@ -7,6 +7,8 @@ import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPFragment;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
+import com.thmub.newbook.bean.event.ChapterExchangeEvent;
+import com.thmub.newbook.manager.RxBusManager;
 import com.thmub.newbook.presenter.CatalogPresenter;
 import com.thmub.newbook.presenter.contract.CatalogContract;
 import com.thmub.newbook.ui.activity.CatalogActivity;
@@ -73,8 +75,9 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
     protected void initClick() {
         super.initClick();
         mAdapter.setListener((index, page) -> {
-            if (mBook.isReading()){
-
+            if (mBook.isReading()) {
+                RxBusManager.getInstance().post(new ChapterExchangeEvent(index, page));
+                getFatherActivity().finish();
             }
         });
     }
@@ -82,12 +85,11 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
     @Override
     protected void processLogic() {
         super.processLogic();
-        if (mBook.getBookChapterListSize() > 0){
+        if (mBook.getBookChapterListSize() > 0) {
             mAdapter.setShelfBook(mBook);
             //置顶当前章节位置
             rvContent.getLayoutManager().scrollToPosition(mBook.getCurChapter());
-        }
-        else
+        } else
             mPresenter.loadCatalog(mBook);
     }
 

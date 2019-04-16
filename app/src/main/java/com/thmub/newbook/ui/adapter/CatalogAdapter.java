@@ -90,8 +90,8 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
             holder.tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.textPrimary));
             holder.tvTitle.setSelected(false);
         }
-
-        holder.tvTitle.setOnClickListener(v -> listener.onItemClick(position, 0));
+        //注意此处不能传递 position
+        holder.tvTitle.setOnClickListener(v -> listener.onItemClick(data.getChapterIndex(), 0));
     }
 
     @Override
