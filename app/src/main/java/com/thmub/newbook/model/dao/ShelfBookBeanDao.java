@@ -29,17 +29,18 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
         public final static Property Author = new Property(2, String.class, "author", false, "AUTHOR");
         public final static Property Desc = new Property(3, String.class, "desc", false, "DESC");
         public final static Property Cover = new Property(4, String.class, "cover", false, "COVER");
-        public final static Property SourceTag = new Property(5, String.class, "sourceTag", false, "SOURCE_TAG");
-        public final static Property CatalogLink = new Property(6, String.class, "catalogLink", false, "CATALOG_LINK");
-        public final static Property LatestChapter = new Property(7, String.class, "latestChapter", false, "LATEST_CHAPTER");
-        public final static Property ChapterCount = new Property(8, int.class, "chapterCount", false, "CHAPTER_COUNT");
-        public final static Property Updated = new Property(9, String.class, "updated", false, "UPDATED");
-        public final static Property LastRead = new Property(10, String.class, "lastRead", false, "LAST_READ");
-        public final static Property CurChapterTitle = new Property(11, String.class, "curChapterTitle", false, "CUR_CHAPTER_TITLE");
-        public final static Property CurChapter = new Property(12, Integer.class, "curChapter", false, "CUR_CHAPTER");
-        public final static Property CurChapterPage = new Property(13, Integer.class, "curChapterPage", false, "CUR_CHAPTER_PAGE");
-        public final static Property IsUpdate = new Property(14, boolean.class, "isUpdate", false, "IS_UPDATE");
-        public final static Property IsLocal = new Property(15, boolean.class, "isLocal", false, "IS_LOCAL");
+        public final static Property CatalogLink = new Property(5, String.class, "catalogLink", false, "CATALOG_LINK");
+        public final static Property FindLink = new Property(6, String.class, "findLink", false, "FIND_LINK");
+        public final static Property SourceTag = new Property(7, String.class, "sourceTag", false, "SOURCE_TAG");
+        public final static Property LatestChapter = new Property(8, String.class, "latestChapter", false, "LATEST_CHAPTER");
+        public final static Property ChapterCount = new Property(9, int.class, "chapterCount", false, "CHAPTER_COUNT");
+        public final static Property Updated = new Property(10, String.class, "updated", false, "UPDATED");
+        public final static Property LastRead = new Property(11, String.class, "lastRead", false, "LAST_READ");
+        public final static Property CurChapterTitle = new Property(12, String.class, "curChapterTitle", false, "CUR_CHAPTER_TITLE");
+        public final static Property CurChapter = new Property(13, Integer.class, "curChapter", false, "CUR_CHAPTER");
+        public final static Property CurChapterPage = new Property(14, Integer.class, "curChapterPage", false, "CUR_CHAPTER_PAGE");
+        public final static Property IsUpdate = new Property(15, boolean.class, "isUpdate", false, "IS_UPDATE");
+        public final static Property IsLocal = new Property(16, boolean.class, "isLocal", false, "IS_LOCAL");
     }
 
     private DaoSession daoSession;
@@ -63,17 +64,18 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
                 "\"AUTHOR\" TEXT," + // 2: author
                 "\"DESC\" TEXT," + // 3: desc
                 "\"COVER\" TEXT," + // 4: cover
-                "\"SOURCE_TAG\" TEXT," + // 5: sourceTag
-                "\"CATALOG_LINK\" TEXT," + // 6: catalogLink
-                "\"LATEST_CHAPTER\" TEXT," + // 7: latestChapter
-                "\"CHAPTER_COUNT\" INTEGER NOT NULL ," + // 8: chapterCount
-                "\"UPDATED\" TEXT," + // 9: updated
-                "\"LAST_READ\" TEXT," + // 10: lastRead
-                "\"CUR_CHAPTER_TITLE\" TEXT," + // 11: curChapterTitle
-                "\"CUR_CHAPTER\" INTEGER," + // 12: curChapter
-                "\"CUR_CHAPTER_PAGE\" INTEGER," + // 13: curChapterPage
-                "\"IS_UPDATE\" INTEGER NOT NULL ," + // 14: isUpdate
-                "\"IS_LOCAL\" INTEGER NOT NULL );"); // 15: isLocal
+                "\"CATALOG_LINK\" TEXT," + // 5: catalogLink
+                "\"FIND_LINK\" TEXT," + // 6: findLink
+                "\"SOURCE_TAG\" TEXT," + // 7: sourceTag
+                "\"LATEST_CHAPTER\" TEXT," + // 8: latestChapter
+                "\"CHAPTER_COUNT\" INTEGER NOT NULL ," + // 9: chapterCount
+                "\"UPDATED\" TEXT," + // 10: updated
+                "\"LAST_READ\" TEXT," + // 11: lastRead
+                "\"CUR_CHAPTER_TITLE\" TEXT," + // 12: curChapterTitle
+                "\"CUR_CHAPTER\" INTEGER," + // 13: curChapter
+                "\"CUR_CHAPTER_PAGE\" INTEGER," + // 14: curChapterPage
+                "\"IS_UPDATE\" INTEGER NOT NULL ," + // 15: isUpdate
+                "\"IS_LOCAL\" INTEGER NOT NULL );"); // 16: isLocal
     }
 
     /** Drops the underlying database table. */
@@ -111,48 +113,53 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
             stmt.bindString(5, cover);
         }
  
-        String sourceTag = entity.getSourceTag();
-        if (sourceTag != null) {
-            stmt.bindString(6, sourceTag);
-        }
- 
         String catalogLink = entity.getCatalogLink();
         if (catalogLink != null) {
-            stmt.bindString(7, catalogLink);
+            stmt.bindString(6, catalogLink);
+        }
+ 
+        String findLink = entity.getFindLink();
+        if (findLink != null) {
+            stmt.bindString(7, findLink);
+        }
+ 
+        String sourceTag = entity.getSourceTag();
+        if (sourceTag != null) {
+            stmt.bindString(8, sourceTag);
         }
  
         String latestChapter = entity.getLatestChapter();
         if (latestChapter != null) {
-            stmt.bindString(8, latestChapter);
+            stmt.bindString(9, latestChapter);
         }
-        stmt.bindLong(9, entity.getChapterCount());
+        stmt.bindLong(10, entity.getChapterCount());
  
         String updated = entity.getUpdated();
         if (updated != null) {
-            stmt.bindString(10, updated);
+            stmt.bindString(11, updated);
         }
  
         String lastRead = entity.getLastRead();
         if (lastRead != null) {
-            stmt.bindString(11, lastRead);
+            stmt.bindString(12, lastRead);
         }
  
         String curChapterTitle = entity.getCurChapterTitle();
         if (curChapterTitle != null) {
-            stmt.bindString(12, curChapterTitle);
+            stmt.bindString(13, curChapterTitle);
         }
  
         Integer curChapter = entity.getCurChapter();
         if (curChapter != null) {
-            stmt.bindLong(13, curChapter);
+            stmt.bindLong(14, curChapter);
         }
  
         Integer curChapterPage = entity.getCurChapterPage();
         if (curChapterPage != null) {
-            stmt.bindLong(14, curChapterPage);
+            stmt.bindLong(15, curChapterPage);
         }
-        stmt.bindLong(15, entity.getIsUpdate() ? 1L: 0L);
-        stmt.bindLong(16, entity.getIsLocal() ? 1L: 0L);
+        stmt.bindLong(16, entity.getIsUpdate() ? 1L: 0L);
+        stmt.bindLong(17, entity.getIsLocal() ? 1L: 0L);
     }
 
     @Override
@@ -184,48 +191,53 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
             stmt.bindString(5, cover);
         }
  
-        String sourceTag = entity.getSourceTag();
-        if (sourceTag != null) {
-            stmt.bindString(6, sourceTag);
-        }
- 
         String catalogLink = entity.getCatalogLink();
         if (catalogLink != null) {
-            stmt.bindString(7, catalogLink);
+            stmt.bindString(6, catalogLink);
+        }
+ 
+        String findLink = entity.getFindLink();
+        if (findLink != null) {
+            stmt.bindString(7, findLink);
+        }
+ 
+        String sourceTag = entity.getSourceTag();
+        if (sourceTag != null) {
+            stmt.bindString(8, sourceTag);
         }
  
         String latestChapter = entity.getLatestChapter();
         if (latestChapter != null) {
-            stmt.bindString(8, latestChapter);
+            stmt.bindString(9, latestChapter);
         }
-        stmt.bindLong(9, entity.getChapterCount());
+        stmt.bindLong(10, entity.getChapterCount());
  
         String updated = entity.getUpdated();
         if (updated != null) {
-            stmt.bindString(10, updated);
+            stmt.bindString(11, updated);
         }
  
         String lastRead = entity.getLastRead();
         if (lastRead != null) {
-            stmt.bindString(11, lastRead);
+            stmt.bindString(12, lastRead);
         }
  
         String curChapterTitle = entity.getCurChapterTitle();
         if (curChapterTitle != null) {
-            stmt.bindString(12, curChapterTitle);
+            stmt.bindString(13, curChapterTitle);
         }
  
         Integer curChapter = entity.getCurChapter();
         if (curChapter != null) {
-            stmt.bindLong(13, curChapter);
+            stmt.bindLong(14, curChapter);
         }
  
         Integer curChapterPage = entity.getCurChapterPage();
         if (curChapterPage != null) {
-            stmt.bindLong(14, curChapterPage);
+            stmt.bindLong(15, curChapterPage);
         }
-        stmt.bindLong(15, entity.getIsUpdate() ? 1L: 0L);
-        stmt.bindLong(16, entity.getIsLocal() ? 1L: 0L);
+        stmt.bindLong(16, entity.getIsUpdate() ? 1L: 0L);
+        stmt.bindLong(17, entity.getIsLocal() ? 1L: 0L);
     }
 
     @Override
@@ -247,17 +259,18 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // author
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // desc
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // cover
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // sourceTag
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // catalogLink
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // latestChapter
-            cursor.getInt(offset + 8), // chapterCount
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // updated
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // lastRead
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // curChapterTitle
-            cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12), // curChapter
-            cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13), // curChapterPage
-            cursor.getShort(offset + 14) != 0, // isUpdate
-            cursor.getShort(offset + 15) != 0 // isLocal
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // catalogLink
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // findLink
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // sourceTag
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // latestChapter
+            cursor.getInt(offset + 9), // chapterCount
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // updated
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // lastRead
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // curChapterTitle
+            cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13), // curChapter
+            cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14), // curChapterPage
+            cursor.getShort(offset + 15) != 0, // isUpdate
+            cursor.getShort(offset + 16) != 0 // isLocal
         );
         return entity;
     }
@@ -269,17 +282,18 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
         entity.setAuthor(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setDesc(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setCover(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setSourceTag(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setCatalogLink(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setLatestChapter(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setChapterCount(cursor.getInt(offset + 8));
-        entity.setUpdated(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setLastRead(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setCurChapterTitle(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setCurChapter(cursor.isNull(offset + 12) ? null : cursor.getInt(offset + 12));
-        entity.setCurChapterPage(cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13));
-        entity.setIsUpdate(cursor.getShort(offset + 14) != 0);
-        entity.setIsLocal(cursor.getShort(offset + 15) != 0);
+        entity.setCatalogLink(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setFindLink(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setSourceTag(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setLatestChapter(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setChapterCount(cursor.getInt(offset + 9));
+        entity.setUpdated(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setLastRead(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setCurChapterTitle(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setCurChapter(cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13));
+        entity.setCurChapterPage(cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14));
+        entity.setIsUpdate(cursor.getShort(offset + 15) != 0);
+        entity.setIsLocal(cursor.getShort(offset + 16) != 0);
      }
     
     @Override

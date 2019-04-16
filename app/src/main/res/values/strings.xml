@@ -91,6 +91,8 @@
     <string name="common_cancel">取消</string>
     <string name="common_loading">正在加载</string>
 
+    <string name="common_search">搜索</string>
+
 
     <!--网络相关-->
     <string name="net_error_tip">似乎没有网络哦</string>
@@ -112,12 +114,6 @@
     <string name="menu_action_cache">缓存</string>
     <string name="menu_action_delete">删除</string>
     <string name="menu_action_batch">批量管理</string>
-
-    <!--fragment_title:主页的名字-->
-    <string name="fragment_title_bookshelf">书架</string>
-    <string name="fragment_title_store">书城</string>
-    <string name="fragment_title_find">发现</string>
-    <string name="fragment_title_community">社区</string>
 
 
 </resources>

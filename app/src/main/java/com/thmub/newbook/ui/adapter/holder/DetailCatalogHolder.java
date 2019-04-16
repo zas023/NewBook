@@ -28,18 +28,7 @@ public class DetailCatalogHolder extends ViewHolderImpl<BookChapterBean> {
 
     @Override
     public void onBind(BookChapterBean data, int pos) {
+
         itemTvBookInfo.setText("第" + (data.getChapterIndex() + 1) + "章  " + data.getChapterTitle());
-        //第一项为书籍简介
-//        if (pos == 0) {
-//            //注意父层是RecyclerView，所以使用RecyclerView.LayoutParams
-//            RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) itemLlBookInfo.getLayoutParams();
-//            lp.setMargins(0, 8, 0, 8);
-//            //两个字符缩进
-//            itemTvBookInfo.setText("\t\t\t\t"+data.getChapterTitle());
-//        }else {
-//            //itemTvBookInfo.setText("第 "+data.getChapterIndex()+1+" 章  "+data.getChapterTitle());
-//            //data.getChapterIndex()+1会被jvm优化成字符串
-//            itemTvBookInfo.setText("第 "+(data.getChapterIndex()+1)+" 章  "+data.getChapterTitle());
-//        }
     }
 }

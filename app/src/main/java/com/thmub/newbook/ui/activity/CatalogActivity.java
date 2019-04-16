@@ -1,23 +1,21 @@
 package com.thmub.newbook.ui.activity;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import com.futuremind.recyclerviewfastscroll.FastScroller;
+import com.google.android.material.tabs.TabLayout;
 import com.thmub.newbook.R;
-import com.thmub.newbook.base.BaseMVPActivity;
-import com.thmub.newbook.bean.BookChapterBean;
-import com.thmub.newbook.bean.BookDetailBean;
-import com.thmub.newbook.presenter.CatalogPresenter;
-import com.thmub.newbook.presenter.contract.CatalogContract;
-import com.thmub.newbook.ui.adapter.DetailCatalogAdapter;
-import com.thmub.newbook.utils.ToastUtils;
-import com.thmub.newbook.widget.DashlineItemDivider;
+import com.thmub.newbook.base.BaseActivity;
+import com.thmub.newbook.bean.ShelfBookBean;
+import com.thmub.newbook.ui.adapter.TabFragmentPageAdapter;
+import com.thmub.newbook.ui.fragment.BookMarkFragment;
+import com.thmub.newbook.ui.fragment.CatalogFragment;
 
-import java.util.List;
-
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 /**
@@ -26,27 +24,37 @@ import butterknife.BindView;
  * <p>
  * 书籍目录activity
  */
-public class CatalogActivity extends BaseMVPActivity<CatalogContract.Presenter>
-        implements CatalogContract.View {
+public class CatalogActivity extends BaseActivity {
 
     public static final String EXTRA_BOOK = "extra_book";
 
+    @BindView(R.id.catalog_tab)
+    TabLayout catalogTab;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.rv_content)
-    RecyclerView rvContent;
-    @BindView(R.id.fast_scroller)
-    FastScroller fastScroller;
+    @BindView(R.id.catalog_vp)
+    ViewPager catalogVp;
+    private SearchView searchView;
 
+    private ShelfBookBean mBook;
 
-    private BookDetailBean mBook;
+    private TabFragmentPageAdapter tabAdapter;
 
-    private DetailCatalogAdapter mAdapter;
+    /*******************Public**********************************/
+
+    public ShelfBookBean getShelfBook() {
+        return mBook;
+    }
 
     /*********************Initialization****************************/
     @Override
     protected int getLayoutId() {
         return R.layout.activity_catalog;
+    }
+
+    @Override
+    protected boolean initSwipeBackEnable() {
+        return false;
     }
 
     @Override
@@ -58,51 +66,52 @@ public class CatalogActivity extends BaseMVPActivity<CatalogContract.Presenter>
     @Override
     protected void setUpToolbar(Toolbar toolbar) {
         super.setUpToolbar(toolbar);
-        getSupportActionBar().setTitle(mBook.getTitle() + "目录");
+        tabAdapter = new TabFragmentPageAdapter(getSupportFragmentManager());
+        tabAdapter.addFragment(new CatalogFragment(), "目录");
+        tabAdapter.addFragment(new BookMarkFragment(), "书签");
     }
 
     @Override
     protected void initWidget() {
         super.initWidget();
-        mAdapter = new DetailCatalogAdapter();
-        rvContent.setLayoutManager(new LinearLayoutManager(mContext));
-        rvContent.setAdapter(mAdapter);
-        rvContent.addItemDecoration(new DashlineItemDivider());
+        catalogVp.setAdapter(tabAdapter);
+        catalogVp.setOffscreenPageLimit(2);
+        catalogTab.setupWithViewPager(catalogVp);
+    }
 
-        fastScroller.setRecyclerView(rvContent);
+
+    /*************************************************************************/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_view_search, menu);
+        MenuItem search = menu.findItem(R.id.action_search);
+        searchView = (SearchView) search.getActionView();
+        searchView.setMaxWidth(getResources().getDisplayMetrics().widthPixels);
+        searchView.onActionViewCollapsed();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ((CatalogFragment) tabAdapter.getItem(0)).startSearch(newText);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    protected void initClick() {
-        super.initClick();
-    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.home:
 
-    @Override
-    protected void processLogic() {
-        super.processLogic();
-        mPresenter.loadCatalog(mBook);
-    }
-
-    /*********************Initialization****************************/
-    @Override
-    public void finishLoadCatalog(List<BookChapterBean> items) {
-        mAdapter.clear();
-        mAdapter.addItems(items);
-    }
-
-    @Override
-    public void showError(Throwable e) {
-        ToastUtils.showError(mContext, e.getMessage());
-    }
-
-    @Override
-    public void complete() {
-
-    }
-
-    @Override
-    protected CatalogContract.Presenter bindPresenter() {
-        return new CatalogPresenter();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

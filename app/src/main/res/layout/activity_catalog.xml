@@ -15,25 +15,20 @@
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/Theme.ToolBar.Menu">
 
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/catalog_tab"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="9"
+                app:tabIndicatorColor="@color/md_orange_800"
+                app:tabSelectedTextColor="@color/md_white_1000"
+                app:tabTextColor="@color/textTranslucent" />
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/catalog_vp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <com.futuremind.recyclerviewfastscroll.FastScroller
-            android:id="@+id/fast_scroller"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:orientation="vertical"
-            app:fastscroll__handleColor="@color/colorPrimary" />
-    </RelativeLayout>
+        android:layout_height="match_parent"/>
 </LinearLayout>

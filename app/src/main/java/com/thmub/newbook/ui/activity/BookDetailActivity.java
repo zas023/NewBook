@@ -3,10 +3,8 @@ package com.thmub.newbook.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,7 +27,6 @@ import com.thmub.newbook.ui.adapter.DetailFindAdapter;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 import com.thmub.newbook.widget.DashlineItemDivider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.widget.Toolbar;
@@ -272,6 +269,54 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     }
 
     /**
+     * 章节列表
+     */
+    @OnClick(R.id.book_detail_tv_catalog_more)
+    public void goToMoreChapter() {
+        startActivity(new Intent(mContext, CatalogActivity.class)
+                .putExtra(CatalogActivity.EXTRA_BOOK, mShelfBook));
+    }
+
+    /**
+     * 发现书籍列表
+     */
+    @OnClick(R.id.book_detail_tv_find_more)
+    public void goToMoreBook() {
+        startActivity(new Intent(mContext, FindBookActivity.class)
+                .putExtra(FindBookActivity.EXTRA_BOOK, mDetailBook));
+    }
+
+    /**
+     * 加入书架
+     */
+    @OnClick(R.id.fl_add_bookcase)
+    public void addToShelf() {
+        if (isCollected) {
+            //放弃点击
+            //因为需要同时删除数据库中的章节和缓存的文件，所以采用异步的方式
+            mPresenter.removeShelfBook(mShelfBook);
+            bookDetailTvAdd.setText("加入书架");
+            bookDetailTvOpen.setText("开始阅读");
+            isCollected = false;
+        } else {
+            BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
+            bookDetailTvAdd.setText("移除书架");
+            bookDetailTvOpen.setText("继续阅读");
+            isCollected = true;
+        }
+    }
+
+    /**
+     * 开始阅读
+     */
+    @OnClick(R.id.fl_open_book)
+    public void goToRead() {
+        mShelfBook.setCollected(isCollected);
+        startActivityForResult(new Intent(mContext, ReadActivity.class)
+                .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook), REQUEST_CODE_READ);
+    }
+
+    /**
      * 响应上层返回结果
      *
      * @param requestCode
@@ -292,56 +337,6 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
                 bookDetailTvAdd.setText("移除书架");
                 bookDetailTvOpen.setText("继续阅读");
             }
-        }
-    }
-
-    /**
-     * 监听点击事件
-     *
-     * @param view
-     */
-    @OnClick({R.id.fl_add_bookcase, R.id.fl_open_book, R.id.book_detail_tv_find_more
-            , R.id.book_detail_tv_catalog_more})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.book_detail_tv_find_more:  //发现
-                startActivity(new Intent(mContext, FindBookActivity.class)
-                        .putExtra(FindBookActivity.EXTRA_BOOK, mDetailBook));
-                break;
-
-            case R.id.book_detail_tv_catalog_more:
-                startActivity(new Intent(mContext, CatalogActivity.class)
-                        .putExtra(CatalogActivity.EXTRA_BOOK, mDetailBook));
-                break;
-
-            case R.id.fl_add_bookcase:  //加入书架
-                addToShelf();
-                break;
-
-            case R.id.fl_open_book:  //开始阅读
-                startActivityForResult(new Intent(mContext, ReadActivity.class)
-                        .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook)
-                        .putExtra(ReadActivity.EXTRA_IS_COLLECTED, isCollected), REQUEST_CODE_READ);
-                break;
-        }
-    }
-
-    /**
-     * 加入书架
-     */
-    private void addToShelf() {
-        if (isCollected) {
-            //放弃点击
-            //因为需要同时删除数据库中的章节和缓存的文件，所以采用异步的方式
-            mPresenter.removeShelfBook(mShelfBook);
-            bookDetailTvAdd.setText("加入书架");
-            bookDetailTvOpen.setText("开始阅读");
-            isCollected = false;
-        } else {
-            BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
-            bookDetailTvAdd.setText("移除书架");
-            bookDetailTvOpen.setText("继续阅读");
-            isCollected = true;
         }
     }
 

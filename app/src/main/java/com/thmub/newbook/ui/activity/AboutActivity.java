@@ -37,7 +37,8 @@ public class AboutActivity extends BaseActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
                 ShareUtils.share(this, R.string.share_text);

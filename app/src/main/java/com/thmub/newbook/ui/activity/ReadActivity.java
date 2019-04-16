@@ -70,13 +70,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     /****************************Constant*********************************/
     public static final String EXTRA_BOOK = "extra_book";
-    public static final String EXTRA_IS_COLLECTED = "extra_is_collected";
 
     /*****************************View***********************************/
-    @BindView(R.id.read_drawer)
-    DrawerLayout readDrawer;
-    @BindView(R.id.read_rv_catalog)
-    RecyclerView readRvCatalog;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.read_abl_top_menu)
@@ -101,8 +96,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     TextView readTvSetting;
     @BindView(R.id.read_ll_bottom_menu)
     LinearLayout readLlBottomMenu;
-    @BindView(R.id.read_fast_scroller)
-    FastScroller readFastScroller;
 
 
     private ReadSettingDialog mSettingDialog;
@@ -117,8 +110,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private Animation mBottomOutAnim;
 
     private ReadSettingManager readSettingManager = ReadSettingManager.getInstance();
-
-    private CatalogAdapter mAdapter;
 
     private boolean isFullScreen = true;
     private boolean isCollected;
@@ -136,7 +127,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         mShelfBook = getIntent().getParcelableExtra(EXTRA_BOOK);
-        isCollected = getIntent().getBooleanExtra(EXTRA_IS_COLLECTED, false);
+        isCollected = mShelfBook.isCollected();
+        //设置正在阅读
+        mShelfBook.setReading(true);
         //如果没有搜藏，则mShelfBook的chapterList==null
         //在getChapterList的时候 GreenDao会报错
         if (!isCollected)
@@ -166,17 +159,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     @Override
     protected void initWidget() {
         super.initWidget();
-        // Catalog
-        mAdapter = new CatalogAdapter(mShelfBook);
-        readRvCatalog.setLayoutManager(new LinearLayoutManager(mContext));
-        readRvCatalog.getLayoutManager().scrollToPosition(mShelfBook.getCurChapter());
-        readRvCatalog.setAdapter(mAdapter);
-        readRvCatalog.setBackground(readSettingManager.getTextBackground(this));
-        //虚线分割
-        readRvCatalog.addItemDecoration(new DashlineItemDivider());
-        //scroller
-        readFastScroller.setRecyclerView(readRvCatalog);
-
         // PageView
         pageView.setBackground(readSettingManager.getTextBackground(this));
         mPageLoader.updateBattery(BatteryUtils.getLevel(this));
@@ -224,8 +206,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mPageLoader.setOnPageChangeListener(new PageLoader.OnPageChangeListener() {
             @Override
             public void onChapterChange(int pos) {
-                mAdapter.setSelectedChapter(pos);
-                readRvCatalog.getLayoutManager().scrollToPosition(pos);
+//                readRvCatalog.getLayoutManager().scrollToPosition(pos);
             }
 
             @Override
@@ -254,12 +235,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             public void center() {
                 toggleMenu(true);
             }
-        });
-
-        //catalog
-        mAdapter.setListener((index, page) -> {
-            mPageLoader.skipToChapter(index, 0);
-            readDrawer.closeDrawer(GravityCompat.START);
         });
 
         //监听底部设置菜单
@@ -407,9 +382,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 } else if (mSettingDialog.isShowing()) {
                     mSettingDialog.dismiss();
                     return true;
-                } else if (readDrawer.isDrawerOpen(GravityCompat.START)) {
-                    readDrawer.closeDrawer(GravityCompat.START);
-                    return true;
                 }
                 if (!isCollected) {
                     new AlertDialog.Builder(this)
@@ -438,20 +410,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     }
 
     @OnClick({R.id.read_tv_category, R.id.read_tv_setting, R.id.read_tv_pre_chapter
-            , R.id.read_tv_next_chapter, R.id.read_tv_night_mode, R.id.read_tv_download})
+            , R.id.read_tv_next_chapter, R.id.read_tv_night_mode})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.read_tv_category: //目录
-                //移动到指定位置
-
-                //切换菜单
-                toggleMenu(true);
-                //打开侧滑动栏
-                readDrawer.openDrawer(GravityCompat.START);
-                break;
-            case R.id.read_tv_download:  //下载
-                downloadBook();
-                break;
             case R.id.read_tv_setting:  //设置
                 toggleMenu(false);
                 mSettingDialog.show();
@@ -468,12 +429,25 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         }
     }
 
+    /**
+     * 跳转到目录
+     */
+    @OnClick(R.id.read_tv_category)
+    public void goToCatalog() {
+        //切换菜单
+        toggleMenu(true);
+        //跳转
+        startActivity(new Intent(mContext, CatalogActivity.class)
+                .putExtra(CatalogActivity.EXTRA_BOOK, mShelfBook));
+    }
+
     private int selectedIndex;
 
     /**
      * 下载
      */
-    private void downloadBook() {
+    @OnClick(R.id.read_tv_download)
+    public void downloadBook() {
         if (!NetworkUtils.isNetWorkAvailable()) {
             Toast.makeText(mContext, "无网络连接", Toast.LENGTH_SHORT).show();
             return;

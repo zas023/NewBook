@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.annotation.Transient;
 
 import com.thmub.newbook.model.dao.DaoSession;
 import com.thmub.newbook.model.dao.BookChapterBeanDao;
@@ -37,11 +38,13 @@ public class ShelfBookBean implements Parcelable {
     //封面地址
     private String cover;
 
-    //书源
-    private String sourceTag;
-
     //目录地址
     private String catalogLink;
+    //发现地址
+    private String findLink;
+
+    //书源
+    private String sourceTag;
 
 
     //最新章节名称
@@ -66,6 +69,10 @@ public class ShelfBookBean implements Parcelable {
     //是否是本地文件,打开的本地文件，而非指缓存文件
     private boolean isLocal = false;
 
+    @Transient
+    private boolean isReading;    //正在阅读
+    @Transient
+    private boolean isCollected;  //是否添加收藏
 
     @ToMany(referencedJoinProperty = "bookLink")
     private List<BookChapterBean> bookChapterList;
@@ -77,17 +84,18 @@ public class ShelfBookBean implements Parcelable {
     private transient ShelfBookBeanDao myDao;
 
 
-    @Generated(hash = 1712768311)
-    public ShelfBookBean(String link, String title, String author, String desc, String cover, String sourceTag,
-            String catalogLink, String latestChapter, int chapterCount, String updated, String lastRead,
-            String curChapterTitle, Integer curChapter, Integer curChapterPage, boolean isUpdate, boolean isLocal) {
+    @Generated(hash = 660789090)
+    public ShelfBookBean(String link, String title, String author, String desc, String cover, String catalogLink, String findLink,
+            String sourceTag, String latestChapter, int chapterCount, String updated, String lastRead, String curChapterTitle,
+            Integer curChapter, Integer curChapterPage, boolean isUpdate, boolean isLocal) {
         this.link = link;
         this.title = title;
         this.author = author;
         this.desc = desc;
         this.cover = cover;
-        this.sourceTag = sourceTag;
         this.catalogLink = catalogLink;
+        this.findLink = findLink;
+        this.sourceTag = sourceTag;
         this.latestChapter = latestChapter;
         this.chapterCount = chapterCount;
         this.updated = updated;
@@ -109,8 +117,9 @@ public class ShelfBookBean implements Parcelable {
         author = in.readString();
         desc = in.readString();
         cover = in.readString();
-        sourceTag = in.readString();
         catalogLink = in.readString();
+        findLink = in.readString();
+        sourceTag = in.readString();
         latestChapter = in.readString();
         chapterCount = in.readInt();
         updated = in.readString();
@@ -128,6 +137,8 @@ public class ShelfBookBean implements Parcelable {
         }
         isUpdate = in.readByte() != 0;
         isLocal = in.readByte() != 0;
+        isReading = in.readByte() != 0;
+        isCollected = in.readByte() != 0;
         bookChapterList = in.createTypedArrayList(BookChapterBean.CREATOR);
     }
 
@@ -277,7 +288,7 @@ public class ShelfBookBean implements Parcelable {
     public void setBookChapterList(List<BookChapterBean> bookChapterList) {
         if (bookChapterList == null) return;
         this.bookChapterList = bookChapterList;
-        if (bookChapterList.size() > 0){
+        if (bookChapterList.size() > 0) {
             chapterCount = bookChapterList.size();
             latestChapter = bookChapterList.get(chapterCount - 1).getChapterTitle();
         }
@@ -301,6 +312,45 @@ public class ShelfBookBean implements Parcelable {
         }
     }
 
+    public String getFindLink() {
+        return findLink;
+    }
+
+    public void setFindLink(String findLink) {
+        this.findLink = findLink;
+    }
+
+    public boolean isUpdate() {
+        return isUpdate;
+    }
+
+    public void setUpdate(boolean update) {
+        isUpdate = update;
+    }
+
+    public boolean isLocal() {
+        return isLocal;
+    }
+
+    public void setLocal(boolean local) {
+        isLocal = local;
+    }
+
+    public boolean isReading() {
+        return isReading;
+    }
+
+    public void setReading(boolean reading) {
+        isReading = reading;
+    }
+
+    public boolean isCollected() {
+        return isCollected;
+    }
+
+    public void setCollected(boolean collected) {
+        isCollected = collected;
+    }
 
     /**
      * To-many relationship, resolved on first access (and after reset).
@@ -385,8 +435,9 @@ public class ShelfBookBean implements Parcelable {
         dest.writeString(author);
         dest.writeString(desc);
         dest.writeString(cover);
-        dest.writeString(sourceTag);
         dest.writeString(catalogLink);
+        dest.writeString(findLink);
+        dest.writeString(sourceTag);
         dest.writeString(latestChapter);
         dest.writeInt(chapterCount);
         dest.writeString(updated);
@@ -406,6 +457,8 @@ public class ShelfBookBean implements Parcelable {
         }
         dest.writeByte((byte) (isUpdate ? 1 : 0));
         dest.writeByte((byte) (isLocal ? 1 : 0));
+        dest.writeByte((byte) (isReading ? 1 : 0));
+        dest.writeByte((byte) (isCollected ? 1 : 0));
         dest.writeTypedList(bookChapterList);
     }
 }

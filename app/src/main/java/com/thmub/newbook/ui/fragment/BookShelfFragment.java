@@ -3,7 +3,6 @@ package com.thmub.newbook.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPFragment;
@@ -13,7 +12,6 @@ import com.thmub.newbook.presenter.BookShelfPresenter;
 import com.thmub.newbook.presenter.contract.BookShelfContract;
 import com.thmub.newbook.ui.activity.ReadActivity;
 import com.thmub.newbook.ui.adapter.BookShelfAdapter;
-import com.thmub.newbook.utils.SnackbarUtils;
 import com.thmub.newbook.utils.ToastUtils;
 import com.thmub.newbook.utils.UiUtils;
 import com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView;
@@ -23,7 +21,6 @@ import java.util.List;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
-import es.dmoral.toasty.Toasty;
 
 /**
  * Created by Zhouas666 on 2019-03-28
@@ -68,9 +65,9 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
             //多表联查需要设置  book__setDaoSession(DaoSession);
             ShelfBookBean book = mAdapter.getItem(pos);
             book.setBookChapterList(BookShelfRepository.getInstance().getChapters(book));
+            book.setCollected(true);
             startActivity(new Intent(mContext, ReadActivity.class)
-                    .putExtra(ReadActivity.EXTRA_BOOK, book)
-                    .putExtra(ReadActivity.EXTRA_IS_COLLECTED, true));
+                    .putExtra(ReadActivity.EXTRA_BOOK, book));
         });
         //长按弹出管理菜单
         mAdapter.setOnItemLongClickListener(

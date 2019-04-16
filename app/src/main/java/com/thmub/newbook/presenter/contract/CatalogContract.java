@@ -2,7 +2,7 @@ package com.thmub.newbook.presenter.contract;
 
 import com.thmub.newbook.base.BaseContract;
 import com.thmub.newbook.bean.BookChapterBean;
-import com.thmub.newbook.bean.BookDetailBean;
+import com.thmub.newbook.bean.ShelfBookBean;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface CatalogContract {
 
     interface Presenter extends BaseContract.BasePresenter<View> {
 
-        void loadCatalog(BookDetailBean book);
+        void loadCatalog(ShelfBookBean book);
     }
 
 }
