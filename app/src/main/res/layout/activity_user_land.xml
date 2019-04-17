@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/colorPrimary">
+
+        <com.thmub.newbook.widget.OwlLoginView
+                android:id="@+id/land_owl_view"
+                android:layout_width="175dp"
+                android:layout_height="107dp"
+                android:layout_marginTop="100dp"
+                android:layout_centerHorizontal="true"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/land_til_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_large"
+                app:counterEnabled="true"
+                app:counterMaxLength="12">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="请输入用户名"
+                    android:inputType="text"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/land_til_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_marginRight="@dimen/margin_large"
+                app:counterEnabled="true"
+                app:counterMaxLength="16"
+                app:passwordToggleDrawable="@mipmap/ic_pwd_look"
+                app:passwordToggleTintMode="src_in">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="请输入密码"
+                    android:inputType="textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+                android:id="@+id/land_btn_login"
+                style="@style/AppTheme.Widget.Button.Default"
+                android:text="一键登录注册"/>
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:layout_marginRight="@dimen/margin_large"
+                android:layout_marginTop="5dp">
+
+            <TextView
+                    android:id="@+id/land_tv_forget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="忘记密码？"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>
+

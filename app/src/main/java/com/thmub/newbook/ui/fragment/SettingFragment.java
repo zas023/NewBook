@@ -14,6 +14,8 @@ import butterknife.BindView;
 /**
  * Created by Zhouas666 on 2019-04-16
  * Github: https://github.com/zas023
+ *
+ * 设置fragment
  */
 public class SettingFragment extends BaseFragment {
 

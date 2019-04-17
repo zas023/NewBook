@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackground"
+            android:elevation="1dp"
+            android:orientation="vertical"
+            tools:targetApi="lollipop">
+
+        <RelativeLayout
+                android:id="@+id/info_rlt_update_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_large">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textPrimary"
+                    android:layout_centerVertical="true"
+                    android:text="@string/user_info_icon"/>
+
+            <com.thmub.newbook.widget.CircleImageView
+                    android:id="@+id/info_iv_icon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/ic_default_portrait"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_narrow"/>
+
+        <com.thmub.newbook.widget.CommonItemLayout
+                android:id="@+id/info_cil_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cil_leftText="@string/user_info_username"
+                app:cil_leftTextColor="@color/textPrimary"
+                app:cil_rightText="admin"
+                app:cil_rightTextColor="@color/textAssist"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_narrow"/>
+
+        <com.thmub.newbook.widget.CommonItemLayout
+                android:id="@+id/info_cil_sex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cil_leftText="@string/user_info_sex"
+                app:cil_leftTextColor="@color/textPrimary"
+                app:cil_rightText="男"
+                app:cil_rightTextColor="@color/textAssist"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_narrow"/>
+
+        <com.thmub.newbook.widget.CommonItemLayout
+                android:id="@+id/info_cil_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cil_leftText="@string/user_info_phone"
+                app:cil_leftTextColor="@color/textPrimary"
+                app:cil_rightText="18"
+                app:cil_rightTextColor="@color/textAssist"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_narrow"/>
+
+        <com.thmub.newbook.widget.CommonItemLayout
+                android:id="@+id/info_cil_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cil_leftText="@string/user_info_email"
+                app:cil_leftTextColor="@color/textPrimary"
+                app:cil_rightText="18"
+                app:cil_rightTextColor="@color/textAssist"/>
+
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/info_btn_logout"
+            android:text="@string/user_info_logout"
+            android:layout_marginTop="@dimen/margin_large"
+            style="@style/AppTheme.Widget.Button.Logout"/>
+
+</LinearLayout>

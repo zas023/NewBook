@@ -31,13 +31,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.SearchActivity" />
+        <activity android:name=".ui.activity.UserLandActivity" />
         <activity android:name=".ui.activity.BookDetailActivity" />
         <activity android:name=".ui.activity.BookSourceActivity" />
         <activity android:name=".ui.activity.SourceEditActivity" />
         <activity android:name=".ui.activity.ReadActivity" />
         <activity android:name=".ui.activity.DownloadActivity" />
         <activity android:name=".ui.activity.ReplacementActivity" />
-        <activity android:name=".ui.activity.SettingActivity" />
+        <activity android:name=".ui.activity.FragmentActivity" />
         <activity android:name=".ui.activity.AboutActivity" />
         <activity android:name=".ui.activity.StoreNodeActivity" />
         <activity android:name=".ui.activity.FindBookActivity" />

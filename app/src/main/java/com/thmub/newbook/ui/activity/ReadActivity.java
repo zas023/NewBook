@@ -265,7 +265,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
             @Override
             public void OnMarginChange() {
-
+                if (mPageLoader != null) {
+                    mPageLoader.setLayoutMargin();
+                }
             }
 
 

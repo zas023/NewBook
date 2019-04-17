@@ -9,14 +9,15 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseActivity;
+import com.thmub.newbook.bean.bmob.MyUser;
 import com.thmub.newbook.ui.adapter.TabFragmentPageAdapter;
 import com.thmub.newbook.ui.fragment.BookShelfFragment;
 import com.thmub.newbook.ui.fragment.BookStoreFragment;
-import com.thmub.newbook.utils.UiUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -26,6 +27,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by Zhouas666 on 2019-03-26
@@ -36,7 +38,8 @@ import butterknife.OnClick;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     /*************************Constant**************************/
-
+    public static final int REQUEST_LAND = 1;
+    public static final int REQUEST_USER_INFO = 2;
 
     /*****************************View********************************/
 
@@ -60,6 +63,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private TabFragmentPageAdapter tabAdapter;
 
+    private MyUser currentUser;
+
     /*****************************Initialization********************************/
     @Override
     protected int getLayoutId() {
@@ -75,7 +80,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void setUpToolbar(Toolbar toolbar) {
         super.setUpToolbar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setTitle(UiUtils.getString(R.string.app_name));
+        getSupportActionBar().setTitle(getString(R.string.app_name));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         //drawer.setDrawerListener(toggle);
@@ -97,15 +102,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tabAdapter.addFragment(new BookShelfFragment(), "书架");
         tabAdapter.addFragment(new BookStoreFragment(), "书城");
 
+        currentUser = BmobUser.getCurrentUser(MyUser.class);
     }
 
     @Override
     protected void initWidget() {
         super.initWidget();
+        //header
+        refreshDrawerHeader();
+
+        //viewPage
         mainVpContent.setAdapter(tabAdapter);
         mainVpContent.setOffscreenPageLimit(3);
         mainTabTitle.setupWithViewPager(mainVpContent);
 
+        //夜间模式
         swNightMode = navigationView.getMenu()
                 .findItem(R.id.action_night).getActionView().findViewById(R.id.menu_switch);
         swNightMode.setChecked(isNightTheme());
@@ -114,6 +125,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void initClick() {
         super.initClick();
+        //监听菜单栏头部
+        drawerHeader.setOnClickListener(view -> {
+            //用户不存在则跳转登录界面
+            if (currentUser == null)
+                startActivityForResult(new Intent(mContext, UserLandActivity.class), REQUEST_LAND);
+            else
+                startActivityForResult(new Intent(mContext, FragmentActivity.class)
+                                .putExtra(FragmentActivity.EXTRA_FRAGMENT_TYPE, FragmentActivity.FRAGMENT_TYPE_USER_INFO)
+                        , REQUEST_USER_INFO);
+        });
+
+        //侧滑菜单栏
         navigationView.setNavigationItemSelectedListener(this);
 
         //监听夜间模式switch
@@ -162,7 +185,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_download:
-                startActivity(new Intent(this, SearchActivity.class));
+                startActivity(new Intent(this, DownloadActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -187,8 +210,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(new Intent(this, ReplacementActivity.class));
                 break;
             case R.id.action_setting:  //设置
-                startActivity(new Intent(this, SettingActivity.class)
-                        .putExtra(SettingActivity.EXTRA_SETTING_TYPE, SettingActivity.SETTING_TYPE_APP));
+                startActivity(new Intent(this, FragmentActivity.class)
+                        .putExtra(FragmentActivity.EXTRA_FRAGMENT_TYPE, FragmentActivity.FRAGMENT_TYPE_SETTING));
                 break;
             case R.id.action_about:  //关于
                 startActivity(new Intent(this, AboutActivity.class));
@@ -203,5 +226,38 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         //关窗
         drawer.closeDrawer(GravityCompat.START);
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 处理返回事件
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //如果登陆账户，则刷新Drawer
+        if (requestCode == REQUEST_LAND || requestCode == REQUEST_USER_INFO) {
+            currentUser = BmobUser.getCurrentUser(MyUser.class);
+            refreshDrawerHeader();
+        }
+    }
+
+    /**
+     * 刷新用户信息
+     */
+    private void refreshDrawerHeader() {
+        if (currentUser == null) {
+            drawerIv.setImageDrawable(getDrawable(R.mipmap.ic_default_portrait));
+            drawerTvAccount.setText("账户");
+            drawerTvMail.setText("点我登陆");
+            return;
+        }
+        if (currentUser.getPortrait() != null)
+            Glide.with(mContext).load(currentUser.getPortrait()).into(drawerIv);
+        drawerTvAccount.setText(currentUser.getUsername());
+        drawerTvMail.setText(currentUser.getEmail());
     }
 }

@@ -1,5 +1,6 @@
 package com.thmub.newbook.ui.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.manager.ReadSettingManager;
+
+import java.text.DecimalFormat;
 
 import androidx.annotation.NonNull;
 import butterknife.BindView;
@@ -159,6 +162,8 @@ public class ReadSettingDialog extends Dialog {
         updateBoldText(mSettingManager.getTextBold());
         updatePageMode(mSettingManager.getPageMode());
         updateTextSize(mSettingManager.getTextSize());
+        updateLineSize(mSettingManager.getLineMultiplier());
+        updateParagraphSize(mSettingManager.getParagraphSize());
     }
 
     /**
@@ -228,6 +233,7 @@ public class ReadSettingDialog extends Dialog {
         }
     }
 
+    //字体大小
     private void updateTextSize(int size) {
         //注意不能直接设置整型的size,否则系统会吧整型判断为资源ID
         //需要转换成字符串类型
@@ -235,9 +241,16 @@ public class ReadSettingDialog extends Dialog {
         mSettingManager.setTextSize(size);
     }
 
-    private void updateLineSize(int size) {
-        readSettingTvFont.setText(size);
-        mSettingManager.setTextSize(size);
+    //行间距
+    private void updateLineSize(float size) {
+        readSettingTvLine.setText(new DecimalFormat("0.0").format(size));
+        mSettingManager.setLineMultiplier(size);
+    }
+
+    //行间距
+    private void updateParagraphSize(float size) {
+        readSettingTvParagraph.setText(new DecimalFormat("0.0").format(size));
+        mSettingManager.setParagraphSize(size);
     }
 
 
@@ -305,12 +318,20 @@ public class ReadSettingDialog extends Dialog {
                 mListener.OnTextSizeChange();
                 break;
             case R.id.read_setting_tv_line_minus:  //行间距
+                updateLineSize(mSettingManager.getLineMultiplier() - 0.1f);
+                mListener.OnMarginChange();
                 break;
             case R.id.read_setting_tv_line_plus:
+                updateLineSize(mSettingManager.getLineMultiplier() + 0.1f);
+                mListener.OnMarginChange();
                 break;
             case R.id.read_setting_tv_paragraph_minus:  //段间距
+                updateParagraphSize(mSettingManager.getParagraphSize() - 0.1f);
+                mListener.OnMarginChange();
                 break;
             case R.id.read_setting_tv_paragraph_plus:
+                updateParagraphSize(mSettingManager.getParagraphSize() + 0.1f);
+                mListener.OnMarginChange();
                 break;
         }
     }

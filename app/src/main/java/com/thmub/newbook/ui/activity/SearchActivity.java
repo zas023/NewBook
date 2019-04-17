@@ -142,7 +142,7 @@ public class SearchActivity extends BaseActivity {
                 startActivityForResult(new Intent(this, BookSourceActivity.class), REQUEST_CODE);
                 break;
             case R.id.action_setting:
-                startActivityForResult(new Intent(this, SettingActivity.class), REQUEST_CODE);
+                startActivityForResult(new Intent(this, FragmentActivity.class), REQUEST_CODE);
                 break;
         }
         return super.onOptionsItemSelected(item);

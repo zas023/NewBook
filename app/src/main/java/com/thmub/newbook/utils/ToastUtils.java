@@ -16,26 +16,26 @@ import es.dmoral.toasty.Toasty;
 public class ToastUtils {
 
     public static void show(@NonNull Context context, @NonNull String msg) {
-        Toasty.normal(context, "此功能尚未完成").show();
+        Toasty.normal(context, msg).show();
     }
 
     //红色
     public static void showError(@NonNull Context context, @NonNull String msg) {
-        Toasty.error(context, "此功能尚未完成", Toast.LENGTH_SHORT, true).show();
+        Toasty.error(context, msg, Toast.LENGTH_SHORT, true).show();
     }
 
     //绿色
     public static void showSuccess(@NonNull Context context, @NonNull String msg) {
-        Toasty.success(context, "此功能尚未完成", Toast.LENGTH_SHORT, true).show();
+        Toasty.success(context, msg, Toast.LENGTH_SHORT, true).show();
     }
 
     //蓝色
     public static void showInfo(@NonNull Context context, @NonNull String msg) {
-        Toasty.info(context, "此功能尚未完成", Toast.LENGTH_SHORT, true).show();
+        Toasty.info(context, msg, Toast.LENGTH_SHORT, true).show();
     }
 
     //黄色
     public static void showWarring(@NonNull Context context, @NonNull String msg) {
-        Toasty.warning(context, "此功能尚未完成", Toast.LENGTH_SHORT, true).show();
+        Toasty.warning(context, msg, Toast.LENGTH_SHORT, true).show();
     }
 }

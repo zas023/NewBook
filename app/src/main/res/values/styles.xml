@@ -186,4 +186,24 @@
         <item name="android:layout_weight">1</item>
     </style>
 
+    <!-- Widget:修改View的样式的-->
+    <style name="AppTheme.Widget"/>
+
+    <!--按钮样式-->
+    <style name="AppTheme.Widget.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/md_white_1000</item>
+    </style>
+
+    <style name="AppTheme.Widget.Button.Logout">
+        <item name="android:background">@drawable/bg_button_default_logout</item>
+        <item name="android:layout_margin">@dimen/padding_large</item>
+    </style>
+
+    <style name="AppTheme.Widget.Button.Default">
+        <item name="android:background">@drawable/bg_button_default</item>
+        <item name="android:layout_margin">@dimen/padding_large</item>
+    </style>
 </resources>

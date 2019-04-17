@@ -5,6 +5,17 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!--通用-->
+    <string name="common_tip">提示</string>
+    <string name="common_sure">确定</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_loading">正在加载</string>
+    <string name="common_search">搜索</string>
+
+    <!--网络相关-->
+    <string name="net_error_tip">似乎没有网络哦</string>
+
+
     <string name="share">分享</string>
     <string name="share_text">发现了一款非常好用的小说App「览阅」，绿色健康、无广告，而且完全开源不收费，实在是太赞了! 推荐~：https://github.com/zas023/NewBook</string>
 
@@ -15,8 +26,17 @@
     <string name="activity_setting">设置</string>
     <string name="activity_about">关于</string>
 
+    <string name="fragment_user_info">用户中心</string>
     <string name="fragment_setting">设置</string>
     <string name="fragment_read_setting">阅读设置</string>
+
+    <!--user info-->
+    <string name="user_info_icon">头像</string>
+    <string name="user_info_username">用户名</string>
+    <string name="user_info_sex">性别</string>
+    <string name="user_info_phone">手机</string>
+    <string name="user_info_email">邮箱</string>
+    <string name="user_info_logout">退出</string>
 
     <!--Array-->
     <!--CollBook的长按点击-->
@@ -87,18 +107,6 @@
         任何单位或个人认为通过览阅搜索链接到的第三方网页内容可能涉嫌侵犯其信息网络传播权， 应该及时向览阅提出书面权力通知，
         并提供身份证明、权属证明及详细侵权情况证明。 览阅在收到上述法律文件后，将会依法尽快断开相关链接内容。
     </string>
-
-    <!--通用-->
-    <string name="common_tip">提示</string>
-    <string name="common_sure">确定</string>
-    <string name="common_cancel">取消</string>
-    <string name="common_loading">正在加载</string>
-
-    <string name="common_search">搜索</string>
-
-
-    <!--网络相关-->
-    <string name="net_error_tip">似乎没有网络哦</string>
 
     <!--menu 菜单-->
     <!--<string name="menu_action_search">搜索</string>-->

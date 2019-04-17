@@ -26,7 +26,7 @@ import butterknife.BindView;
  * Created by Zhouas666 on 2019-04-16
  * Github: https://github.com/zas023
  * <p>
- * 书城fragment
+ * 目录fragment
  */
 public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
         implements CatalogContract.View {
