@@ -30,17 +30,4 @@
         <attr name="layout_refresh_loading" format="reference"/>
     </declare-styleable>
 
-    <!--BookText-->
-    <declare-styleable name="BookTextView">
-        <attr name="bookColor" format="reference"/>
-    </declare-styleable>
-    
-    <declare-styleable name="EasyRatingBar">
-        <attr name="rateNum" format="integer"/>
-        <attr name="rating" format="integer"/>
-        <attr name="rateNormal" format="reference"/>
-        <attr name="rateSelect" format="reference"/>
-        <attr name="rateInterval" format="dimension"/>
-        <attr name="isIndicator" format="boolean"/>
-    </declare-styleable>
 </resources>

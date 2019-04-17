@@ -276,6 +276,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 if (mPageLoader != null) {
                     mPageLoader.refreshUi();
                 }
+                //4号颜色为黑色
+                setNightTheme(readSettingManager.getBgColor()==4);
             }
 
             @Override

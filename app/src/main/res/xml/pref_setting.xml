@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preference_screen_settings"
+    android:title="settings">
+
+    <androidx.preference.SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="key_1"
+        android:summary="Summary"
+        android:title="Title"/>
+
+    <androidx.preference.EditTextPreference
+        android:defaultValue="default_value"
+        android:dialogMessage="dialog_message"
+        android:key="key_2"
+        android:summary="Summary"
+        android:title="Title" />
+    <androidx.preference.CheckBoxPreference
+        android:defaultValue="true"
+        android:key="key_3"
+        android:summary="Summary"
+        android:title="Title" />
+
+    <androidx.preference.ListPreference
+        android:defaultValue="2"
+        android:key="key_4"
+        android:summary="Summary"
+        android:title="Title" />
+
+    <androidx.preference.SeekBarPreference
+        android:defaultValue="20"
+        android:key="key_5"
+        android:max="1000"
+        android:min="0"
+        android:summary="Summary"
+        android:title="Title" />
+
+</androidx.preference.PreferenceScreen>

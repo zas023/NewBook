@@ -15,6 +15,9 @@
     <string name="activity_setting">设置</string>
     <string name="activity_about">关于</string>
 
+    <string name="fragment_setting">设置</string>
+    <string name="fragment_read_setting">阅读设置</string>
+
     <!--Array-->
     <!--CollBook的长按点击-->
     <string-array name="menu_net_book">
@@ -115,5 +118,8 @@
     <string name="menu_action_delete">删除</string>
     <string name="menu_action_batch">批量管理</string>
 
+    <!--设置相关-->
+    <string name="pref_thread_num">pref_thread_num</string>
+    <string name="pref_night_model">pref_night_model</string>
 
 </resources>

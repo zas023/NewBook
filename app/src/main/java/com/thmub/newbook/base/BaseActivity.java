@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.snackbar.Snackbar;
 import com.gyf.barlibrary.ImmersionBar;
 import com.thmub.newbook.R;
+import com.thmub.newbook.manager.ReadSettingManager;
 import com.thmub.newbook.utils.SharedPreUtils;
 
 import butterknife.ButterKnife;
@@ -108,11 +109,13 @@ public abstract class BaseActivity extends SwipeBackActivity {
      * @return 是否夜间模式
      */
     protected boolean isNightTheme() {
-        return SharedPreUtils.getInstance().getBoolean("night_mode");
+        return SharedPreUtils.getInstance().getBoolean(getString(R.string.pref_night_model));
     }
 
     protected void setNightTheme(boolean isNightMode) {
-        SharedPreUtils.getInstance().putBoolean("night_mode", isNightMode);
+        SharedPreUtils.getInstance().putBoolean(getString(R.string.pref_night_model), isNightMode);
+        if (isNightMode)
+            ReadSettingManager.getInstance().setTextDrawableIndex(4);
         initTheme();
     }
 

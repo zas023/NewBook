@@ -1,9 +1,11 @@
 package com.thmub.newbook.model;
 
-import android.util.Log;
 
+import com.thmub.newbook.R;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.BookSourceBean;
+import com.thmub.newbook.utils.SharedPreUtils;
+import com.thmub.newbook.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +36,14 @@ public class SearchEngine {
 
     private List<BookSourceBean> mSourceList = new ArrayList<>();
 
-    private int threadsNum = 3;
+    private int threadsNum;
     private int searchSiteIndex;
     private int searchSuccessNum;
 
     private OnSearchListener searchListener;
 
     public SearchEngine() {
+        threadsNum = SharedPreUtils.getInstance().getInt(UiUtils.getString(R.string.pref_thread_num), 6);
     }
 
     public void setOnSearchListener(OnSearchListener searchListener) {
@@ -56,8 +59,6 @@ public class SearchEngine {
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
-        for (BookSourceBean bean : mSourceList)
-            Log.i(TAG, bean.toString());
     }
 
     public void search(String keyword) {

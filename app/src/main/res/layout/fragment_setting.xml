@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.thmub.newbook.widget.CommonItemLayout
+        android:id="@+id/cil_shelf_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cil_leftText="书架排序"
+        app:cil_leftTextColor="@color/textPrimary"
+        app:cil_rightText="时间"
+        app:cil_rightTextColor="@color/textAssist" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_narrow" />
+
+    <com.thmub.newbook.widget.CommonItemLayout
+        android:id="@+id/cil_thread_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cil_leftText="搜索线程"
+        app:cil_leftTextColor="@color/textPrimary"
+        app:cil_rightText="6"
+        app:cil_rightTextColor="@color/textAssist" />
+    <SeekBar
+        android:id="@+id/seekBar_thread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:min="1"
+        android:max="16"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/divider_wide" />
+
+    <com.thmub.newbook.widget.CommonItemLayout
+        android:id="@+id/cil_clear_store"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cil_leftText="清除缓存"
+        app:cil_leftTextColor="@color/textPrimary"
+        app:cil_rightText="10.2M"
+        app:cil_rightTextColor="@color/textAssist" >
+    </com.thmub.newbook.widget.CommonItemLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_narrow" />
+
+</LinearLayout>

@@ -28,8 +28,6 @@ import butterknife.BindView;
  */
 public class SearchActivity extends BaseActivity {
 
-
-
     /****************************Constant*********************************/
     public final static String RESULT_IS_CHANGED = "result_is_changed";
     private final static int REQUEST_CODE = 1;
@@ -80,6 +78,7 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void initClick() {
         super.initClick();
+        //SearchView
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -94,11 +93,8 @@ public class SearchActivity extends BaseActivity {
                 return false;
             }
         });
-
-        searchRvContent.setOnRefreshListener(() -> {
-            mSearchEngine.search(searchView.getQuery().toString());
-        });
-
+        searchRvContent.setOnRefreshListener(() -> mSearchEngine.search(searchView.getQuery().toString()));
+        //RecyclerView
         mAdapter.setOnItemClickListener((view, pos) -> {
             startActivity(new Intent(mContext, BookDetailActivity.class)
                     .putExtra(BookDetailActivity.EXTRA_BOOK, mAdapter.getItem(pos)));
@@ -114,7 +110,7 @@ public class SearchActivity extends BaseActivity {
             public void loadMoreFinish(Boolean isAll) {
                 //ScrollRefreshRecyclerView会被多个线程操作
                 //需要加锁
-                synchronized (ScrollRefreshRecyclerView.class){
+                synchronized (ScrollRefreshRecyclerView.class) {
                     searchRvContent.finishRefresh();
                 }
             }
@@ -143,7 +139,10 @@ public class SearchActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_source:
-                startActivityForResult(new Intent(this, BookSourceActivity.class),REQUEST_CODE);
+                startActivityForResult(new Intent(this, BookSourceActivity.class), REQUEST_CODE);
+                break;
+            case R.id.action_setting:
+                startActivityForResult(new Intent(this, SettingActivity.class), REQUEST_CODE);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -153,10 +152,10 @@ public class SearchActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (requestCode){
+            switch (requestCode) {
                 case REQUEST_CODE:
                     //查询初始化搜书引擎
-                    if (data.getBooleanExtra(RESULT_IS_CHANGED,false))
+                    if (data.getBooleanExtra(RESULT_IS_CHANGED, false))
                         mSearchEngine.initSearchEngine(BookSourceRepository.getInstance().getAllSelectedBookSource());
                     break;
             }
@@ -168,7 +167,7 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mSearchEngine=null;
+        mSearchEngine = null;
         System.gc();
     }
 }

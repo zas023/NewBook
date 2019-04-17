@@ -187,7 +187,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(new Intent(this, ReplacementActivity.class));
                 break;
             case R.id.action_setting:  //设置
-                startActivity(new Intent(this, SettingActivity.class));
+                startActivity(new Intent(this, SettingActivity.class)
+                        .putExtra(SettingActivity.EXTRA_SETTING_TYPE, SettingActivity.SETTING_TYPE_APP));
                 break;
             case R.id.action_about:  //关于
                 startActivity(new Intent(this, AboutActivity.class));

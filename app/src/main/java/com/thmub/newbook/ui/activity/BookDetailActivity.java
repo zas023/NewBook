@@ -25,6 +25,7 @@ import com.thmub.newbook.presenter.contract.BookDetailContract;
 import com.thmub.newbook.ui.adapter.DetailCatalogAdapter;
 import com.thmub.newbook.ui.adapter.DetailFindAdapter;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
+import com.thmub.newbook.utils.ToastUtils;
 import com.thmub.newbook.widget.DashlineItemDivider;
 
 import java.util.List;
@@ -134,7 +135,6 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
             bookDetailTvAdd.setText("移除书架");
             bookDetailTvOpen.setText("继续阅读");
         }
-
         //Dialog
         mSourceDialog = new SourceExchangeDialog(this, mShelfBook);
 
@@ -194,7 +194,9 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
             mShelfBook = mDetailBook.getShelfBook();
         } else {
             isCollected = true;
+            mShelfBook.setCollected(true);
         }
+        mSourceDialog.setShelfBook(mShelfBook);
         initBookInfo();
         mPresenter.loadCatalogs(mShelfBook);
         mPresenter.loadFindBooks(mDetailBook);
@@ -245,6 +247,8 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_change_source:  //换源
+                if (mShelfBook == null)
+                    ToastUtils.showInfo(mContext, "正在加载书籍");
                 mSourceDialog.show();
                 break;
             case R.id.action_edit_source:  //编辑源

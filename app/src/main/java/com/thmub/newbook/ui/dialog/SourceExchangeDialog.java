@@ -55,6 +55,10 @@ public class SourceExchangeDialog extends Dialog {
         mShelfBook = bookBean;
     }
 
+    public void setShelfBook(ShelfBookBean mShelfBook) {
+        this.mShelfBook = mShelfBook;
+    }
+
     public void setListener(OnSourceChangeListener listener) {
         this.listener = listener;
     }

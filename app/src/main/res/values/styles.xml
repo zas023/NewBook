@@ -11,6 +11,7 @@
         <!--<item name="android:textColorSecondary">@color/textSecondary</item>-->
         <!--<item name="android:windowTranslucentStatus">false</item>-->
         <!--<item name="android:windowTranslucentNavigation">true</item>-->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppTheme" parent="BaseAppTheme" />
