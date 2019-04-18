@@ -18,7 +18,7 @@ import butterknife.BindView;
  * Created by Zhouas666 on 2019-04-16
  * Github: https://github.com/zas023
  * <p>
- * 书城fragment
+ * 书签fragment
  */
 public class BookMarkFragment extends BaseFragment {
 

@@ -25,6 +25,7 @@
     <string name="activity_replace">替换管理</string>
     <string name="activity_setting">设置</string>
     <string name="activity_about">关于</string>
+    <string name="activity_book_sort">书籍分类</string>
 
     <string name="fragment_user_info">用户中心</string>
     <string name="fragment_setting">设置</string>
@@ -59,6 +60,14 @@
         <item>@string/dialog_download_item_3</item>
         <item>@string/dialog_download_item_4</item>
     </string-array>
+
+    <!--discover 发现-->
+    <string name="fragment_discover_rank">排行榜</string>
+    <string name="fragment_discover_list">主题书单</string>
+    <string name="fragment_discover_sort">书籍分类</string>
+
+    <!--book 书籍相关-->
+    <string name="book_sort_count">%s本</string>
 
     <!--dialog-->
     <string name="dialog_download_item_1">下载后面五十章</string>

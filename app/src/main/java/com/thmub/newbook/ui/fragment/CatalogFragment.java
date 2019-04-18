@@ -1,5 +1,6 @@
 package com.thmub.newbook.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.futuremind.recyclerviewfastscroll.FastScroller;
@@ -12,6 +13,7 @@ import com.thmub.newbook.manager.RxBusManager;
 import com.thmub.newbook.presenter.CatalogPresenter;
 import com.thmub.newbook.presenter.contract.CatalogContract;
 import com.thmub.newbook.ui.activity.CatalogActivity;
+import com.thmub.newbook.ui.activity.ReadActivity;
 import com.thmub.newbook.ui.adapter.CatalogAdapter;
 import com.thmub.newbook.utils.ToastUtils;
 import com.thmub.newbook.widget.DashlineItemDivider;
@@ -78,6 +80,11 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
             if (mBook.isReading()) {
                 RxBusManager.getInstance().post(new ChapterExchangeEvent(index, page));
                 getFatherActivity().finish();
+            } else {
+                mBook.setCurChapter(index);
+                mBook.setCurChapterPage(page);
+                startActivity(new Intent(mContext, ReadActivity.class).putExtra(ReadActivity.EXTRA_BOOK, mBook));
+                getActivity().finish();
             }
         });
     }

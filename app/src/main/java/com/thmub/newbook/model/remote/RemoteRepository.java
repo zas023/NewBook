@@ -1,6 +1,7 @@
 package com.thmub.newbook.model.remote;
 
 import com.thmub.newbook.bean.zhui.BookBean;
+import com.thmub.newbook.bean.zhui.DiscoverSortBean;
 import com.thmub.newbook.bean.zhui.StoreBannerBean;
 import com.thmub.newbook.bean.zhui.StoreNodeBookBean;
 
@@ -70,4 +71,28 @@ public class RemoteRepository {
                 .map(bean -> bean.getData());
     }
 
+    /****************************Discover************************/
+    /**
+     * 书籍分类
+     *
+     * @return
+     */
+    public Single<DiscoverSortBean> getDiscoverSort() {
+        return mBookApi.getDiscoverSort();
+    }
+
+    /**
+     * 分类书籍列表
+     * @param gender
+     * @param type
+     * @param major
+     * @param minor
+     * @param start
+     * @param limit
+     * @return
+     */
+    public Single<List<BookBean>> getSortBooks(String gender, String type, String major, String minor, int start, int limit) {
+        return mBookApi.getSortBookList(gender,type,major,minor,start,limit)
+                .map(bean -> bean.getBooks());
+    }
 }

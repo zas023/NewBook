@@ -18,6 +18,7 @@ import com.thmub.newbook.bean.bmob.MyUser;
 import com.thmub.newbook.ui.adapter.TabFragmentPageAdapter;
 import com.thmub.newbook.ui.fragment.BookShelfFragment;
 import com.thmub.newbook.ui.fragment.BookStoreFragment;
+import com.thmub.newbook.ui.fragment.DiscoverFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -101,6 +102,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tabAdapter = new TabFragmentPageAdapter(getSupportFragmentManager());
         tabAdapter.addFragment(new BookShelfFragment(), "书架");
         tabAdapter.addFragment(new BookStoreFragment(), "书城");
+        tabAdapter.addFragment(new DiscoverFragment(), "发现");
 
         currentUser = BmobUser.getCurrentUser(MyUser.class);
     }

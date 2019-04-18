@@ -43,6 +43,8 @@
         <activity android:name=".ui.activity.StoreNodeActivity" />
         <activity android:name=".ui.activity.FindBookActivity" />
         <activity android:name=".ui.activity.CatalogActivity" />
+        <activity android:name=".ui.activity.BookSortActivity" />
+        <activity android:name=".ui.activity.BookSortDetailActivity" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.BookDownloadService" />
