@@ -240,7 +240,8 @@ public class XpathSourceModel implements ISourceModel {
                 String author = jxDocument.selOne((ruleBook + bookSourceBean.getRuleDetailAuthor())).toString();
                 //去除有些网站添加的属性
                 if (author.contains("：")) {
-                    author = author.split("：")[1].replace(" ", "");
+                    author.replace(" ", "");
+                    author = author.split("：")[1];
                 }
                 bean.setAuthor(author);
             }

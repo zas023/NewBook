@@ -9,6 +9,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.adapter.ViewHolderImpl;
 import com.thmub.newbook.bean.BookSearchBean;
+import com.thmub.newbook.utils.BitmapUtils;
 
 /**
  * Created by Zhouas666 on 2019-04-14
@@ -36,6 +37,8 @@ public class DetailFindHolder extends ViewHolderImpl<BookSearchBean> {
             Glide.with(getContext()).load(data.getCover())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
                     .into(itemIvCover);
+        else
+            itemIvCover.setImageBitmap(BitmapUtils.getTextBitMap(data.getTitle()));
         itemTvTitle.setText(data.getTitle());
     }
 }

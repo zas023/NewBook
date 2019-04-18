@@ -11,14 +11,21 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.thmub.newbook.App;
+import com.thmub.newbook.R;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static com.thmub.newbook.utils.UiUtils.getResources;
 
 /**
  * Created by Zhouas666 on 2019-03-31
@@ -398,4 +405,25 @@ public class BitmapUtils {
 
         return blurredBitmap;
     }
+
+    /**
+     * 获取文字图片
+     *
+     * @param text
+     * @return
+     */
+    public static Bitmap getTextBitMap(String text) {
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_book_cover);
+        Bitmap newBitmap = Bitmap.createBitmap(120, 150, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(newBitmap);
+        canvas.drawBitmap(bmp, 0, 0, null);
+        TextPaint textPaint = new TextPaint();
+        textPaint.setAntiAlias(true);
+        textPaint.setTextSize(18.0F);
+        StaticLayout sl = new StaticLayout(text, textPaint, newBitmap.getWidth() - 8, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        canvas.translate(6, 40);
+        sl.draw(canvas);
+        return newBitmap;
+    }
+
 }

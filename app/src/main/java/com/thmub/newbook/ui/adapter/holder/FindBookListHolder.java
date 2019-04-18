@@ -1,5 +1,6 @@
 package com.thmub.newbook.ui.adapter.holder;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -9,6 +10,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.adapter.ViewHolderImpl;
 import com.thmub.newbook.bean.BookSearchBean;
+import com.thmub.newbook.utils.BitmapUtils;
+
 
 /**
  * Created by Zhouas666 on 2019-04-16
@@ -16,24 +19,24 @@ import com.thmub.newbook.bean.BookSearchBean;
  */
 public class FindBookListHolder extends ViewHolderImpl<BookSearchBean> {
 
-    ImageView itemSearchIvCover;
-    TextView itemSearchTvTitle;
-    TextView itemSearchTvAuthor;
-    TextView itemSearchTvInfo;
-    TextView itemSearchTvSource;
+    ImageView itemIvCover;
+    TextView itemTvTitle;
+    TextView itemTvAuthor;
+    TextView itemTvInfo;
+    TextView itemTvSource;
 
     @Override
     protected int getItemLayoutId() {
-        return R.layout.item_book_search;
+        return R.layout.item_book_list;
     }
 
     @Override
     public void initView() {
-        itemSearchIvCover = findById((R.id.item_search_iv_cover));
-        itemSearchTvTitle = findById((R.id.item_search_tv_title));
-        itemSearchTvAuthor = findById((R.id.item_search_tv_author));
-        itemSearchTvInfo = findById((R.id.item_search_tv_info));
-        itemSearchTvSource = findById((R.id.item_search_tv_source));
+        itemIvCover = findById((R.id.item_iv_cover));
+        itemTvTitle = findById((R.id.item_tv_title));
+        itemTvAuthor = findById((R.id.item_tv_author));
+        itemTvInfo = findById((R.id.item_tv_info));
+        itemTvSource = findById((R.id.item_tv_source));
     }
 
     @Override
@@ -41,16 +44,18 @@ public class FindBookListHolder extends ViewHolderImpl<BookSearchBean> {
         if (data.getCover() != null)
             Glide.with(getContext()).load(data.getCover())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
-                    .into(itemSearchIvCover);
-        itemSearchTvTitle.setText(data.getTitle());
+                    .into(itemIvCover);
+        else
+            itemIvCover.setImageBitmap(BitmapUtils.getTextBitMap(data.getTitle()));
+        itemTvTitle.setText(data.getTitle());
         if (data.getAuthor() != null)
-            itemSearchTvAuthor.setText(data.getAuthor());
+            itemTvAuthor.setText(data.getAuthor());
         else
-            itemSearchTvAuthor.setText(data.getTitle());
+            itemTvAuthor.setVisibility(View.GONE);
         if (data.getDesc() != null)
-            itemSearchTvInfo.setText(data.getDesc());
+            itemTvInfo.setText(data.getDesc());
         else
-            itemSearchTvInfo.setText(data.getSourceTag());
-        itemSearchTvSource.setText(data.getBookLink());
+            itemTvInfo.setText(data.getBookLink());
+        itemTvSource.setText(data.getSourceTag());
     }
 }
