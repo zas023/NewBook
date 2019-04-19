@@ -12,13 +12,15 @@ import com.thmub.newbook.bean.BookSourceBean;
 /**
  * Created by Zhouas666 on 2019-03-30
  * Github: https://github.com/zas023
+ * <p>
+ * 书源holder
  */
 public class BookSourceHolder extends ViewHolderImpl<BookSourceBean> {
 
-
-    private CheckBox itemSourceCb;
-    private TextView itemSourceTvTitle;
-    private ImageView itemSourceIvRoof;
+    CheckBox itemCb;
+    TextView itemTvTitle;
+    ImageView itemIvEdit;
+    ImageView itemIvDelete;
 
     @Override
     protected int getItemLayoutId() {
@@ -27,21 +29,20 @@ public class BookSourceHolder extends ViewHolderImpl<BookSourceBean> {
 
     @Override
     public void initView() {
-        itemSourceCb = findById(R.id.item_source_cb);
-        itemSourceTvTitle = findById(R.id.item_source_tv_title);
-        itemSourceIvRoof = findById(R.id.item_source_iv_roof);
+        itemCb = findById(R.id.item_cb);
+        itemTvTitle = findById(R.id.item_tv_title);
+        itemIvEdit = findById(R.id.item_iv_edit);
+        itemIvDelete = findById(R.id.item_iv_delete);
     }
 
     @Override
     public void onBind(BookSourceBean data, int pos) {
         //设置排序数
         data.setOrderNumber(pos);
-        itemSourceTvTitle.setText(data.getSourceName());
-        itemSourceCb.setChecked(data.isSelected());
+        itemTvTitle.setText(data.getSourceName());
+        itemCb.setChecked(data.isSelected());
         //单选框监听
-        itemSourceCb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            data.setSelected(isChecked);
-        });
+        itemCb.setOnCheckedChangeListener((buttonView, isChecked) -> data.setSelected(isChecked));
     }
 
 }

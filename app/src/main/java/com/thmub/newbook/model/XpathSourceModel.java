@@ -82,9 +82,12 @@ public class XpathSourceModel implements ISourceModel {
                 if (rsCovers != null) {
                     //检查链接是否完整，这里取了一个巧，因为几乎所有网站均采用网站host加爬取的地址构成一个完整的链接地址
                     String coverUrl = rsCovers.get(i).toString();
-                    if (RegexUtils.checkURL(coverUrl))
+                    if (RegexUtils.checkURL(coverUrl)) {
+                        if (coverUrl.startsWith("//")) {
+                            coverUrl.replace("//", "");
+                        }
                         bean.setCover(coverUrl);
-                    else
+                    } else
                         bean.setCover(bookSourceBean.getRootLink() + coverUrl);
                 }
                 //书籍链接
@@ -116,7 +119,6 @@ public class XpathSourceModel implements ISourceModel {
      */
     @Override
     public Observable<List<BookSearchBean>> searchBook(String keyword) {
-
         Log.i("XpathSourceModel", "searchBook:" + keyword);
         if (isEmpty(bookSourceBean.getSearchLink()) || isEmpty(bookSourceBean.getRuleSearchTitle())
                 || isEmpty(bookSourceBean.getRuleSearchAuthor()) || isEmpty(bookSourceBean.getRuleSearchLink())) {
@@ -176,9 +178,12 @@ public class XpathSourceModel implements ISourceModel {
                 if (rsCovers != null) {
                     //检查链接是否完整，这里取了一个巧，因为几乎所有网站均采用网站host加爬取的地址构成一个完整的链接地址
                     String coverUrl = rsCovers.get(i).toString();
-                    if (RegexUtils.checkURL(coverUrl))
+                    if (RegexUtils.checkURL(coverUrl)) {
+                        if (coverUrl.startsWith("//")) {
+                            coverUrl.replace("//", "");
+                        }
                         bean.setCover(coverUrl);
-                    else
+                    } else
                         bean.setCover(bookSourceBean.getRootLink() + coverUrl);
                 }
                 //书籍链接
@@ -250,9 +255,12 @@ public class XpathSourceModel implements ISourceModel {
             String coverLink;
             if (bookSourceBean.getRuleDetailCover() != null) {
                 coverLink = jxDocument.selOne((ruleBook + bookSourceBean.getRuleDetailCover())).toString();
-                if (RegexUtils.checkURL(coverLink))
+                if (RegexUtils.checkURL(coverLink)) {
+                    if (coverLink.startsWith("//")) {
+                        coverLink.replace("//", "");
+                    }
                     bean.setCover(coverLink);
-                else
+                } else
                     bean.setCover(bookSourceBean.getRootLink() + coverLink);
             }
             //简介
@@ -302,6 +310,7 @@ public class XpathSourceModel implements ISourceModel {
     @Override
     public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book, int num) {
         String catalogLink = book.getCatalogLink();
+        Log.i("XpathSourceModel", "parseCatalog:" + catalogLink);
         if (isEmpty(catalogLink)) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);

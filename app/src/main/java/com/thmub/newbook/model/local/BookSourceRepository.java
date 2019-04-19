@@ -136,4 +136,15 @@ public class BookSourceRepository {
                 .unique();
     }
 
+    /*****************************Delete*************************************/
+
+    /**
+     * 删除书源规则
+     *
+     * @param bean
+     */
+    public void deleteBookSource(BookSourceBean bean) {
+        mBookSourceDao.delete(bean);
+    }
+
 }

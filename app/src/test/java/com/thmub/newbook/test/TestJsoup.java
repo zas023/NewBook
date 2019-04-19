@@ -18,16 +18,16 @@ public class TestJsoup {
 
     public static void main(String[] args) {
         TestJsoup test=new TestJsoup();
-//        test.testSite();
+        test.testSite();
 //        test.testCatalog();
-        test.testContent();
+//        test.testContent();
     }
 
     public void testSite(){
 
         JXDocument jxDocument = null;
         try {
-            jxDocument = JXDocument.create(OkHttpUtils.getHtml("https://www.xszww.com/s.php?ie=gbk&s=10385337132858012269&q=%D5%DA%CC%EC","gbk"));
+            jxDocument = JXDocument.create(OkHttpUtils.getHtml("https://99lib.net/book/search.php?s=13139900387823019677&type=%E7%AB%99%E5%86%85&q=%E6%B3%95%E5%8C%BB%E7%A7%A6%E6%98%8E","utf-8"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,23 +38,23 @@ public class TestJsoup {
         String linkXpath = "//div[@class='bookinfo']/h4/a/@href";
 //        String authorXpath = "substring-after(.//div[@class='author']/text(),'作者：')";
         String authorXpath = "//div[@class='author']/text()";
-        String descXpath = "//div[@class='bookinfo']//div[@class='update']/text()";
+        String descXpath = "//*[@class='list_box']/li/div[1]/allText()";
 
         List<Object> rsBooks = jxDocument.sel(xpath);
         //List<Object> rsCovers = jxDocument.sel(coverXpath);
        // List<Object> rsTitles = jxDocument.sel(titleXpath);
        // List<Object> rsLinks = jxDocument.sel(linkXpath);
-        List<Object> rsAuthors = jxDocument.sel(authorXpath);
-        //List<Object> rsDescs = jxDocument.sel(descXpath);
+//        List<Object> rsAuthors = jxDocument.sel(authorXpath);
+        List<Object> rsDescs = jxDocument.sel(descXpath);
 
         List<BookSearchBean> bookList = new ArrayList<>();
-        for (int i = 0, size = rsBooks.size(); i < size; i++) {
+        for (int i = 0, size = rsDescs.size(); i < size; i++) {
             BookSearchBean bean = new BookSearchBean();
             //bean.setTitle(rsTitles.get(i).toString());
             //bean.setCover(root+rsCovers.get(i).toString());
             //bean.setLink(rsLinks.get(i).toString());
-            bean.setAuthor(rsAuthors.get(i).toString().replace("作者：",""));
-           // bean.setShortIntro(rsDescs.get(i).toString());
+//            bean.setAuthor(rsAuthors.get(i).toString().replace("作者：",""));
+            bean.setDesc(rsDescs.get(i).toString());
             bookList.add(bean);
             System.out.println(bean.toString());
         }

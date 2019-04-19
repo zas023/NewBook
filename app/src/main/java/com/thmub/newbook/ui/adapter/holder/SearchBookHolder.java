@@ -11,30 +11,35 @@ import com.thmub.newbook.base.adapter.ViewHolderImpl;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.utils.BitmapUtils;
 
+import butterknife.BindView;
+
 /**
  * Created by Zhouas666 on 2019-03-27
  * Github: https://github.com/zas023
+ * <p>
+ * 搜索列表holder
  */
 public class SearchBookHolder extends ViewHolderImpl<BookSearchBean> {
 
-    ImageView itemSearchIvCover;
-    TextView itemSearchTvTitle;
-    TextView itemSearchTvAuthor;
-    TextView itemSearchTvInfo;
-    TextView itemSearchTvSource;
+
+    ImageView itemIvCover;
+    TextView itemTvTitle;
+    TextView itemTvAuthor;
+    TextView itemTvInfo;
+    TextView itemTvSource;
 
     @Override
     protected int getItemLayoutId() {
-        return R.layout.item_book_search;
+        return R.layout.item_book_list;
     }
 
     @Override
     public void initView() {
-        itemSearchIvCover = findById((R.id.item_search_iv_cover));
-        itemSearchTvTitle = findById((R.id.item_search_tv_title));
-        itemSearchTvAuthor = findById((R.id.item_search_tv_author));
-        itemSearchTvInfo = findById((R.id.item_search_tv_info));
-        itemSearchTvSource = findById((R.id.item_search_tv_source));
+        itemIvCover = findById((R.id.item_iv_cover));
+        itemTvTitle = findById((R.id.item_tv_title));
+        itemTvAuthor = findById((R.id.item_tv_author));
+        itemTvInfo = findById((R.id.item_tv_info));
+        itemTvSource = findById((R.id.item_tv_source));
     }
 
     @Override
@@ -42,12 +47,12 @@ public class SearchBookHolder extends ViewHolderImpl<BookSearchBean> {
         if (data.getCover() != null)
             Glide.with(getContext()).load(data.getCover())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(8)))
-                    .into(itemSearchIvCover);
+                    .into(itemIvCover);
         else
-            itemSearchIvCover.setImageBitmap(BitmapUtils.getTextBitMap(data.getTitle()));
-        itemSearchTvTitle.setText(data.getTitle());
-        itemSearchTvAuthor.setText(data.getAuthor());
-        itemSearchTvInfo.setText(data.getDesc());
-        itemSearchTvSource.setText("共("+data.getSourceUrls().size()+")源："+data.getSourceUrls());
+            itemIvCover.setImageBitmap(BitmapUtils.getTextBitMap(data.getTitle()));
+        itemTvTitle.setText(data.getTitle());
+        itemTvAuthor.setText(data.getAuthor());
+        itemTvInfo.setText(data.getDesc());
+        itemTvSource.setText("共(" + data.getSourceUrls().size() + ")源：" + data.getSourceUrls());
     }
 }

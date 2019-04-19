@@ -53,6 +53,12 @@
         <item>@string/menu_action_batch</item>
     </string-array>
 
+    <!--BookSource点击-->
+    <string-array name="menu_book_source">
+        <item>@string/menu_action_edit</item>
+        <item>@string/menu_action_delete</item>
+    </string-array>
+
     <!--下载选择对话框-->
     <string-array name="dialog_download">
         <item>@string/dialog_download_item_1</item>
@@ -133,6 +139,7 @@
     <string name="menu_action_top">置顶</string>
     <string name="menu_action_cache">缓存</string>
     <string name="menu_action_delete">删除</string>
+    <string name="menu_action_edit">编辑</string>
     <string name="menu_action_batch">批量管理</string>
 
     <!--设置相关-->

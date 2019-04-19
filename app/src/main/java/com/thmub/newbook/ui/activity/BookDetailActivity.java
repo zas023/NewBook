@@ -70,7 +70,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.book_detail_tv_desc)
-    TextView bookDetailTvDesc;
+    TextView mTvDesc;
     @BindView(R.id.fl_download_book)
     FrameLayout flDownloadBook;
     @BindView(R.id.fl_add_bookcase)
@@ -152,7 +152,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         mTvAuthor.setText(mShelfBook.getAuthor());
         mTvType.setText(mShelfBook.getLink());
         mTvWordCount.setText(mShelfBook.getSourceTag());
-        bookDetailTvDesc.setText("\t\t\t\t" + mShelfBook.getDesc());
+        mTvDesc.setText("\t\t\t\t" + mShelfBook.getDesc());
     }
 
     @Override
@@ -271,6 +271,10 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         }
         return super.onOptionsItemSelected(item);
     }
+
+//    @OnClick(R.id.book_detail_tv_desc)
+//    protected void showMoreDesc(){
+//    }
 
     /**
      * 章节列表

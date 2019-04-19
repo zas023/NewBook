@@ -120,13 +120,15 @@ public class RegexUtils {
     }
 
     /**
+     *
      * 验证URL地址
      *
      * @param url 格式：http://blog.csdn.net:80/xyang81/article/details/7705960 或 http://www.csdn.net:80
+     *            或者//www.csdn.net:80
      * @return 验证成功返回true，验证失败返回false
      */
     public static boolean checkURL(String url) {
-        String regex = "^([hH][tT]{2}[pP]://|[hH][tT]{2}[pP][sS]://)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~\\\\/])+$";
+        String regex = "^([hH][tT]{2}[pP]://|[hH][tT]{2}[pP][sS]://|//)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~\\\\/])+$";
         return Pattern.matches(regex, url);
     }
 

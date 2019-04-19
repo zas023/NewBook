@@ -6,11 +6,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookSourceBean;
+import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.model.local.BookSourceRepository;
 import com.thmub.newbook.presenter.BookSourcePresenter;
 import com.thmub.newbook.presenter.contract.BookSourceContract;
@@ -51,13 +53,18 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
 
     private BookSourceAdapter mAdapter;
 
-    private boolean ischanged;
+    private boolean isChanged;
 
     /******************************Initialization**********************************/
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_book_source;
+    }
+
+    @Override
+    public void setSwipeBackEnable(boolean enable) {
+        super.setSwipeBackEnable(false);
     }
 
     @Override
@@ -80,26 +87,26 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
     @Override
     protected void initClick() {
         super.initClick();
+
+        //长按拖拽
         ItemDragCallback dragCallback = new ItemDragCallback();
         dragCallback.setOnItemTouchListener(new ItemDragCallback.OnItemTouchListener() {
             @Override
             public void onMove(int fromPosition, int toPosition) {
                 mAdapter.onMove(fromPosition, toPosition);
-                ischanged = true;
+                isChanged = true;
             }
 
             @Override
             public void onSwiped(int position) {
-                ischanged = true;
+                isChanged = true;
             }
         });
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(dragCallback);
         itemTouchHelper.attachToRecyclerView(sourceRvContent.getReyclerView());
 
-        mAdapter.setOnItemClickListener((view, pos) -> {
-            startActivityForResult(new Intent(mContext, SourceEditActivity.class)
-                    .putExtra(SourceEditActivity.EXTRA_BOOK_SOURCE, mAdapter.getItem(pos)), REQUEST_CODE);
-        });
+        //点击事件
+        mAdapter.setOnItemClickListener((view, pos) -> openItemDialog(mAdapter.getItem(pos)));
     }
 
     @Override
@@ -140,6 +147,46 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
     }
 
     /*******************************Event**************************************/
+
+    /**
+     * 书源选择对话框
+     *
+     * @param bean
+     */
+    private void openItemDialog(BookSourceBean bean) {
+        String[] menus = UiUtils.getStringArray(R.array.menu_book_source);
+        AlertDialog collBookDialog = new AlertDialog.Builder(mContext)
+                .setTitle(bean.getSourceName())
+                .setAdapter(new ArrayAdapter<>(mContext,
+                                android.R.layout.simple_list_item_1, menus),
+                        (dialog, which) -> onItemMenuClick(menus[which], bean))
+                .create();
+
+        collBookDialog.show();
+    }
+
+    private void onItemMenuClick(String which, BookSourceBean bean) {
+        switch (which) {
+            case "编辑":
+                startActivityForResult(new Intent(mContext, SourceEditActivity.class)
+                        .putExtra(SourceEditActivity.EXTRA_BOOK_SOURCE, bean), REQUEST_CODE);
+                break;
+            case "删除":
+                BookSourceRepository.getInstance().deleteBookSource(bean);
+                //删除后刷新列表
+                mPresenter.loadBookSource();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 初始化导航栏菜单
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_source, menu);
@@ -192,7 +239,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
 
     private void exit() {
         BookSourceRepository.getInstance().saveBookSourceWithAsync(mAdapter.getItems());
-        setResult(Activity.RESULT_OK, new Intent().putExtra(SearchActivity.RESULT_IS_CHANGED, ischanged));
+        setResult(Activity.RESULT_OK, new Intent().putExtra(SearchActivity.RESULT_IS_CHANGED, isChanged));
         finish();
     }
 
@@ -204,7 +251,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
                 ToastUtils.showSuccess(mContext, "保存成功");
                 mAdapter.clear();
                 mPresenter.loadBookSource();
-                ischanged = true;
+                isChanged = true;
             }
         }
     }

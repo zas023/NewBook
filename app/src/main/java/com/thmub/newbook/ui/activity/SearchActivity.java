@@ -43,7 +43,7 @@ public class SearchActivity extends BaseActivity {
     private SearchBookAdapter mAdapter;
 
     private SearchEngine mSearchEngine;
-
+    private String keyword;
     /****************************Initialization*********************************/
     @Override
     protected int getLayoutId() {
@@ -85,6 +85,7 @@ public class SearchActivity extends BaseActivity {
                 mAdapter.clear();
                 searchRvContent.startRefresh();
                 mSearchEngine.search(query);
+                keyword=query;
                 return false;
             }
 
@@ -117,7 +118,7 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void loadMoreSearchBook(List<BookSearchBean> items) {
-                mAdapter.addItems(items);
+                mAdapter.addItems(items,keyword);
             }
         });
     }
