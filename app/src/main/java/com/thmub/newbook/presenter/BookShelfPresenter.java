@@ -28,9 +28,9 @@ public class BookShelfPresenter extends RxPresenter<BookShelfContract.View>
     @Override
     public void checkBookUpdate(List<ShelfBookBean> items) {
         if (items == null || items.isEmpty()) return;
-        for (ShelfBookBean book: items){
+        for (ShelfBookBean book : items) {
             SourceModel.getInstance(book.getSourceTag())
-                    .parseCatalog(book)
+                    .parseCatalog(book, 0)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<List<BookChapterBean>>() {

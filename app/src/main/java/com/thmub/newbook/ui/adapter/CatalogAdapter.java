@@ -80,8 +80,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
         }
 
         holder.tvTitle.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-        holder.tvTitle.setText(getContext().getString(R.string.read_catalog_title
-                , data.getChapterIndex() + 1, data.getChapterTitle()));
+        holder.tvTitle.setText(data.getChapterTitle());
         //选中
         if (position == mShelfBook.getCurChapter()) {
             holder.tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.md_red_400));

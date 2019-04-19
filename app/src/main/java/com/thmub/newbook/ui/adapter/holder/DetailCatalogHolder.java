@@ -29,6 +29,6 @@ public class DetailCatalogHolder extends ViewHolderImpl<BookChapterBean> {
     @Override
     public void onBind(BookChapterBean data, int pos) {
 
-        itemTvBookInfo.setText("第" + (data.getChapterIndex() + 1) + "章  " + data.getChapterTitle());
+        itemTvBookInfo.setText(data.getChapterTitle());
     }
 }

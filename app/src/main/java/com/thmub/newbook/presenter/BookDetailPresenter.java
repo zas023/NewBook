@@ -89,7 +89,7 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
     public void loadCatalogs(ShelfBookBean bookBean) {
         //加载最新10章
         SourceModel.getInstance(bookBean.getSourceTag())
-                .parseCatalogFromEnd(bookBean, 10)
+                .parseCatalog(bookBean, -10)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BookChapterBean>>() {

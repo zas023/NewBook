@@ -98,15 +98,6 @@ public class BookChapterBean implements Parcelable {
     }
 
     public void setChapterTitle(String chapterTitle) {
-        if (chapterTitle != null) {
-            chapterTitle = chapterTitle.trim();
-            Matcher matcher = RegexUtils.chapterNamePattern.matcher(chapterTitle);
-            if (matcher.find()) {
-                int num = StringUtils.stringToInt(matcher.group(2));
-                this.chapterTitle = num > 0 ? matcher.replaceFirst("第" + num + "章 ") : matcher.replaceFirst("$1 ");
-                return;
-            }
-        }
         this.chapterTitle = chapterTitle;
     }
 

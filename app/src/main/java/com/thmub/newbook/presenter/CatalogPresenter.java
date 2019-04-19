@@ -25,7 +25,7 @@ public class CatalogPresenter extends RxPresenter<CatalogContract.View>
             mView.showError(new Throwable("书籍不能为空"));
 
         SourceModel.getInstance(book.getSourceTag())
-                .parseCatalog(book)
+                .parseCatalog(book,0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BookChapterBean>>() {

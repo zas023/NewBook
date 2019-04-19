@@ -29,7 +29,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
     public void loadCatalogs(ShelfBookBean bookBean, boolean fromNet) {
         if (fromNet) {
             SourceModel.getInstance(bookBean.getSourceTag())
-                    .parseCatalog(bookBean)
+                    .parseCatalog(bookBean,0)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<List<BookChapterBean>>() {

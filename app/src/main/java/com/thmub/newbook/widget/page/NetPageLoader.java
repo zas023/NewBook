@@ -58,7 +58,7 @@ public class NetPageLoader extends PageLoader {
         } else {
             //如果shelfBook中没有章节列表，则从网络加载
             SourceModel.getInstance(bookShelfBean.getSourceTag())
-                    .parseCatalog(bookShelfBean)
+                    .parseCatalog(bookShelfBean, 0)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<List<BookChapterBean>>() {
@@ -214,7 +214,7 @@ public class NetPageLoader extends PageLoader {
     @Override
     void parseNextChapter() {
         //加载接下来的两章节
-        for (int i=mCurChapterPos+1;i<Math.min(mCurChapterPos + 3, bookShelfBean.getBookChapterListSize());i++)
+        for (int i = mCurChapterPos + 1; i < Math.min(mCurChapterPos + 3, bookShelfBean.getBookChapterListSize()); i++)
             loadChapterContent(i);
     }
 
@@ -225,7 +225,7 @@ public class NetPageLoader extends PageLoader {
     public void updateCatalog() {
         Toast.makeText(mPageView.getActivity(), "目录更新中", Toast.LENGTH_SHORT).show();
         SourceModel.getInstance(bookShelfBean.getSourceTag())
-                .parseCatalog(bookShelfBean)
+                .parseCatalog(bookShelfBean,0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<BookChapterBean>>() {

@@ -85,25 +85,14 @@ public class SourceModel implements ISourceModel {
     }
 
     @Override
-    public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean bookBean) {
+    public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book, int num) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);
                 emitter.onComplete();
             });
         }
-        return sourceModel.parseCatalog(bookBean);
-    }
-
-    @Override
-    public Observable<List<BookChapterBean>> parseCatalogFromEnd(ShelfBookBean book, int num) {
-        if (!initBookSourceBean()) {
-            return Observable.create(emitter -> {
-                emitter.onNext(null);
-                emitter.onComplete();
-            });
-        }
-        return sourceModel.parseCatalogFromEnd(book, num);
+        return sourceModel.parseCatalog(book, num);
     }
 
     @Override

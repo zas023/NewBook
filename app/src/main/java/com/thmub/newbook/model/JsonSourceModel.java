@@ -125,7 +125,7 @@ public class JsonSourceModel implements ISourceModel {
             JsonParser parser = new JsonParser();  //创建JSON解析器
             JsonObject book = (JsonObject) parser.parse(jsonStr);  //创建JsonObject对象
             //定位到书籍详情字段
-            if (bookJson != null&&!isEmpty(bookJson)) {
+            if (bookJson != null && !isEmpty(bookJson)) {
                 String[] bookRules = bookJson.split("\\$");
                 for (int i = 0; i < bookRules.length; i++) {
                     book = book.get(bookRules[i]).getAsJsonObject();
@@ -349,91 +349,11 @@ public class JsonSourceModel implements ISourceModel {
      * 解析目录
      *
      * @param book
-     * @return
-     */
-    @Override
-    public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book) {
-        if (book != null && isEmpty(book.getCatalogLink())) {
-            return Observable.create(emitter -> {
-                emitter.onNext(null);
-                emitter.onComplete();
-            });
-        }
-        return Observable.create(emitter -> {
-            String jsonStr = null;
-            try {
-                jsonStr = OkHttpUtils.getHtml(book.getCatalogLink()
-                        , bookSourceBean.getEncodeType().split("&")[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            String chapterJson = bookSourceBean.getRuleChapters();
-            String titleJson = bookSourceBean.getRuleChapterTitle();
-            String linkJson = bookSourceBean.getRuleChapterLink();
-
-
-            String[] chapterRules = chapterJson.split("\\$");
-            JsonParser parser = new JsonParser();
-            JsonObject object = (JsonObject) parser.parse(jsonStr);
-            for (int i = 0; i < chapterRules.length - 1; i++) {
-                object = object.get(chapterRules[i]).getAsJsonObject();
-            }
-            JsonArray chapters = object.get(chapterRules[chapterRules.length - 1]).getAsJsonArray();
-
-            String[] titleRules = titleJson.split("@");
-            if (titleRules.length > 1) {
-                titleJson = titleRules[0];
-                titleRules = titleRules[1].split("#");
-            }
-            String[] linkRules = linkJson.split("@");
-            if (linkRules.length > 1) {
-                linkJson = linkRules[0];
-                linkRules = linkRules[1].split("#");
-            }
-
-            List<BookChapterBean> chapterList = new ArrayList<>();
-            for (int i = 0; i < chapters.size(); i++) {
-                BookChapterBean bean = new BookChapterBean();
-
-                JsonObject chapter = chapters.get(i).getAsJsonObject();
-
-                //章节名称
-                String title = chapter.get(titleJson).getAsString();
-                title = StringUtils.fullToHalf(executeOp(titleRules, title))
-                        .replaceAll("\\s", "")
-                        .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
-                        .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
-                bean.setChapterTitle(title);
-                //章节链接
-                String link = chapter.get(linkJson).getAsString();
-                bean.setChapterLink(executeOp(linkRules, link));
-                //章节序号
-                bean.setChapterIndex(i);
-                //章节对应的书籍
-                bean.setBookLink(book.getLink());
-                bean.setBookTitle(book.getTitle());
-                //对应书源
-                bean.setTag(book.getSourceTag());
-
-                chapterList.add(bean);
-
-                Log.i("JsonSourceModel", bean.toString());
-            }
-
-            emitter.onNext(chapterList);
-            emitter.onComplete();
-        });
-    }
-
-    /**
-     * 从后向前加载目录
-     *
-     * @param book
      * @param num
      * @return
      */
-    public Observable<List<BookChapterBean>> parseCatalogFromEnd(ShelfBookBean book, int num) {
+    @Override
+    public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book, int num) {
         if (book != null && isEmpty(book.getCatalogLink())) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);
@@ -472,35 +392,55 @@ public class JsonSourceModel implements ISourceModel {
             JsonArray chapters = object.get(chapterRules[chapterRules.length - 1]).getAsJsonArray();
             List<BookChapterBean> chapterList = new ArrayList<>();
 
-            //注意i > flag，不能i >= flag
-            for (int i = chapters.size() - 1, flag = Math.max(0, chapters.size() - num - 1); i > flag; i--) {
-                BookChapterBean bean = new BookChapterBean();
+            if (num < 0)
+                //注意i > flag，不能i >= flag
+                for (int i = chapters.size() - 1, flag = Math.max(0, chapters.size() + num - 1); i > flag; i--) {
+                    BookChapterBean bean = new BookChapterBean();
 
-                JsonObject chapter = chapters.get(i).getAsJsonObject();
+                    JsonObject chapter = chapters.get(i).getAsJsonObject();
 
-                //章节名称
-                String title = chapter.get(titleJson).getAsString();
-                title = StringUtils.fullToHalf(executeOp(titleRules, title))
-                        .replaceAll("\\s", "")
-                        .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
-                        .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
-                bean.setChapterTitle(title);
-                //章节链接
-                String link = chapter.get(linkJson).getAsString();
-                bean.setChapterLink(executeOp(linkRules, link));
-                //章节序号
-                bean.setChapterIndex(i);
-                //章节对应的书籍
-                bean.setBookLink(book.getLink());
-                bean.setBookTitle(book.getTitle());
-                //对应书源
-                bean.setTag(book.getSourceTag());
+                    //章节名称
+                    String title = chapter.get(titleJson).getAsString();
+                    bean.setChapterTitle(StringUtils.fullToHalf(executeOp(titleRules, title)));
+                    //章节链接
+                    String link = chapter.get(linkJson).getAsString();
+                    bean.setChapterLink(executeOp(linkRules, link));
+                    //章节序号
+                    bean.setChapterIndex(i);
+                    //章节对应的书籍
+                    bean.setBookLink(book.getLink());
+                    bean.setBookTitle(book.getTitle());
+                    //对应书源
+                    bean.setTag(book.getSourceTag());
 
-                chapterList.add(bean);
+                    chapterList.add(bean);
 
-                Log.i("JsonSourceModel", bean.toString());
-            }
+                    Log.i("JsonSourceModel", bean.toString());
+                }
+            else if (num == 0)
+                for (int i = 0; i < chapters.size(); i++) {
+                    BookChapterBean bean = new BookChapterBean();
 
+                    JsonObject chapter = chapters.get(i).getAsJsonObject();
+
+                    //章节名称
+                    String title = chapter.get(titleJson).getAsString();
+                    bean.setChapterTitle(StringUtils.fullToHalf(executeOp(titleRules, title)));
+                    //章节链接
+                    String link = chapter.get(linkJson).getAsString();
+                    bean.setChapterLink(executeOp(linkRules, link));
+                    //章节序号
+                    bean.setChapterIndex(i);
+                    //章节对应的书籍
+                    bean.setBookLink(book.getLink());
+                    bean.setBookTitle(book.getTitle());
+                    //对应书源
+                    bean.setTag(book.getSourceTag());
+
+                    chapterList.add(bean);
+
+                    Log.i("JsonSourceModel", bean.toString());
+                }
             emitter.onNext(chapterList);
             emitter.onComplete();
         });

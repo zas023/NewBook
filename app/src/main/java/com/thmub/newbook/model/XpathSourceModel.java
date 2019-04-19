@@ -296,10 +296,11 @@ public class XpathSourceModel implements ISourceModel {
      * 解析目录
      *
      * @param book
+     * @param num
      * @return
      */
     @Override
-    public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book) {
+    public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book, int num) {
         String catalogLink = book.getCatalogLink();
         if (isEmpty(catalogLink)) {
             return Observable.create(emitter -> {
@@ -316,90 +317,67 @@ public class XpathSourceModel implements ISourceModel {
                 e.printStackTrace();
             }
 
+            String ruleLink = bookSourceBean.getRuleChapterLink();
+            boolean isBookLink = false;
+            if (ruleLink.contains("bookLink+")) {
+                ruleLink = ruleLink.replace("bookLink+", "");
+                isBookLink = true;
+            }
+
             List<Object> rsTitles = jxDocument.sel(bookSourceBean.getRuleChapterTitle());
-            List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleChapterLink());
+            List<Object> rsLinks = jxDocument.sel(ruleLink);
 
             List<BookChapterBean> catalogList = new ArrayList<>();
-            for (int i = 0, size = rsTitles.size(); i < size; i++) {
-                BookChapterBean bean = new BookChapterBean();
 
-                //章节名称
-                String title = rsTitles.get(i).toString();
-                title = StringUtils.fullToHalf(title)
-                        .replaceAll("\\s", "")
-                        .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
-                        .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
-                bean.setChapterTitle(title);
-                //章节链接
-                String chapterLink = rsLinks.get(i).toString();
-                if (RegexUtils.checkURL(chapterLink))
-                    bean.setChapterLink(chapterLink);
-                else
-                    bean.setChapterLink(bookSourceBean.getRootLink() + chapterLink);
-                //章节序号
-                bean.setChapterIndex(i);
-                //书籍链接
-                bean.setBookLink(catalogLink);
+            //正序所有
+            if (num == 0) {
+                for (int i = 0, size = rsTitles.size(); i < size; i++) {
+                    BookChapterBean bean = new BookChapterBean();
+                    //章节名称
+                    bean.setChapterTitle(StringUtils.fullToHalf(rsTitles.get(i).toString()));
+                    //章节链接
+                    String chapterLink = rsLinks.get(i).toString();
+                    if (RegexUtils.checkURL(chapterLink))
+                        bean.setChapterLink(chapterLink);
+                    else {
+                        if (isBookLink)
+                            bean.setChapterLink(book.getLink() + chapterLink);
+                        else
+                            bean.setChapterLink(bookSourceBean.getRootLink() + chapterLink);
+                    }
+                    //章节序号
+                    bean.setChapterIndex(i);
+                    //书籍链接
+                    bean.setBookLink(catalogLink);
 
-                catalogList.add(bean);
+                    catalogList.add(bean);
 
-                Log.i("XpathSourceModel", bean.toString());
-            }
-            emitter.onNext(catalogList);
-            emitter.onComplete();
-        });
-    }
+                    Log.i("XpathSourceModel", bean.toString());
+                }
+            } else if (num < 0) {
+                for (int i = rsTitles.size() - 1, flag = Math.max(0, rsTitles.size() + num - 1); i > flag; i--) {
+                    BookChapterBean bean = new BookChapterBean();
+                    //章节名称
+                    bean.setChapterTitle(StringUtils.fullToHalf(rsTitles.get(i).toString()));
+                    //章节链接
+                    String chapterLink = rsLinks.get(i).toString();
+                    if (RegexUtils.checkURL(chapterLink))
+                        bean.setChapterLink(chapterLink);
+                    else {
+                        if (isBookLink)
+                            bean.setChapterLink(book.getLink() + chapterLink);
+                        else
+                            bean.setChapterLink(bookSourceBean.getRootLink() + chapterLink);
+                    }
+                    //章节序号
+                    bean.setChapterIndex(i);
+                    //书籍链接
+                    bean.setBookLink(catalogLink);
 
-    /**
-     * 有后向前加载目录
-     *
-     * @param book
-     * @return
-     */
-    public Observable<List<BookChapterBean>> parseCatalogFromEnd(ShelfBookBean book, int num) {
-        String catalogLink = book.getCatalogLink();
-        if (isEmpty(catalogLink)) {
-            return Observable.create(emitter -> {
-                emitter.onNext(null);
-                emitter.onComplete();
-            });
-        }
-        return Observable.create(emitter -> {
-            JXDocument jxDocument = null;
-            try {
-                jxDocument = JXDocument.create(
-                        OkHttpUtils.getHtml(book.getCatalogLink(), bookSourceBean.getEncodeType().split("&")[0]));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            List<Object> rsTitles = jxDocument.sel(bookSourceBean.getRuleChapterTitle());
-            List<Object> rsLinks = jxDocument.sel(bookSourceBean.getRuleChapterLink());
+                    catalogList.add(bean);
 
-            List<BookChapterBean> catalogList = new ArrayList<>();
-            for (int i = rsTitles.size() - 1, flag = Math.max(0, rsTitles.size() - num - 1); i > flag; i--) {
-                BookChapterBean bean = new BookChapterBean();
-
-                //章节名称
-                String title = rsTitles.get(i).toString();
-                title = StringUtils.fullToHalf(title)
-                        .replaceAll("\\s", "")
-                        .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
-                        .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
-                bean.setChapterTitle(title);
-                //章节链接
-                String chapterLink = rsLinks.get(i).toString();
-                if (RegexUtils.checkURL(chapterLink))
-                    bean.setChapterLink(chapterLink);
-                else
-                    bean.setChapterLink(bookSourceBean.getRootLink() + chapterLink);
-                //章节序号
-                bean.setChapterIndex(i);
-                //书籍链接
-                bean.setBookLink(catalogLink);
-
-                catalogList.add(bean);
-
-                Log.i("XpathSourceModel", bean.toString());
+                    Log.i("XpathSourceModel", bean.toString());
+                }
             }
             emitter.onNext(catalogList);
             emitter.onComplete();
@@ -408,6 +386,7 @@ public class XpathSourceModel implements ISourceModel {
 
     @Override
     public Observable<BookContentBean> parseContent(BookChapterBean chapter) {
+        Log.i("XpathSourceModel", "parseContent:" + chapter.getChapterLink());
         if (isEmpty(chapter.getChapterLink())) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);
@@ -426,10 +405,10 @@ public class XpathSourceModel implements ISourceModel {
 
             BookContentBean bookContent = new BookContentBean();
             List<Object> rsContents = jxDocument.sel(bookSourceBean.getRuleChapterContent());
-            //优化内容
-            String content = "";
+            String content = null;
             for (int i = 0, size = rsContents.size(); i < size; i++) {
-                content = content + rsContents.get(i).toString()
+                //优化内容
+                content = rsContents.get(i).toString()
                         // 替换特定标签为换行符
                         .replaceAll("(?i)<(br[\\s/]*|/*p.*?|/*div.*?)>", "\n")
                         // 删除script标签对和空格转义符
@@ -443,9 +422,11 @@ public class XpathSourceModel implements ISourceModel {
             bookContent.setChapterLink(chapter.getChapterLink());
             //章节序号
             bookContent.setChapterIndex(chapter.getChapterIndex());
-            //章节内容
-            bookContent.setChapterContent(content);
-
+            if (content == null)
+                //章节内容
+                bookContent.setChapterContent("解析章节内容错误");
+            else
+                bookContent.setChapterContent(content);
             Log.i("XpathSourceModel", content);
 
             emitter.onNext(bookContent);

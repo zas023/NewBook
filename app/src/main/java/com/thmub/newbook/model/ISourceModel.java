@@ -22,9 +22,7 @@ public interface ISourceModel {
 
     Observable<BookDetailBean> parseBook(BookSearchBean bookBean);
 
-    Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book);
-
-    Observable<List<BookChapterBean>> parseCatalogFromEnd(ShelfBookBean book, int num);
+    Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book, int num);
 
     Observable<BookContentBean> parseContent(BookChapterBean chapter);
 }

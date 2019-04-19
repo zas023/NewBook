@@ -408,7 +408,7 @@ public class BitmapUtils {
 
     /**
      * 获取文字图片
-     *
+     * link : http://www.cnblogs.com/zhujiabin/p/6023104.html
      * @param text
      * @return
      */
