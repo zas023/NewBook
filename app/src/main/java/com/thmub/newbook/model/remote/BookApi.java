@@ -1,7 +1,9 @@
 package com.thmub.newbook.model.remote;
 
 import com.thmub.newbook.bean.zhui.BookBean;
+import com.thmub.newbook.bean.zhui.DiscoverRankBean;
 import com.thmub.newbook.bean.zhui.DiscoverSortBean;
+import com.thmub.newbook.bean.zhui.RankBookListBean;
 import com.thmub.newbook.bean.zhui.SortBookListBean;
 import com.thmub.newbook.bean.zhui.StoreBannerListBean;
 import com.thmub.newbook.bean.zhui.StoreNodeBookListBean;
@@ -60,4 +62,23 @@ public interface BookApi {
                                              @Query("major") String major, @Query("minor") String minor,
                                              @Query("start") int start, @Query("limit") int limit);
 
+    /****************************Rank***********************************/
+    /**
+     * 获取所有排行榜
+     *
+     * @return
+     */
+    @GET("/ranking/gender")
+    Single<DiscoverRankBean> getDiscoverRank();
+
+    /**
+     * 获取单一排行榜
+     * 周榜：rankingId-> _id
+     * 月榜：rankingId-> monthRank
+     * 总榜：rankingId-> totalRank
+     *
+     * @return
+     */
+    @GET("/ranking/{rankingId}")
+    Single<RankBookListBean> getRankBookList(@Path("rankingId") String rankingId);
 }

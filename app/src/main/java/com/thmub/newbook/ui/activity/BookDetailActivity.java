@@ -166,9 +166,8 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         //换源对话框
         mSourceDialog.setListener(bean -> {
             mSearchBook = bean;
-            mShelfBook = mSearchBook.getShelfBook();
-            initBookInfo();
-            mPresenter.loadCatalogs(mShelfBook);
+            mDetailBook = new BookDetailBean(mSearchBook);
+            mPresenter.loadDetailBook(mSearchBook);
             mSourceDialog.dismiss();
         });
     }

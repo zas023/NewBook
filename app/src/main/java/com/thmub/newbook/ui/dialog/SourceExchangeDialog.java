@@ -132,7 +132,8 @@ public class SourceExchangeDialog extends Dialog {
         mAdapter.setOnItemClickListener((view, pos) -> {
             listener.onSourceChanged(mAdapter.getItem(pos));
             mAdapter.getItem(pos).setSelected(true);
-            mAdapter.getItem(sourceIndex).setSelected(false);
+            if (sourceIndex > -1)
+                mAdapter.getItem(sourceIndex).setSelected(false);
             sourceIndex = pos;
             mAdapter.notifyDataSetChanged();
         });

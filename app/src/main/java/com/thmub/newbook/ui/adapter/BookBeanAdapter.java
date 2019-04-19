@@ -13,9 +13,13 @@ import com.thmub.newbook.ui.adapter.holder.BookBeanHolder;
  */
 public class BookBeanAdapter extends QuickAdapter<BookBean> {
 
+    public BookBeanAdapter() {
+    }
+
     public BookBeanAdapter(Context context, Options options) {
         super(context, options);
     }
+
     @Override
     protected IViewHolder<BookBean> createViewHolder(int viewType) {
         return new BookBeanHolder();
