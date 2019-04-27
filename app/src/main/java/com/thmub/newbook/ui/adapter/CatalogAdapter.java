@@ -1,5 +1,6 @@
 package com.thmub.newbook.ui.adapter;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,12 +35,18 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
 
     private ShelfBookBean mShelfBook;
 
+    private Context mContext;
     private List<BookChapterBean> mList;
 
     private OnItemClickListener listener;
 
 
     public CatalogAdapter() {
+        mList = new ArrayList<>();
+    }
+
+    public CatalogAdapter(Context mContext) {
+        this.mContext = mContext;
         mList = new ArrayList<>();
     }
 
@@ -83,10 +90,12 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
         holder.tvTitle.setText(data.getChapterTitle());
         //选中
         if (position == mShelfBook.getCurChapter()) {
-            holder.tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.md_red_400));
+            holder.tvTitle.setTextColor(mContext.getResources().getColor( R.color.md_red_400));
             holder.tvTitle.setSelected(true);
-        } else {
-            holder.tvTitle.setTextColor(ContextCompat.getColor(getContext(), R.color.textPrimary));
+        }
+        else {
+            //使用ContextCompat无法获取到夜间模式下的相应颜色
+            holder.tvTitle.setTextColor(mContext.getResources().getColor(R.color.textPrimary));
             holder.tvTitle.setSelected(false);
         }
         //注意此处不能传递 position

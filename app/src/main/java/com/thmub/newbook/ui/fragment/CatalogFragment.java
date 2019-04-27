@@ -67,7 +67,7 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
         //
         isReversed=false;
         //adapter
-        mAdapter = new CatalogAdapter();
+        mAdapter = new CatalogAdapter(mContext);
         //layoutManager
         layoutManager=new LinearLayoutManager(mContext);
     }
