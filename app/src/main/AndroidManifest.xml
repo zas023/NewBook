@@ -47,6 +47,8 @@
         <activity android:name=".ui.activity.BookSortDetailActivity" />
         <activity android:name=".ui.activity.BookRankActivity" />
         <activity android:name=".ui.activity.BookRankDetailActivity" />
+        <activity android:name=".ui.activity.BookThemeActivity" />
+        <activity android:name=".ui.activity.BookThemeDetailActivity" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.BookDownloadService" />

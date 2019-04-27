@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseFragment;
 import com.thmub.newbook.bean.type.DiscoverType;
+import com.thmub.newbook.ui.activity.BookThemeActivity;
 import com.thmub.newbook.ui.activity.BookRankActivity;
 import com.thmub.newbook.ui.activity.BookSortActivity;
 import com.thmub.newbook.ui.adapter.DiscoverAdapter;
@@ -60,10 +61,9 @@ public class DiscoverFragment extends BaseFragment {
                 case RANK:
                     startActivity(new Intent(getContext(), BookRankActivity.class));
                     break;
-//                case TOPIC:
-//                    intent = new Intent(getContext(), BookListActivity.class);
-//                    startActivity(intent);
-//                    break;
+                case LIST:
+                    startActivity(new Intent(getContext(), BookThemeActivity.class));
+                    break;
             }
         });
     }

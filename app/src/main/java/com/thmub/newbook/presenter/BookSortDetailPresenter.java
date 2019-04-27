@@ -1,7 +1,7 @@
 package com.thmub.newbook.presenter;
 
 import com.thmub.newbook.base.RxPresenter;
-import com.thmub.newbook.model.remote.RemoteRepository;
+import com.thmub.newbook.model.remote.BookRepository;
 import com.thmub.newbook.presenter.contract.BookSortDetailContract;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -16,7 +16,7 @@ public class BookSortDetailPresenter extends RxPresenter<BookSortDetailContract.
 
     @Override
     public void loadSortBooks(String gender, String type, String major, String minor, int start, int limit) {
-        addDisposable(RemoteRepository.getInstance()
+        addDisposable(BookRepository.getInstance()
                 .getSortBooks(gender, type, major, minor, start, limit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

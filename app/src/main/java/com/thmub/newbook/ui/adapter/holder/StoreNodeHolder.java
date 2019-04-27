@@ -6,7 +6,7 @@ import com.thmub.newbook.R;
 import com.thmub.newbook.base.adapter.ViewHolderImpl;
 import com.thmub.newbook.bean.zhui.BookBean;
 import com.thmub.newbook.bean.zhui.StoreNodeBean;
-import com.thmub.newbook.model.remote.RemoteRepository;
+import com.thmub.newbook.model.remote.BookRepository;
 import com.thmub.newbook.ui.adapter.StoreNodeBookAdapter;
 import com.thmub.newbook.utils.RxUtils;
 
@@ -56,7 +56,7 @@ public class StoreNodeHolder extends ViewHolderImpl<StoreNodeBean> {
 
         //是否已经加载
         if (!hasLoad) {
-            new CompositeDisposable().add(RemoteRepository.getInstance()
+            new CompositeDisposable().add(BookRepository.getInstance()
                     .getStoreNodeBooks(data.get_id())
                     .compose(RxUtils::toSimpleSingle)
                     .subscribe(beans -> {

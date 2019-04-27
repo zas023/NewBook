@@ -2,7 +2,7 @@ package com.thmub.newbook.presenter;
 
 import com.thmub.newbook.base.RxPresenter;
 import com.thmub.newbook.manager.BookManager;
-import com.thmub.newbook.model.remote.RemoteRepository;
+import com.thmub.newbook.model.remote.BookRepository;
 import com.thmub.newbook.presenter.contract.BookStoreContract;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,7 +18,7 @@ public class BookStorePresenter extends RxPresenter<BookStoreContract.View>
 
     @Override
     public void loadStoreBanner() {
-        addDisposable(RemoteRepository.getInstance()
+        addDisposable(BookRepository.getInstance()
                 .getStoreBanner()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -29,7 +29,7 @@ public class BookStorePresenter extends RxPresenter<BookStoreContract.View>
 
     @Override
     public void loadBookSearchBean(String id) {
-        addDisposable(RemoteRepository.getInstance()
+        addDisposable(BookRepository.getInstance()
                 .getBookDetail(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

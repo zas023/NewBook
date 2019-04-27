@@ -1,12 +1,14 @@
 package com.thmub.newbook.model.remote;
 
 import com.thmub.newbook.bean.zhui.BookBean;
+import com.thmub.newbook.bean.zhui.DiscoverThemeBean;
 import com.thmub.newbook.bean.zhui.DiscoverRankBean;
 import com.thmub.newbook.bean.zhui.DiscoverSortBean;
 import com.thmub.newbook.bean.zhui.RankBookListBean;
 import com.thmub.newbook.bean.zhui.SortBookListBean;
 import com.thmub.newbook.bean.zhui.StoreBannerListBean;
 import com.thmub.newbook.bean.zhui.StoreNodeBookListBean;
+import com.thmub.newbook.bean.zhui.ThemeBookListBean;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
@@ -81,4 +83,31 @@ public interface BookApi {
      */
     @GET("/ranking/{rankingId}")
     Single<RankBookListBean> getRankBookList(@Path("rankingId") String rankingId);
+
+    /****************************BookList***********************************/
+    /**
+     * 获取主题书单列表
+     * 本周最热：duration=last-seven-days&sort=collectorCount
+     * 最新发布：duration=all&sort=created
+     * 最多收藏：duration=all&sort=collectorCount
+     * <p>
+     * 如:http://api.zhuishushenqi.com/book-list?duration=last-seven-days&sort=collectorCount&start=0&limit=20&tag=%E9%83%BD%E5%B8%82&gender=male
+     *
+     * @param tag    都市、古代、架空、重生、玄幻、网游
+     * @param gender male、female
+     * @param limit  20
+     * @return
+     */
+    @GET("/book-list")
+    Single<DiscoverThemeBean> getDiscoverTheme(@Query("duration") String duration, @Query("sort") String sort,
+                                           @Query("start") int start, @Query("limit") int limit,
+                                           @Query("tag") String tag, @Query("gender") String gender);
+
+    /**
+     * 获取书单详情
+     *
+     * @return
+     */
+    @GET("/book-list/{bookListId}")
+    Single<ThemeBookListBean> getThemeBookList(@Path("bookListId") String bookListId);
 }

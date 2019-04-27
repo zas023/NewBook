@@ -1,10 +1,12 @@
 package com.thmub.newbook.model.remote;
 
 import com.thmub.newbook.bean.zhui.BookBean;
+import com.thmub.newbook.bean.zhui.ThemeBean;
 import com.thmub.newbook.bean.zhui.DiscoverRankBean;
 import com.thmub.newbook.bean.zhui.DiscoverSortBean;
 import com.thmub.newbook.bean.zhui.StoreBannerBean;
 import com.thmub.newbook.bean.zhui.StoreNodeBookBean;
+import com.thmub.newbook.bean.zhui.ThemeBookBean;
 
 import java.util.List;
 
@@ -15,24 +17,24 @@ import retrofit2.Retrofit;
  * Created by Zhouas666 on 2019-04-13
  * Github: https://github.com/zas023
  */
-public class RemoteRepository {
-    private static final String TAG = "RemoteRepository";
+public class BookRepository {
+    private static final String TAG = "BookRepository";
 
-    private static RemoteRepository sInstance;
+    private static BookRepository sInstance;
     private Retrofit mRetrofit;
     private BookApi mBookApi;
 
-    private RemoteRepository() {
+    private BookRepository() {
         mRetrofit = RemoteHelper.getInstance().getRetrofit();
 
         mBookApi = mRetrofit.create(BookApi.class);
     }
 
-    public static RemoteRepository getInstance() {
+    public static BookRepository getInstance() {
         if (sInstance == null) {
             synchronized (RemoteHelper.class) {
                 if (sInstance == null) {
-                    sInstance = new RemoteRepository();
+                    sInstance = new BookRepository();
                 }
             }
         }
@@ -117,4 +119,33 @@ public class RemoteRepository {
         return mBookApi.getRankBookList(rankId)
                 .map(bean -> bean.getRanking().getBooks());
     }
+
+    /**
+     * 主题书单
+     *
+     * @param duration
+     * @param sort
+     * @param start
+     * @param limit
+     * @param tag
+     * @param gender
+     * @return
+     */
+    public Single<List<ThemeBean>> getDiscoverTheme(String duration, String sort, int start, int limit, String tag, String gender) {
+        return mBookApi.getDiscoverTheme(duration, sort, start, limit, tag, gender)
+                .map(bean -> bean.getBookLists());
+    }
+
+    /**
+     * 主题书单书籍
+     *
+     * @param bookListId
+     * @return
+     */
+    public Single<List<ThemeBookBean>> getThemeBooks(String bookListId) {
+        return mBookApi.getThemeBookList(bookListId)
+                .map(bean -> bean.getBookList().getBooks());
+    }
+
+
 }

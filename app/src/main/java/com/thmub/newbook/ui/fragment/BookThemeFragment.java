@@ -6,13 +6,14 @@ import android.os.Bundle;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPFragment;
 import com.thmub.newbook.base.adapter.QuickAdapter;
-import com.thmub.newbook.bean.type.BookSortListType;
-import com.thmub.newbook.bean.zhui.BookBean;
+import com.thmub.newbook.bean.type.BookListType;
+import com.thmub.newbook.bean.zhui.ThemeBean;
 import com.thmub.newbook.manager.BookManager;
-import com.thmub.newbook.presenter.BookSortDetailPresenter;
-import com.thmub.newbook.presenter.contract.BookSortDetailContract;
+import com.thmub.newbook.presenter.BookThemePresenter;
+import com.thmub.newbook.presenter.contract.BookThemeContract;
 import com.thmub.newbook.ui.activity.BookDetailActivity;
-import com.thmub.newbook.ui.adapter.BookBeanAdapter;
+import com.thmub.newbook.ui.activity.BookThemeDetailActivity;
+import com.thmub.newbook.ui.adapter.BookThemeAdapter;
 import com.thmub.newbook.utils.ToastUtils;
 
 import java.util.List;
@@ -23,40 +24,34 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 
+
 /**
- * Created by Zhouas666 on 2019-04-18
+ * Created by Zhouas666 on 2019-04-19
  * Github: https://github.com/zas023
  * <p>
- * 书籍分类书籍列表fragment
+ * 主题书单列表fragment
  */
-public class BookSortDetailFragment extends BaseMVPFragment<BookSortDetailContract.Presenter>
-        implements BookSortDetailContract.View {
+public class BookThemeFragment extends BaseMVPFragment<BookThemeContract.Presenter>
+        implements BookThemeContract.View {
 
     /***************************Constant********************************/
-    private static final String EXTRA_GENDER = "extra_gender";
     private static final String EXTRA_TYPE = "extra_type";
-    private static final String EXTRA_MAJOR = "extra_major";
 
     @BindView(R.id.rv_content)
     RecyclerView rvContent;
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout swipeLayout;
 
-    private BookBeanAdapter mAdapter;
-    /***************************Variable********************************/
-    private String mGender;
-    private String mMajor;
-    private BookSortListType mType;
-    private String mMinor = "";
+    private BookThemeAdapter mAdapter;
+    private BookListType mType;
+
     private int mStart = 0;
     private int mLimit = 20;
 
-    public static Fragment newInstance(String gender, String major, BookSortListType type) {
+    public static Fragment newInstance(BookListType type) {
         Bundle bundle = new Bundle();
-        bundle.putString(EXTRA_GENDER, gender);
-        bundle.putString(EXTRA_MAJOR, major);
         bundle.putSerializable(EXTRA_TYPE, type);
-        Fragment fragment = new BookSortDetailFragment();
+        Fragment fragment = new BookThemeFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -64,12 +59,9 @@ public class BookSortDetailFragment extends BaseMVPFragment<BookSortDetailContra
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(EXTRA_GENDER, mGender);
-        outState.putString(EXTRA_MAJOR, mMajor);
         outState.putSerializable(EXTRA_TYPE, mType);
     }
 
-    /******************************Initialization*****************************/
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_refresh_list;
@@ -79,20 +71,16 @@ public class BookSortDetailFragment extends BaseMVPFragment<BookSortDetailContra
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         if (savedInstanceState != null) {
-            mGender = savedInstanceState.getString(EXTRA_GENDER);
-            mMajor = savedInstanceState.getString(EXTRA_MAJOR);
-            mType = (BookSortListType) savedInstanceState.getSerializable(EXTRA_TYPE);
+            mType = (BookListType) savedInstanceState.getSerializable(EXTRA_TYPE);
         } else {
-            mGender = getArguments().getString(EXTRA_GENDER);
-            mMajor = getArguments().getString(EXTRA_MAJOR);
-            mType = (BookSortListType) getArguments().getSerializable(EXTRA_TYPE);
+            mType = (BookListType) getArguments().getSerializable(EXTRA_TYPE);
         }
     }
 
     @Override
     protected void initWidget(Bundle savedInstanceState) {
         super.initWidget(savedInstanceState);
-        mAdapter = new BookBeanAdapter(mContext, new QuickAdapter.Options());
+        mAdapter = new BookThemeAdapter(mContext, new QuickAdapter.Options());
         rvContent.setLayoutManager(new LinearLayoutManager(mContext));
         rvContent.setAdapter(mAdapter);
     }
@@ -100,20 +88,19 @@ public class BookSortDetailFragment extends BaseMVPFragment<BookSortDetailContra
     @Override
     protected void initClick() {
         super.initClick();
-        //点击书籍
         mAdapter.setOnItemClickListener((view, pos) ->
-                startActivity(new Intent(mContext, BookDetailActivity.class)
-                        .putExtra(BookDetailActivity.EXTRA_BOOK
-                                , BookManager.getSearchBook(mAdapter.getItem(pos))))
+                startActivity(new Intent(mContext, BookThemeDetailActivity.class)
+                        .putExtra(BookThemeDetailActivity.EXTRA_THEME_ID, mAdapter.getItem(pos).get_id())
+                        .putExtra(BookThemeDetailActivity.EXTRA_THEME_TITLE, mAdapter.getItem(pos).getTitle()))
         );
         //加载更多
         mAdapter.setOnLoadMoreListener(
-                () -> mPresenter.loadSortBooks(mGender, mType.getNetName(), mMajor, mMinor, mStart, mLimit)
+                () -> mPresenter.loadBookLists(mType.getNetName(), mType.getSortName(), mStart, mLimit, "", "")
         );
         //刷新
         swipeLayout.setOnRefreshListener(() -> {
             mStart = 0;
-            mPresenter.loadSortBooks(mGender, mType.getNetName(), mMajor, mMinor, mStart, mLimit);
+            mPresenter.loadBookLists(mType.getNetName(), mType.getSortName(), mStart, mLimit, "", "");
         });
     }
 
@@ -121,19 +108,20 @@ public class BookSortDetailFragment extends BaseMVPFragment<BookSortDetailContra
     protected void processLogic() {
         super.processLogic();
         swipeLayout.setRefreshing(true);
-        mPresenter.loadSortBooks(mGender, mType.getNetName(), mMajor, mMinor, mStart, mLimit);
+        mPresenter.loadBookLists(mType.getNetName(), mType.getSortName(), mStart, mLimit, "", "");
     }
 
-    /***************************Transaction************************************/
+    /*************************Transaction**********************************/
     @Override
-    protected BookSortDetailContract.Presenter bindPresenter() {
-        return new BookSortDetailPresenter();
+    protected BookThemeContract.Presenter bindPresenter() {
+        return new BookThemePresenter();
     }
 
     @Override
-    public void finishLoadSortBooks(List<BookBean> items) {
+    public void finishLoadBookLists(List<ThemeBean> items) {
         if (mStart == 0) {
             mStart = items.size();
+            //refreshItems会设置自动调用一次加载更多，所需需要先赋mStart的值
             mAdapter.refreshItems(items);
         } else {
             mAdapter.addItems(items);

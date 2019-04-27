@@ -37,6 +37,6 @@ public class BookSortHolder extends ViewHolderImpl<SortBean> {
     public void onBind(SortBean data, int pos) {
         Glide.with(getContext()).load(Constant.IMG_BASE_URL + data.getBookCover().get(0)).into(itemIvCover);
         itemTvType.setText(data.getName());
-        itemTvCount.setText(String.format(UiUtils.getString(R.string.book_sort_count), data.getBookCount()));
+        itemTvCount.setText(String.format(UiUtils.getString(R.string.book_count), data.getBookCount()));
     }
 }
