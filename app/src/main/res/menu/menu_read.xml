@@ -15,11 +15,16 @@
     <item
         android:id="@+id/action_add_bookmark"
         android:title="添加书签" />
-
     <item
         android:id="@+id/action_copy_content"
         android:title="拷贝内容" />
     <item
         android:id="@+id/action_refresh_catalog"
         android:title="刷新目录" />
+    <item
+        android:id="@+id/action_open_link"
+        android:title="打开链接" />
+    <item
+        android:id="@+id/action_open_detail"
+        android:title="查看详情" />
 </menu>

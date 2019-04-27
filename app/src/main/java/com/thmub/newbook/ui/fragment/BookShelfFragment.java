@@ -93,6 +93,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
 
     @Override
     public void finishLoadShelfBook(List<ShelfBookBean> items) {
+        mAdapter.clear();
         shelfRvContent.finishRefresh();
         mAdapter.addItems(items);
     }
@@ -127,10 +128,10 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
                 ToastUtils.showInfo(mContext, "此功能尚未完成");
                 break;
             case "缓存":
-
+                ToastUtils.showInfo(mContext, "此功能尚未完成");
                 break;
             case "删除":
-
+                deleteBook(shelfBook);
                 break;
             case "批量管理":
                 ToastUtils.showWarring(mContext, "此功能尚未完成");
@@ -146,22 +147,16 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
      * @param shelfBook
      */
     private void deleteBook(ShelfBookBean shelfBook) {
+        new AlertDialog.Builder(mContext)
+                .setTitle("确定将" + shelfBook.getTitle() + "移出书架")
+                .setPositiveButton(UiUtils.getString(R.string.common_sure), ((dialogInterface, i) -> {
 
-//        if (shelfBook.getIsLocal()) {
-//            new AlertDialog.Builder(mContext)
-//                    .setTitle("删除文件")
-//                    .setPositiveButton(UiUtils.getString(R.string.common_sure), ((dialogInterface, i) -> {
-//
-//                        S.getInstance().deleteCollBook(collBook);
-//                        BookRepository.getInstance().deleteBookRecord(collBook.get_id());
-//                        //从Adapter中删除
-//                        mCollBookAdapter.removeItem(collBook);
-//                    }))
-//                    .setNegativeButton(getResources().getString(R.string.common_cancel), null)
-//                    .show();
-//        } else {
-//            RxBusManager.getInstance().post(new DeleteTaskEvent(collBook));
-//        }
+                    BookShelfRepository.getInstance().deleteShelfBook(shelfBook);
+                    //从Adapter中删除
+                    mPresenter.loadShelfBook();
+                }))
+                .setNegativeButton(getResources().getString(R.string.common_cancel), null)
+                .show();
     }
 
     /*************************Life Cycle*******************************/
@@ -171,7 +166,6 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     @Override
     public void onResume() {
         super.onResume();
-        mAdapter.clear();
         shelfRvContent.startRefresh();
         mPresenter.loadShelfBook();
     }

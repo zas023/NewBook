@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.futuremind.recyclerviewfastscroll.FastScroller;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPFragment;
 import com.thmub.newbook.bean.BookChapterBean;
@@ -38,10 +39,15 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
     RecyclerView rvContent;
     @BindView(R.id.fast_scroller)
     FastScroller fastScroller;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     /***************************Variable*****************************/
     private ShelfBookBean mBook;
     private CatalogAdapter mAdapter;
+    private LinearLayoutManager layoutManager;
+
+    private boolean isReversed;
 
     /***************************Public*****************************/
     public void startSearch(String query) {
@@ -58,15 +64,20 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         mBook = getFatherActivity().getShelfBook();
+        //
+        isReversed=false;
+        //adapter
+        mAdapter = new CatalogAdapter();
+        //layoutManager
+        layoutManager=new LinearLayoutManager(mContext);
     }
 
     @Override
     protected void initWidget(Bundle savedInstanceState) {
         super.initWidget(savedInstanceState);
-        //adapter
-        mAdapter = new CatalogAdapter();
+
         //recycler
-        rvContent.setLayoutManager(new LinearLayoutManager(mContext));
+        rvContent.setLayoutManager(layoutManager);
         rvContent.setAdapter(mAdapter);
         rvContent.addItemDecoration(new DashlineItemDivider());
         //scroller
@@ -76,6 +87,7 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
     @Override
     protected void initClick() {
         super.initClick();
+        //前往章节
         mAdapter.setListener((index, page) -> {
             if (mBook.isReading()) {
                 RxBusManager.getInstance().post(new ChapterExchangeEvent(index, page));
@@ -86,6 +98,14 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
                 startActivity(new Intent(mContext, ReadActivity.class).putExtra(ReadActivity.EXTRA_BOOK, mBook));
                 getActivity().finish();
             }
+        });
+        //倒叙
+        fab.setOnClickListener(v -> {
+            isReversed=!isReversed;
+            //列表再底部开始展示，反转后由上面开始展示
+            layoutManager.setStackFromEnd(isReversed);
+            //列表翻转
+            layoutManager.setReverseLayout(isReversed);
         });
     }
 

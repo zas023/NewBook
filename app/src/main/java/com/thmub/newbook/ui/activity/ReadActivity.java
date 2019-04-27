@@ -2,9 +2,9 @@ package com.thmub.newbook.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,12 +17,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.futuremind.recyclerviewfastscroll.FastScroller;
 import com.google.android.material.appbar.AppBarLayout;
 import com.gyf.barlibrary.ImmersionBar;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookChapterBean;
+import com.thmub.newbook.bean.BookDetailBean;
+import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.DownloadBookBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.bean.event.ChapterExchangeEvent;
@@ -32,7 +33,6 @@ import com.thmub.newbook.manager.RxBusManager;
 import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
-import com.thmub.newbook.ui.adapter.CatalogAdapter;
 import com.thmub.newbook.ui.dialog.CopyContentDialog;
 import com.thmub.newbook.ui.dialog.ReadSettingDialog;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
@@ -41,7 +41,6 @@ import com.thmub.newbook.utils.NetworkUtils;
 import com.thmub.newbook.utils.StringUtils;
 import com.thmub.newbook.utils.SystemBarUtils;
 import com.thmub.newbook.utils.UiUtils;
-import com.thmub.newbook.widget.DashlineItemDivider;
 import com.thmub.newbook.widget.animation.PageAnimation;
 import com.thmub.newbook.widget.page.PageLoader;
 import com.thmub.newbook.widget.page.PageView;
@@ -52,10 +51,6 @@ import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -266,7 +261,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             @Override
             public void OnMarginChange() {
                 if (mPageLoader != null) {
-                    mPageLoader.setLayoutMargin();
+                    mPageLoader.refreshUi();
                 }
             }
 
@@ -279,7 +274,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     mPageLoader.refreshUi();
                 }
                 //4号颜色为黑色
-                setNightTheme(readSettingManager.getBgColor()==4);
+                setNightTheme(readSettingManager.getBgColor() == 4);
             }
 
             @Override
@@ -292,17 +287,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         //换源
         mSourceDialog.setListener(bean -> {
             mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
-            //交换数据
-            ShelfBookBean oldBook = mShelfBook;
-            mShelfBook = bean.getShelfBook();
-            mShelfBook.setCurChapter(oldBook.getCurChapter());
-            mShelfBook.setCurChapterPage(oldBook.getCurChapterPage());
-
-            BookShelfRepository.getInstance().deleteShelfBook(oldBook);
-            BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
-
-            //换源
-            mPageLoader.changeSourceFinish(mShelfBook);
+            //加载书籍
+            mPresenter.loadDetailBook(bean);
             mSourceDialog.dismiss();
         });
     }
@@ -332,9 +318,21 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         return new ReadPresenter();
     }
 
-    @Override
-    public void finishLoadCatalogs(List<BookChapterBean> items, boolean fromNet) {
 
+    @Override
+    public void finishLoadDetailBook(BookDetailBean book) {
+        //交换数据
+        ShelfBookBean oldBook = mShelfBook;
+        mShelfBook = book.getShelfBook();
+        mShelfBook.setCurChapter(oldBook.getCurChapter());
+        mShelfBook.setCurChapterPage(oldBook.getCurChapterPage());
+
+        BookShelfRepository.getInstance().deleteShelfBook(oldBook);
+        BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
+
+        //换源
+        mPageLoader.changeSourceFinish(mShelfBook);
+        mSourceDialog.dismiss();
     }
 
     @Override
@@ -379,6 +377,14 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 break;
             case R.id.action_refresh_catalog:  //刷新目录
                 mPageLoader.refreshChapterList();
+                break;
+            case R.id.action_open_link:  //打开链接
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(mShelfBook.getChapter(mShelfBook.getCurChapter()).getChapterLink())));
+                break;
+            case R.id.action_open_detail:  //查看详情
+                startActivity(new Intent(mContext, BookDetailActivity.class)
+                        .putExtra(BookDetailActivity.EXTRA_BOOK, new BookSearchBean(mShelfBook)));
                 break;
             default:
                 break;

@@ -44,6 +44,7 @@ public class SearchActivity extends BaseActivity {
 
     private SearchEngine mSearchEngine;
     private String keyword;
+
     /****************************Initialization*********************************/
     @Override
     protected int getLayoutId() {
@@ -85,7 +86,7 @@ public class SearchActivity extends BaseActivity {
                 mAdapter.clear();
                 searchRvContent.startRefresh();
                 mSearchEngine.search(query);
-                keyword=query;
+                keyword = query;
                 return false;
             }
 
@@ -118,7 +119,7 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void loadMoreSearchBook(List<BookSearchBean> items) {
-                mAdapter.addItems(items,keyword);
+                mAdapter.addItems(items, keyword);
             }
         });
     }
@@ -153,13 +154,7 @@ public class SearchActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_CODE:
-                    //查询初始化搜书引擎
-                    if (data.getBooleanExtra(RESULT_IS_CHANGED, false))
-                        mSearchEngine.initSearchEngine(BookSourceRepository.getInstance().getAllSelectedBookSource());
-                    break;
-            }
+            mSearchEngine.initSearchEngine(BookSourceRepository.getInstance().getAllSelectedBookSource());
         }
     }
 
@@ -168,7 +163,8 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //mSearchEngine.closeSearchEngine();
         mSearchEngine = null;
-        System.gc();
+        //System.gc();
     }
 }

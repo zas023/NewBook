@@ -13,6 +13,7 @@ import okhttp3.ResponseBody;
  * Github: https://github.com/zas023
  */
 public class OkHttpUtils {
+
     public static OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //            .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
 //            .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
@@ -54,23 +55,14 @@ public class OkHttpUtils {
         Request request = builder
                 .url(url)
                 .build();
-
-        ResponseBody body = okHttpClient.newCall(request).execute().body();
+        ResponseBody body = new OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS).build().newCall(request).execute().body();
         if (body == null) {
             return "";
         } else {
             return new String(body.bytes(), encodeType);
         }
     }
-
-//    private static Random mRandom = new Random();
-//
-//    /**
-//     * 获取随机ip地址
-//     *
-//     * @return random ip
-//     */
-//    private static String getRandomIPAddress() {
-//        return String.valueOf(mRandom.nextInt(255)) + "." + String.valueOf(mRandom.nextInt(255)) + "." + String.valueOf(mRandom.nextInt(255)) + "." + String.valueOf(mRandom.nextInt(255));
-//    }
 }

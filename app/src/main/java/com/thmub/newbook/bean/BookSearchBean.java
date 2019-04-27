@@ -44,6 +44,15 @@ public class BookSearchBean implements Parcelable {
 
     }
 
+    public BookSearchBean(ShelfBookBean bean) {
+        title = bean.getTitle();
+        author = bean.getAuthor();
+        desc = bean.getDesc();
+        cover = bean.getCover();
+        bookLink = bean.getLink();
+        sourceTag = bean.getSourceTag();
+    }
+
 
     protected BookSearchBean(Parcel in) {
         title = in.readString();

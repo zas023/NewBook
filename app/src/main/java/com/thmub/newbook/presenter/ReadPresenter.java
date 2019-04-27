@@ -2,6 +2,8 @@ package com.thmub.newbook.presenter;
 
 import com.thmub.newbook.base.RxPresenter;
 import com.thmub.newbook.bean.BookChapterBean;
+import com.thmub.newbook.bean.BookDetailBean;
+import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.DownloadBookBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.model.SourceModel;
@@ -25,37 +27,33 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
 
     private static final String TAG = "ReadPresenter";
 
+
     @Override
-    public void loadCatalogs(ShelfBookBean bookBean, boolean fromNet) {
-        if (fromNet) {
-            SourceModel.getInstance(bookBean.getSourceTag())
-                    .parseCatalog(bookBean,0)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<List<BookChapterBean>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            addDisposable(d);
-                        }
+    public void loadDetailBook(BookSearchBean bookBean) {
+        SourceModel.getInstance(bookBean.getSourceTag())
+                .parseBook(bookBean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BookDetailBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
 
-                        @Override
-                        public void onNext(List<BookChapterBean> bookChapterBeans) {
-                            mView.finishLoadCatalogs(bookChapterBeans, true);
-                        }
+                    @Override
+                    public void onNext(BookDetailBean bookDetailBean) {
+                        mView.finishLoadDetailBook(bookDetailBean);
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.showError(e);
+                    }
 
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
-        } else {
-            mView.finishLoadCatalogs(BookShelfRepository.getInstance().getChapters(bookBean)
-                    , false);
-        }
+                    @Override
+                    public void onComplete() {
+                        mView.complete();
+                    }
+                });
     }
 }

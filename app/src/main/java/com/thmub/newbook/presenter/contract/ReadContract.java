@@ -1,10 +1,8 @@
 package com.thmub.newbook.presenter.contract;
 
 import com.thmub.newbook.base.BaseContract;
-import com.thmub.newbook.bean.BookChapterBean;
-import com.thmub.newbook.bean.ShelfBookBean;
-
-import java.util.List;
+import com.thmub.newbook.bean.BookDetailBean;
+import com.thmub.newbook.bean.BookSearchBean;
 
 /**
  * Created by Zhouas666 on 2019-03-28
@@ -13,12 +11,11 @@ import java.util.List;
 public interface ReadContract {
 
     interface View extends BaseContract.BaseView {
-        void finishLoadCatalogs(List<BookChapterBean> items, boolean fromNet);
+        void finishLoadDetailBook(BookDetailBean book);
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {
-        //加载目录
-        void loadCatalogs(ShelfBookBean bookBean,boolean fromNet);
+        void loadDetailBook(BookSearchBean bookBean);
     }
 
 }

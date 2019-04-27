@@ -28,6 +28,10 @@ public class SourceModel implements ISourceModel {
         this.name = sourceId;
     }
 
+    public SourceModel(BookSourceBean source) {
+        this.name = source.getSourceName();
+    }
+
     public static SourceModel getInstance(String sourceId) {
         return new SourceModel(sourceId);
     }

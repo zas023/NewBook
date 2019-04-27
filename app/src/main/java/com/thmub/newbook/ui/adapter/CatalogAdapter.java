@@ -102,7 +102,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
 
     @Override
     public String getSectionTitle(int position) {
-        return mShelfBook.getChapter(position).getChapterTitle().substring(0, 1);
+        return String.valueOf(position);
     }
 
     /**

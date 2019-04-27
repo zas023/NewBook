@@ -54,13 +54,38 @@ public class SearchEngine {
      * 搜索引擎初始化
      */
     public void initSearchEngine(@NonNull List<BookSourceBean> sourceList) {
-        mSourceList.clear();
         mSourceList.addAll(sourceList);
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
     }
 
+    /**
+     * 刷新引擎
+     *
+     * @param sourceList
+     */
+    public void refreshSearchEngine(@NonNull List<BookSourceBean> sourceList) {
+        mSourceList.clear();
+        mSourceList.addAll(sourceList);
+    }
+
+
+    /**
+     * 关闭引擎
+     */
+    public void closeSearchEngine() {
+        executorService.shutdown();
+        if (!compositeDisposable.isDisposed())
+            compositeDisposable.dispose();
+        compositeDisposable = null;
+    }
+
+    /**
+     * 搜索关键字
+     *
+     * @param keyword
+     */
     public void search(String keyword) {
         if (mSourceList.size() == 0) {
             System.out.println("没有选中任何书源");
@@ -74,6 +99,12 @@ public class SearchEngine {
         }
     }
 
+    /**
+     * 根据书名和作者搜索书籍
+     *
+     * @param title
+     * @param author
+     */
     public void search(String title, String author) {
         if (mSourceList.size() == 0) {
             System.out.println("没有选中任何书源");
@@ -103,6 +134,7 @@ public class SearchEngine {
 
                         @Override
                         public void onNext(List<BookSearchBean> bookSearchBeans) {
+                            searchSuccessNum++;
                             if (bookSearchBeans != null)
                                 searchListener.loadMoreSearchBook(bookSearchBeans);
                             searchOnEngine(keyword);
@@ -140,6 +172,7 @@ public class SearchEngine {
 
                         @Override
                         public void onNext(List<BookSearchBean> bookSearchBeans) {
+                            searchSuccessNum++;
                             if (bookSearchBeans != null) {
                                 List<BookSearchBean> list = new ArrayList<>(1);
                                 for (BookSearchBean bean : bookSearchBeans) {
@@ -166,6 +199,7 @@ public class SearchEngine {
                     });
         } else {
             searchListener.loadMoreFinish(true);
+
         }
 
     }
