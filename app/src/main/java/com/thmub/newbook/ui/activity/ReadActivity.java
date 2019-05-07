@@ -131,7 +131,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mShelfBook.setReading(true);
         //如果没有搜藏，则mShelfBook的chapterList==null
         //在getChapterList的时候 GreenDao会报错
-        if (!isCollected)
+        if (isCollected)
+            mShelfBook.setBookChapterList(BookShelfRepository.getInstance().getChapters(mShelfBook));
+        else
             mShelfBook.setBookChapterList(new ArrayList<>());
         mPageLoader = pageView.getPageLoader(this, mShelfBook);
         //重置书籍更新提示状态
@@ -285,7 +287,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             }
         });
         //换源
-        mSourceDialog.setListener(bean -> {
+        mSourceDialog.setOnSourceChangeListener(bean -> {
             mPageLoader.setStatus(TxtChapter.Status.CHANGE_SOURCE);
             //加载书籍
             mPresenter.loadDetailBook(bean);
@@ -300,9 +302,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         addDisposable(RxBusManager.getInstance()
                 .toObservable(ChapterExchangeEvent.class)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    mPageLoader.skipToChapter(event.getChapterIndex(), event.getPageIndex());
-                }));
+                .subscribe(event -> mPageLoader.skipToChapter(event.getChapterIndex(), event.getPageIndex())));
     }
 
     @Override

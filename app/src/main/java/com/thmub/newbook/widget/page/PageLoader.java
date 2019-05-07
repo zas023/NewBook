@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
+import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.manager.ReadSettingManager;
+import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.utils.BookShelfUtils;
 import com.thmub.newbook.utils.ScreenUtils;
 import com.thmub.newbook.utils.StringUtils;
@@ -1606,7 +1608,6 @@ public abstract class PageLoader {
         mPreChapter = null;
         mCurChapter = null;
         mNextChapter = null;
-
     }
 
     /*****************************************interface*****************************************/

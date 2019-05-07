@@ -97,10 +97,8 @@ public class SearchActivity extends BaseActivity {
         });
         searchRvContent.setOnRefreshListener(() -> mSearchEngine.search(searchView.getQuery().toString()));
         //RecyclerView
-        mAdapter.setOnItemClickListener((view, pos) -> {
-            startActivity(new Intent(mContext, BookDetailActivity.class)
-                    .putExtra(BookDetailActivity.EXTRA_BOOK, mAdapter.getItem(pos)));
-        });
+        mAdapter.setOnItemClickListener((view, pos) -> startActivity(new Intent(mContext, BookDetailActivity.class)
+                .putExtra(BookDetailActivity.EXTRA_BOOK, mAdapter.getItem(pos))));
     }
 
     @Override
@@ -113,7 +111,8 @@ public class SearchActivity extends BaseActivity {
                 //ScrollRefreshRecyclerView会被多个线程操作
                 //需要加锁
                 synchronized (ScrollRefreshRecyclerView.class) {
-                    searchRvContent.finishRefresh();
+                    if (searchRvContent != null)
+                        searchRvContent.finishRefresh();
                 }
             }
 

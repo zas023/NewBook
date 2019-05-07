@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /**
@@ -25,20 +26,14 @@ public class OkHttpUtils {
             .build();
 
     /**
-     * 同步获取html文件，默认编码gbk
+     * 同步获取html文件，默认编码utf-8
      */
     public static String getHtml(String url) throws IOException {
         return getHtml(url, "utf-8");
     }
 
     public static String getHtml(String url, String encodeType) throws IOException {
-        try {
-            return getHtml(url, null, encodeType);
-        } catch (IOException e) {
-            System.err.print(url);
-            e.printStackTrace();
-            throw e;
-        }
+        return getHtml(url, null,encodeType);
     }
 
     public static String getHtml(String url, RequestBody requestBody, String encodeType) throws IOException {
@@ -46,19 +41,18 @@ public class OkHttpUtils {
                 .addHeader("accept", "*/*")
                 .addHeader("connection", "Keep-Alive")
                 .addHeader("Charsert", "utf-8")
-                .addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36");
+                .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36");
 
         if (requestBody != null) {
             builder.post(requestBody);
         }
-
         Request request = builder
                 .url(url)
                 .build();
-        ResponseBody body = new OkHttpClient.Builder()
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS).build().newCall(request).execute().body();
+        Response response = okHttpClient
+                .newCall(request)
+                .execute();
+        ResponseBody body=response.body();
         if (body == null) {
             return "";
         } else {

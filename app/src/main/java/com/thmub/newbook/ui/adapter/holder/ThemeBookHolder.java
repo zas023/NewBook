@@ -6,10 +6,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.adapter.ViewHolderImpl;
-import com.thmub.newbook.bean.zhui.ThemeBean;
 import com.thmub.newbook.bean.zhui.ThemeBookBean;
 import com.thmub.newbook.constant.Constant;
-import com.thmub.newbook.utils.UiUtils;
 
 
 /**

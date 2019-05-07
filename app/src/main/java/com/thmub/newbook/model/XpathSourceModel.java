@@ -29,6 +29,8 @@ import static android.text.TextUtils.isEmpty;
  */
 public class XpathSourceModel implements ISourceModel {
 
+    private String TAG="XpathSourceModel";
+
     private BookSourceBean bookSourceBean;
 
     public XpathSourceModel(BookSourceBean bean) {
@@ -43,7 +45,7 @@ public class XpathSourceModel implements ISourceModel {
      */
     @Override
     public Observable<List<BookSearchBean>> findBook(String findLink) {
-        Log.i("XpathSourceModel", "findBook:" + findLink);
+        Log.i(TAG, "findBook:" + findLink);
         if (isEmpty(findLink) || isEmpty(bookSourceBean.getRuleFindBookTitle())
                 || isEmpty(bookSourceBean.getRuleFindBookLink())) {
             return Observable.create(emitter -> {
@@ -103,7 +105,7 @@ public class XpathSourceModel implements ISourceModel {
 
                 bookList.add(bean);
 
-                Log.i("XpathSourceModel", bean.toString());
+                Log.i(TAG, bean.toString());
             }
 
             emitter.onNext(bookList);
@@ -119,7 +121,7 @@ public class XpathSourceModel implements ISourceModel {
      */
     @Override
     public Observable<List<BookSearchBean>> searchBook(String keyword) {
-        Log.i("XpathSourceModel", "searchBook:" + keyword);
+        Log.i(TAG, "searchBook:" + keyword);
         if (isEmpty(bookSourceBean.getSearchLink()) || isEmpty(bookSourceBean.getRuleSearchTitle())
                 || isEmpty(bookSourceBean.getRuleSearchAuthor()) || isEmpty(bookSourceBean.getRuleSearchLink())) {
             return Observable.create(emitter -> {
@@ -200,7 +202,7 @@ public class XpathSourceModel implements ISourceModel {
 
                 bookList.add(bean);
 
-                Log.i("XpathSourceModel", bean.toString());
+                Log.i(TAG, bean.toString());
             }
 
             emitter.onNext(bookList);
@@ -216,7 +218,7 @@ public class XpathSourceModel implements ISourceModel {
      */
     @Override
     public Observable<BookDetailBean> parseBook(BookSearchBean bookBean) {
-        Log.i("XpathSourceModel", "parseBook:" + bookBean.toString());
+        Log.i(TAG, System.currentTimeMillis()+"-parseBook:" + bookBean.toString());
         String bookLink = bookBean.getBookLink();
         if (isEmpty(bookLink)) {
             return Observable.create(emitter -> {
@@ -226,11 +228,15 @@ public class XpathSourceModel implements ISourceModel {
         }
         return Observable.create(emitter -> {
             JXDocument jxDocument = null;
+            String html;
+
             try {
-                jxDocument = JXDocument.create(
-                        OkHttpUtils.getHtml(bookLink, bookSourceBean.getEncodeType().split("&")[0]));
+                html=OkHttpUtils.getHtml(bookLink, bookSourceBean.getEncodeType().split("&")[0]);
+                jxDocument = JXDocument.create(html);
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.i(TAG,e.getMessage());
+                emitter.onError(e);
             }
 
             BookDetailBean bean = new BookDetailBean(bookBean);
@@ -293,7 +299,7 @@ public class XpathSourceModel implements ISourceModel {
             //对应书源
             bean.setSourceTag(bookSourceBean.getSourceName());
 
-            Log.i("XpathSourceModel", bean.toString());
+            Log.i(TAG, bean.toString());
 
             emitter.onNext(bean);
             emitter.onComplete();
@@ -310,7 +316,7 @@ public class XpathSourceModel implements ISourceModel {
     @Override
     public Observable<List<BookChapterBean>> parseCatalog(ShelfBookBean book, int num) {
         String catalogLink = book.getCatalogLink();
-        Log.i("XpathSourceModel", "parseCatalog:" + catalogLink);
+        Log.i(TAG, "parseCatalog:" + catalogLink);
         if (isEmpty(catalogLink)) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);
@@ -361,7 +367,7 @@ public class XpathSourceModel implements ISourceModel {
 
                     catalogList.add(bean);
 
-                    Log.i("XpathSourceModel", bean.toString());
+                    Log.i(TAG, bean.toString());
                 }
             } else if (num < 0) {
                 for (int i = rsTitles.size() - 1, flag = Math.max(0, rsTitles.size() + num - 1); i > flag; i--) {
@@ -385,7 +391,7 @@ public class XpathSourceModel implements ISourceModel {
 
                     catalogList.add(bean);
 
-                    Log.i("XpathSourceModel", bean.toString());
+                    Log.i(TAG, bean.toString());
                 }
             }
             emitter.onNext(catalogList);
@@ -395,7 +401,7 @@ public class XpathSourceModel implements ISourceModel {
 
     @Override
     public Observable<BookContentBean> parseContent(BookChapterBean chapter) {
-        Log.i("XpathSourceModel", "parseContent:" + chapter.getChapterLink());
+        Log.i(TAG, "parseContent:" + chapter.getChapterLink());
         if (isEmpty(chapter.getChapterLink())) {
             return Observable.create(emitter -> {
                 emitter.onNext(null);
@@ -436,7 +442,7 @@ public class XpathSourceModel implements ISourceModel {
                 bookContent.setChapterContent("解析章节内容错误");
             else
                 bookContent.setChapterContent(content);
-            Log.i("XpathSourceModel", content);
+            Log.i(TAG, content);
 
             emitter.onNext(bookContent);
             emitter.onComplete();

@@ -64,7 +64,6 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
             //greenDao的大坑
             //多表联查需要设置  book__setDaoSession(DaoSession);
             ShelfBookBean book = mAdapter.getItem(pos);
-            book.setBookChapterList(BookShelfRepository.getInstance().getChapters(book));
             book.setCollected(true);
             startActivity(new Intent(mContext, ReadActivity.class)
                     .putExtra(ReadActivity.EXTRA_BOOK, book));

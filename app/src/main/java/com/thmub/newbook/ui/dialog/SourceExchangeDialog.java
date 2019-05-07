@@ -59,7 +59,7 @@ public class SourceExchangeDialog extends Dialog {
         this.mShelfBook = mShelfBook;
     }
 
-    public void setListener(OnSourceChangeListener listener) {
+    public void setOnSourceChangeListener(OnSourceChangeListener listener) {
         this.listener = listener;
     }
 
@@ -130,6 +130,7 @@ public class SourceExchangeDialog extends Dialog {
         });
 
         mAdapter.setOnItemClickListener((view, pos) -> {
+            if (listener == null) return;
             listener.onSourceChanged(mAdapter.getItem(pos));
             mAdapter.getItem(pos).setSelected(true);
             if (sourceIndex > -1)

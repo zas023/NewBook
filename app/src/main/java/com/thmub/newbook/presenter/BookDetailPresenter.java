@@ -1,5 +1,7 @@
 package com.thmub.newbook.presenter;
 
+import android.util.Log;
+
 import com.thmub.newbook.base.RxPresenter;
 import com.thmub.newbook.bean.BookDetailBean;
 import com.thmub.newbook.bean.BookSearchBean;
@@ -58,6 +60,7 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
 
     @Override
     public void loadDetailBook(BookSearchBean bookBean) {
+
         SourceModel.getInstance(bookBean.getSourceTag())
                 .parseBook(bookBean)
                 .subscribeOn(Schedulers.io())
@@ -75,7 +78,7 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
 
                     @Override
                     public void onError(Throwable e) {
-
+                        mView.showError(e);
                     }
 
                     @Override

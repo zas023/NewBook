@@ -3,6 +3,7 @@ package com.thmub.newbook.ui.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -51,7 +52,6 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     public static final String EXTRA_BOOK = "extra_book";
 
     public static final int REQUEST_CODE_READ = 0;
-    public static final int REQUEST_CODE_SOURCE = 1;
 
     /*****************************View***********************************/
     @BindView(R.id.book_detail_iv_cover)
@@ -130,11 +130,6 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         bookDetailRvFind.setLayoutManager(new GridLayoutManager(mContext, 4));
         bookDetailRvFind.setAdapter(mFindAdapter);
 
-        //Button
-        if (isCollected) {
-            bookDetailTvAdd.setText("移除书架");
-            bookDetailTvOpen.setText("继续阅读");
-        }
         //Dialog
         mSourceDialog = new SourceExchangeDialog(this, mShelfBook);
 
@@ -153,22 +148,25 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         mTvType.setText(mShelfBook.getLink());
         mTvWordCount.setText(mShelfBook.getSourceTag());
         mTvDesc.setText("\t\t\t\t" + mShelfBook.getDesc());
+
+        //Button
+        if (isCollected) {
+            bookDetailTvAdd.setText("移除书架");
+            bookDetailTvOpen.setText("继续阅读");
+        }
     }
 
     @Override
     protected void initClick() {
         super.initClick();
         //推荐书籍
-        mFindAdapter.setOnItemClickListener((view, pos) -> {
-            startActivity(new Intent(mContext, BookDetailActivity.class)
-                    .putExtra(BookDetailActivity.EXTRA_BOOK, mFindAdapter.getItem(pos)));
-        });
+        mFindAdapter.setOnItemClickListener((view, pos) -> startActivity(new Intent(mContext, BookDetailActivity.class)
+                .putExtra(BookDetailActivity.EXTRA_BOOK, mFindAdapter.getItem(pos))));
         //换源对话框
-        mSourceDialog.setListener(bean -> {
-            mSearchBook = bean;
-            mDetailBook = new BookDetailBean(mSearchBook);
-            mPresenter.loadDetailBook(mSearchBook);
-            mSourceDialog.dismiss();
+        mSourceDialog.setOnSourceChangeListener(bean -> {
+            startActivity(new Intent(mContext, BookDetailActivity.class)
+                    .putExtra(BookDetailActivity.EXTRA_BOOK,bean));
+            finish();
         });
     }
 
@@ -186,6 +184,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
 
     @Override
     public void finishLoadDetailBook(BookDetailBean item) {
+
         mDetailBook = item;
         //查找书架，判断是否是已收藏
         mShelfBook = BookShelfRepository.getInstance().getShelfBook(mDetailBook.getTitle(), mDetailBook.getAuthor());
@@ -195,8 +194,8 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
             isCollected = true;
             mShelfBook.setCollected(true);
         }
-        mSourceDialog.setShelfBook(mShelfBook);
         initBookInfo();
+        mSourceDialog.setShelfBook(mShelfBook);
         mPresenter.loadCatalogs(mShelfBook);
         mPresenter.loadFindBooks(mDetailBook);
     }
@@ -221,7 +220,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
 
     @Override
     public void showError(Throwable e) {
-
+        ToastUtils.showError(mContext,e.getMessage());
     }
 
     @Override
@@ -271,9 +270,16 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         return super.onOptionsItemSelected(item);
     }
 
-//    @OnClick(R.id.book_detail_tv_desc)
-//    protected void showMoreDesc(){
-//    }
+    /**
+     * 展开简介
+     */
+    @OnClick(R.id.book_detail_tv_desc)
+    protected void showMoreDesc(){
+        if (mTvDesc.getMaxLines()==5)
+            mTvDesc.setMaxLines(15);
+        else
+            mTvDesc.setMaxLines(5);
+    }
 
     /**
      * 章节列表
