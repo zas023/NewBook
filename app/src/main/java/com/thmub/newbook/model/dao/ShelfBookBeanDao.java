@@ -41,6 +41,8 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
         public final static Property CurChapterPage = new Property(14, Integer.class, "curChapterPage", false, "CUR_CHAPTER_PAGE");
         public final static Property IsUpdate = new Property(15, boolean.class, "isUpdate", false, "IS_UPDATE");
         public final static Property IsLocal = new Property(16, boolean.class, "isLocal", false, "IS_LOCAL");
+        public final static Property Rid = new Property(17, String.class, "rid", false, "RID");
+        public final static Property Version = new Property(18, int.class, "version", false, "VERSION");
     }
 
     private DaoSession daoSession;
@@ -75,7 +77,9 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
                 "\"CUR_CHAPTER\" INTEGER," + // 13: curChapter
                 "\"CUR_CHAPTER_PAGE\" INTEGER," + // 14: curChapterPage
                 "\"IS_UPDATE\" INTEGER NOT NULL ," + // 15: isUpdate
-                "\"IS_LOCAL\" INTEGER NOT NULL );"); // 16: isLocal
+                "\"IS_LOCAL\" INTEGER NOT NULL ," + // 16: isLocal
+                "\"RID\" TEXT," + // 17: rid
+                "\"VERSION\" INTEGER NOT NULL );"); // 18: version
     }
 
     /** Drops the underlying database table. */
@@ -160,6 +164,12 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
         }
         stmt.bindLong(16, entity.getIsUpdate() ? 1L: 0L);
         stmt.bindLong(17, entity.getIsLocal() ? 1L: 0L);
+ 
+        String rid = entity.getRid();
+        if (rid != null) {
+            stmt.bindString(18, rid);
+        }
+        stmt.bindLong(19, entity.getVersion());
     }
 
     @Override
@@ -238,6 +248,12 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
         }
         stmt.bindLong(16, entity.getIsUpdate() ? 1L: 0L);
         stmt.bindLong(17, entity.getIsLocal() ? 1L: 0L);
+ 
+        String rid = entity.getRid();
+        if (rid != null) {
+            stmt.bindString(18, rid);
+        }
+        stmt.bindLong(19, entity.getVersion());
     }
 
     @Override
@@ -270,7 +286,9 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
             cursor.isNull(offset + 13) ? null : cursor.getInt(offset + 13), // curChapter
             cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14), // curChapterPage
             cursor.getShort(offset + 15) != 0, // isUpdate
-            cursor.getShort(offset + 16) != 0 // isLocal
+            cursor.getShort(offset + 16) != 0, // isLocal
+            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // rid
+            cursor.getInt(offset + 18) // version
         );
         return entity;
     }
@@ -294,6 +312,8 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
         entity.setCurChapterPage(cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14));
         entity.setIsUpdate(cursor.getShort(offset + 15) != 0);
         entity.setIsLocal(cursor.getShort(offset + 16) != 0);
+        entity.setRid(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
+        entity.setVersion(cursor.getInt(offset + 18));
      }
     
     @Override

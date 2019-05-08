@@ -60,6 +60,16 @@ public class BookShelfRepository {
         }
     }
 
+    /**
+     * 保存书籍列表
+     *
+     * @param books
+     */
+    public void saveShelfBooks(List<ShelfBookBean> books) {
+        //存储BookShelfBean
+        mShelfBookDao.insertOrReplaceInTx(books);
+    }
+
     /***
      * 是否是书架书籍
      * @param book
@@ -141,6 +151,19 @@ public class BookShelfRepository {
      */
     public void deleteShelfBook(ShelfBookBean book) {
         mShelfBookDao.delete(book);
+    }
+
+    /**
+     * 删除书籍
+     *
+     * @param books
+     */
+    public void deleteShelfBooks(List<ShelfBookBean> books) {
+        for (ShelfBookBean book : books) {
+            mShelfBookDao.delete(book);
+            removeChapters(book.getLink());
+            removeFile(book.getTitle() + File.separator + book.getSourceTag());
+        }
     }
 
     /**

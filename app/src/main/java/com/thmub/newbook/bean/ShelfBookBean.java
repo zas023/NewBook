@@ -69,6 +69,11 @@ public class ShelfBookBean implements Parcelable {
     //是否是本地文件,打开的本地文件，而非指缓存文件
     private boolean isLocal = false;
 
+    //服务端id
+    private String rid;
+    //版本号
+    private int version;
+
     @Transient
     private boolean isReading;    //正在阅读
     @Transient
@@ -84,10 +89,10 @@ public class ShelfBookBean implements Parcelable {
     private transient ShelfBookBeanDao myDao;
 
 
-    @Generated(hash = 660789090)
+    @Generated(hash = 2051796434)
     public ShelfBookBean(String link, String title, String author, String desc, String cover, String catalogLink, String findLink,
             String sourceTag, String latestChapter, int chapterCount, String updated, String lastRead, String curChapterTitle,
-            Integer curChapter, Integer curChapterPage, boolean isUpdate, boolean isLocal) {
+            Integer curChapter, Integer curChapterPage, boolean isUpdate, boolean isLocal, String rid, int version) {
         this.link = link;
         this.title = title;
         this.author = author;
@@ -105,6 +110,8 @@ public class ShelfBookBean implements Parcelable {
         this.curChapterPage = curChapterPage;
         this.isUpdate = isUpdate;
         this.isLocal = isLocal;
+        this.rid = rid;
+        this.version = version;
     }
 
     @Generated(hash = 411799995)
@@ -137,6 +144,8 @@ public class ShelfBookBean implements Parcelable {
         }
         isUpdate = in.readByte() != 0;
         isLocal = in.readByte() != 0;
+        rid = in.readString();
+        version = in.readInt();
         isReading = in.readByte() != 0;
         isCollected = in.readByte() != 0;
         bookChapterList = in.createTypedArrayList(BookChapterBean.CREATOR);
@@ -352,6 +361,22 @@ public class ShelfBookBean implements Parcelable {
         isCollected = collected;
     }
 
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
@@ -457,6 +482,8 @@ public class ShelfBookBean implements Parcelable {
         }
         dest.writeByte((byte) (isUpdate ? 1 : 0));
         dest.writeByte((byte) (isLocal ? 1 : 0));
+        dest.writeString(rid);
+        dest.writeInt(version);
         dest.writeByte((byte) (isReading ? 1 : 0));
         dest.writeByte((byte) (isCollected ? 1 : 0));
         dest.writeTypedList(bookChapterList);

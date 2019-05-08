@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPFragment;
 import com.thmub.newbook.bean.ShelfBookBean;
+import com.thmub.newbook.bean.event.SyncEvent;
 import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.BookShelfPresenter;
 import com.thmub.newbook.presenter.contract.BookShelfContract;
@@ -15,6 +16,10 @@ import com.thmub.newbook.ui.adapter.BookShelfAdapter;
 import com.thmub.newbook.utils.ToastUtils;
 import com.thmub.newbook.utils.UiUtils;
 import com.thmub.newbook.widget.refresh.ScrollRefreshRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -37,9 +42,24 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     private BookShelfAdapter mAdapter;
 
     /************************initialization*****************************/
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(SyncEvent event) {
+        if (event.getState() == 100)
+            mPresenter.loadShelfBook();
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_book_shelf;
+    }
+
+    @Override
+    protected void initData(Bundle savedInstanceState) {
+        super.initData(savedInstanceState);
+        //注册 EventBus
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -159,6 +179,13 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
     }
 
     /*************************Life Cycle*******************************/
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     /**
      * 实现从阅读界面返回时刷新书架
      */

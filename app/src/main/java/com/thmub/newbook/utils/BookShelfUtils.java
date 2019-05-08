@@ -1,6 +1,7 @@
 package com.thmub.newbook.utils;
 
 import com.thmub.newbook.bean.ShelfBookBean;
+import com.thmub.newbook.bean.bmob.MyBook;
 import com.thmub.newbook.constant.Constant;
 
 import java.io.BufferedWriter;

@@ -15,10 +15,13 @@ import com.google.android.material.tabs.TabLayout;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseActivity;
 import com.thmub.newbook.bean.bmob.MyUser;
+import com.thmub.newbook.model.remote.BmobRepository;
 import com.thmub.newbook.ui.adapter.TabFragmentPageAdapter;
 import com.thmub.newbook.ui.fragment.BookShelfFragment;
 import com.thmub.newbook.ui.fragment.BookStoreFragment;
 import com.thmub.newbook.ui.fragment.DiscoverFragment;
+import com.thmub.newbook.utils.SnackbarUtils;
+import com.thmub.newbook.utils.ToastUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -223,6 +226,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 swNightMode.setChecked(isNightTheme());
                 break;
             case R.id.action_sync:  //同步书架
+                if (currentUser == null)
+                    ToastUtils.show(mContext, "请先登陆");
+                else
+                    BmobRepository.getInstance().syncBook(currentUser.getObjectId());
                 break;
         }
         //关窗
