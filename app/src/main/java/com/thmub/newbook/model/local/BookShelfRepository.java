@@ -98,6 +98,19 @@ public class BookShelfRepository {
     }
 
     /**
+     * 根据书籍链接查找书籍
+     *
+     * @param bookLink
+     * @return
+     */
+    public ShelfBookBean getShelfBookWithChapters(String bookLink) {
+        ShelfBookBean book = getShelfBook(bookLink);
+        if (book != null)
+            book.setBookChapterList(getChapters(book));
+        return book;
+    }
+
+    /**
      * 获取所有本地图书
      *
      * @return
@@ -115,7 +128,7 @@ public class BookShelfRepository {
      * @return
      */
     public List<BookChapterBean> getChapters(ShelfBookBean book) {
-        return  mSession.getBookChapterBeanDao().queryBuilder()
+        return mSession.getBookChapterBeanDao().queryBuilder()
                 .where(BookChapterBeanDao.Properties.BookLink.eq(book.getLink()))
                 .list();
     }

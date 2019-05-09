@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 
 import com.thmub.newbook.service.BookDownloadService;
-import com.thmub.newbook.service.DownloadService;
 
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;

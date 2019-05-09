@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,22 +26,28 @@ import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.DownloadBookBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.bean.event.ChapterExchangeEvent;
+import com.thmub.newbook.bean.event.DownloadEvent;
 import com.thmub.newbook.manager.ReadSettingManager;
 import com.thmub.newbook.manager.RxBusManager;
 import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
+import com.thmub.newbook.service.BookDownloadService;
 import com.thmub.newbook.ui.dialog.CopyContentDialog;
 import com.thmub.newbook.ui.dialog.ReadSettingDialog;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 import com.thmub.newbook.utils.BatteryUtils;
 import com.thmub.newbook.utils.NetworkUtils;
 import com.thmub.newbook.utils.SystemBarUtils;
+import com.thmub.newbook.utils.ToastUtils;
 import com.thmub.newbook.utils.UiUtils;
 import com.thmub.newbook.widget.animation.PageAnimation;
 import com.thmub.newbook.widget.page.PageLoader;
 import com.thmub.newbook.widget.page.PageView;
 import com.thmub.newbook.widget.page.TxtChapter;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -106,7 +111,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private ReadSettingManager readSettingManager = ReadSettingManager.getInstance();
 
     private boolean isFullScreen = true;
-    //private boolean isCollected;
 
     /*************************Public Method*******************************/
 
@@ -187,7 +191,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         }
     }
 
-
     @Override
     protected void initClick() {
         super.initClick();
@@ -204,8 +207,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
             @Override
             public void onPageChange(int chapterIndex, int pageIndex, boolean resetReadAloud) {
-//                mShelfBook.setCurChapter(chapterIndex);
-//                mShelfBook.setCurChapterPage(pageIndex);
+
             }
         });
         //pageView
@@ -286,6 +288,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 .toObservable(ChapterExchangeEvent.class)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> mPageLoader.skipToChapter(event.getChapterIndex(), event.getPageIndex())));
+        //处理下载消息
+        addDisposable(RxBusManager.getInstance()
+                .toObservable(DownloadEvent.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(event -> ToastUtils.show(mContext,event.message)));
     }
 
     @Override
@@ -490,19 +497,32 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                         }).show();
     }
 
+    /**
+     * 添加下载任务
+     * @param start
+     * @param end
+     */
     private void addDownload(int start, int end) {
+
+        //先加入书架
+        if(!mShelfBook.isCollected()){
+            mShelfBook.setCollected(true);
+            mPageLoader.saveRecord();
+        }
+
+        //计算断点章节
         start = Math.max(0, start);
         end = Math.min(end, mShelfBook.getBookChapterListSize());
 
         DownloadBookBean downloadBook = new DownloadBookBean();
         downloadBook.setName(mShelfBook.getTitle());
-        downloadBook.setNoteUrl(mShelfBook.getCatalogLink());
-        downloadBook.setCoverUrl(mShelfBook.getCover());
+        downloadBook.setBookLink(mShelfBook.getLink());
+        downloadBook.setCoverLink(mShelfBook.getCover());
         downloadBook.setStart(start);
         downloadBook.setEnd(end);
         downloadBook.setFinalDate(System.currentTimeMillis());
-        //DownloadService.addDownload(mContext, downloadBook);
-        //BookDownloadService.post(downloadBook);
+//        DownloadService.addDownload(mContext, downloadBook);
+        BookDownloadService.post(downloadBook);
     }
 
     /**

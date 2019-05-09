@@ -47,7 +47,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
         disposables = new CompositeDisposable();
 
         Observable.create((ObservableOnSubscribe<DownloadBookBean>) emitter -> {
-            ShelfBookBean book = BookShelfRepository.getInstance().getShelfBook(downloadBook.getNoteUrl());
+            ShelfBookBean book = BookShelfRepository.getInstance().getShelfBookWithChapters(downloadBook.getBookLink());
             if (book != null) {
                 if (!book.getBookChapterList().isEmpty()) {
                     for (int i = downloadBook.getStart(); i <= downloadBook.getEnd(); i++) {

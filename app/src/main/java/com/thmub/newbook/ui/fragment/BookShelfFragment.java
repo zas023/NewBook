@@ -47,7 +47,7 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(SyncEvent event) {
+    public void handleSyncEvent(SyncEvent event) {
         if (event.getState() == 100)
             mPresenter.loadShelfBook();
     }

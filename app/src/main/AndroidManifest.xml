@@ -50,7 +50,6 @@
         <activity android:name=".ui.activity.BookThemeActivity" />
         <activity android:name=".ui.activity.BookThemeDetailActivity" />
 
-        <service android:name=".service.DownloadService" />
         <service android:name=".service.BookDownloadService" />
 
         <provider

@@ -12,8 +12,8 @@ import androidx.annotation.Nullable;
  */
 public class DownloadBookBean  implements Parcelable, Comparable<DownloadBookBean> {
     private String name; //小说名
-    private String noteUrl;
-    private String coverUrl;
+    private String bookLink;
+    private String coverLink;
     private int downloadCount;
     private int start;
     private int end;
@@ -26,16 +26,16 @@ public class DownloadBookBean  implements Parcelable, Comparable<DownloadBookBea
 
     public DownloadBookBean(String name, String noteUrl, String coverUrl, int start, int end) {
         this.name = name;
-        this.noteUrl = noteUrl;
-        this.coverUrl = coverUrl;
+        this.bookLink = noteUrl;
+        this.coverLink = coverUrl;
         this.start = start;
         this.end = end;
     }
 
     protected DownloadBookBean(Parcel in) {
         name = in.readString();
-        noteUrl = in.readString();
-        coverUrl = in.readString();
+        bookLink = in.readString();
+        coverLink = in.readString();
         downloadCount = in.readInt();
         start = in.readInt();
         end = in.readInt();
@@ -47,8 +47,8 @@ public class DownloadBookBean  implements Parcelable, Comparable<DownloadBookBea
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeString(noteUrl);
-        dest.writeString(coverUrl);
+        dest.writeString(bookLink);
+        dest.writeString(coverLink);
         dest.writeInt(downloadCount);
         dest.writeInt(start);
         dest.writeInt(end);
@@ -82,20 +82,21 @@ public class DownloadBookBean  implements Parcelable, Comparable<DownloadBookBea
         this.name = name;
     }
 
-    public String getNoteUrl() {
-        return noteUrl;
+
+    public String getBookLink() {
+        return bookLink;
     }
 
-    public void setNoteUrl(String noteUrl) {
-        this.noteUrl = noteUrl;
+    public void setBookLink(String bookLink) {
+        this.bookLink = bookLink;
     }
 
-    public String getCoverUrl() {
-        return coverUrl;
+    public String getCoverLink() {
+        return coverLink;
     }
 
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
+    public void setCoverLink(String coverLink) {
+        this.coverLink = coverLink;
     }
 
     public int getDownloadCount() {
@@ -156,7 +157,7 @@ public class DownloadBookBean  implements Parcelable, Comparable<DownloadBookBea
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof DownloadBookBean) {
-            return TextUtils.equals(((DownloadBookBean) obj).getNoteUrl(), this.noteUrl);
+            return TextUtils.equals(((DownloadBookBean) obj).getBookLink(), this.bookLink);
         }
         return super.equals(obj);
     }
