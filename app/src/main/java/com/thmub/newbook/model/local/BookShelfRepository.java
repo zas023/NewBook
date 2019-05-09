@@ -70,22 +70,6 @@ public class BookShelfRepository {
         mShelfBookDao.insertOrReplaceInTx(books);
     }
 
-    /***
-     * 是否是书架书籍
-     * @param book
-     * @return
-     */
-    public boolean isShelfBook(ShelfBookBean book) {
-        if (book.getBookChapterList() != null) {
-            // 存储BookChapterBean
-            mSession.getBookChapterBeanDao()
-                    .insertOrReplaceInTx(book.getBookChapterList());
-        }
-        //存储BookShelfBean
-        mShelfBookDao.insertOrReplace(book);
-        return false;
-    }
-
     /**************************Get************************************/
     /**
      * 根据书名和作者查找书架
@@ -95,13 +79,10 @@ public class BookShelfRepository {
      * @return
      */
     public ShelfBookBean getShelfBook(String bookName, String author) {
-        ShelfBookBean bean = mShelfBookDao.queryBuilder()
+        return mShelfBookDao.queryBuilder()
                 .where(ShelfBookBeanDao.Properties.Title.eq(bookName))
                 .where(ShelfBookBeanDao.Properties.Author.eq(author))
                 .unique();
-        if (bean != null)
-            bean.__setDaoSession(mSession);
-        return bean;
     }
 
     /**
@@ -111,12 +92,9 @@ public class BookShelfRepository {
      * @return
      */
     public ShelfBookBean getShelfBook(String bookLink) {
-        ShelfBookBean bean = mShelfBookDao.queryBuilder()
+        return mShelfBookDao.queryBuilder()
                 .where(ShelfBookBeanDao.Properties.Link.eq(bookLink))
                 .unique();
-        if (bean != null)
-            bean.__setDaoSession(mSession);
-        return bean;
     }
 
     /**
@@ -137,8 +115,9 @@ public class BookShelfRepository {
      * @return
      */
     public List<BookChapterBean> getChapters(ShelfBookBean book) {
-        book.__setDaoSession(mSession);
-        return book.getBookChapterList();
+        return  mSession.getBookChapterBeanDao().queryBuilder()
+                .where(BookChapterBeanDao.Properties.BookLink.eq(book.getLink()))
+                .list();
     }
 
     /**************************Delete************************************/

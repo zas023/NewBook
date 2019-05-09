@@ -2,6 +2,7 @@ package com.thmub.newbook.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.thmub.newbook.R;
@@ -21,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
@@ -81,10 +83,9 @@ public class BookShelfFragment extends BaseMVPFragment<BookShelfContract.Present
         });
         //监听recycler点击事件
         mAdapter.setOnItemClickListener((view, pos) -> {
-            //greenDao的大坑
-            //多表联查需要设置  book__setDaoSession(DaoSession);
             ShelfBookBean book = mAdapter.getItem(pos);
             book.setCollected(true);
+            book.setBookChapterList(new ArrayList<>());
             startActivity(new Intent(mContext, ReadActivity.class)
                     .putExtra(ReadActivity.EXTRA_BOOK, book));
         });

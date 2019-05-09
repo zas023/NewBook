@@ -8,6 +8,7 @@ import com.thmub.newbook.bean.BookContentBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.manager.BookManager;
 import com.thmub.newbook.model.SourceModel;
+import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.utils.FileUtils;
 import com.thmub.newbook.utils.NetworkUtils;
 
@@ -45,13 +46,9 @@ public class NetPageLoader extends PageLoader {
      */
     @Override
     public void refreshChapterList() {
-        if (bookShelfBean != null && bookShelfBean.getBookChapterListSize() > 0) {
+        if (bookShelfBean.isCollected()) {
             isChapterListPrepare = true;
-
-            // 目录加载完成，执行回调操作。
-            if (mPageChangeListener != null) {
-                mPageChangeListener.onCategoryFinish(bookShelfBean.getBookChapterList());
-            }
+            bookShelfBean.setBookChapterList(BookShelfRepository.getInstance().getChapters(bookShelfBean));
 
             // 打开章节
             skipToChapter(bookShelfBean.getCurChapter(), bookShelfBean.getCurChapterPage());
@@ -71,10 +68,6 @@ public class NetPageLoader extends PageLoader {
                         public void onNext(List<BookChapterBean> chapterBeans) {
                             isChapterListPrepare = true;
                             bookShelfBean.setBookChapterList(chapterBeans);
-                            // 目录加载完成
-                            if (mPageChangeListener != null) {
-                                mPageChangeListener.onCategoryFinish(bookShelfBean.getBookChapterList());
-                            }
 
                             // 加载并显示当前章节
                             skipToChapter(bookShelfBean.getCurChapter(), bookShelfBean.getCurChapterPage());
@@ -242,11 +235,6 @@ public class NetPageLoader extends PageLoader {
                             bookShelfBean.setBookChapterList(bookChapterBeans);
                         } else {
                             Toast.makeText(mPageView.getActivity(), "更新完成,无新章节", Toast.LENGTH_SHORT).show();
-                        }
-
-                        // 目录加载完成
-                        if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(bookShelfBean.getBookChapterList());
                         }
 
                         // 加载并显示当前章节

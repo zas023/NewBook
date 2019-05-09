@@ -5,12 +5,13 @@ import android.widget.FrameLayout;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseActivity;
-import com.thmub.newbook.base.BaseFragment;
+import com.thmub.newbook.ui.fragment.ReadSettingFragment;
 import com.thmub.newbook.ui.fragment.SettingFragment;
 import com.thmub.newbook.ui.fragment.UserInfoFragment;
 import com.thmub.newbook.utils.UiUtils;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 
 /**
@@ -23,7 +24,8 @@ public class FragmentActivity extends BaseActivity {
 
     public static final String EXTRA_FRAGMENT_TYPE = "extra_fragment_type";
     public static final int FRAGMENT_TYPE_SETTING = 0;
-    public static final int FRAGMENT_TYPE_USER_INFO = 1;
+    public static final int FRAGMENT_TYPE_SETTING_READ = 1;
+    public static final int FRAGMENT_TYPE_USER_INFO = 2;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -31,7 +33,7 @@ public class FragmentActivity extends BaseActivity {
     FrameLayout container;
 
     private int type;
-    private BaseFragment fragment;
+    private Fragment fragment;
 
     @Override
     protected int getLayoutId() {
@@ -51,6 +53,10 @@ public class FragmentActivity extends BaseActivity {
             case FRAGMENT_TYPE_SETTING:
                 getSupportActionBar().setTitle(UiUtils.getString(R.string.fragment_setting));
                 fragment = new SettingFragment();
+                break;
+            case FRAGMENT_TYPE_SETTING_READ:
+                getSupportActionBar().setTitle(UiUtils.getString(R.string.fragment_setting));
+                fragment = new ReadSettingFragment();
                 break;
             case FRAGMENT_TYPE_USER_INFO:
                 getSupportActionBar().setTitle(UiUtils.getString(R.string.fragment_user_info));

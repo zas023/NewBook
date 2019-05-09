@@ -1,6 +1,5 @@
 package com.thmub.newbook.widget.page;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -363,10 +362,6 @@ public abstract class PageLoader {
      */
     public void setOnPageChangeListener(OnPageChangeListener listener) {
         mPageChangeListener = listener;
-        // 如果目录加载完之后才设置监听器，那么会默认回调
-        if (isChapterListPrepare) {
-            mPageChangeListener.onCategoryFinish(bookShelfBean.getBookChapterList());
-        }
     }
 
     /**
@@ -717,7 +712,7 @@ public abstract class PageLoader {
             if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
                 mPageView.drawPage(-1);
             }
-            if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < bookShelfBean.getBookChapterList().size() - 1) {
+            if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < bookShelfBean.getBookChapterListSize() - 1) {
                 mPageView.drawPage(1);
             }
         }
@@ -840,8 +835,7 @@ public abstract class PageLoader {
      */
     private synchronized void drawBackground(final Canvas canvas, TxtChapter txtChapter, TxtPage txtPage) {
         if (canvas == null) return;
-
-        if (!bookShelfBean.getBookChapterList().isEmpty()) {
+        if (!(bookShelfBean.getBookChapterList() == null || bookShelfBean.getBookChapterList().isEmpty())) {
             String title = isChapterListPrepare ? bookShelfBean.getChapter(txtChapter.getPosition()).getChapterTitle() : "";
             //title = ChapterContentHelp.getInstance().replaceContent(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag(), title);
             String page = (txtChapter.getStatus() != TxtChapter.Status.FINISH || txtPage == null) ? ""
@@ -1610,6 +1604,20 @@ public abstract class PageLoader {
         mNextChapter = null;
     }
 
+    /**
+     * 保存阅读记录
+     */
+    public void saveRecord(){
+        if (bookShelfBean.isCollected()) {
+            //设置阅读时间
+            bookShelfBean.setLastRead(StringUtils.
+                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+            //阅读章节名称
+            bookShelfBean.setCurChapterTitle(bookShelfBean.getChapter(bookShelfBean.getCurChapter()).getChapterTitle());
+            BookShelfRepository.getInstance().saveShelfBook(bookShelfBean);
+        }
+    }
+
     /*****************************************interface*****************************************/
 
     public interface OnPageChangeListener {
@@ -1619,13 +1627,6 @@ public abstract class PageLoader {
          * @param pos:切换章节的序号
          */
         void onChapterChange(int pos);
-
-        /**
-         * 作用：章节目录加载完成时候回调
-         *
-         * @param chapters：返回章节目录
-         */
-        void onCategoryFinish(List<BookChapterBean> chapters);
 
         /**
          * 作用：章节页码数量改变之后的回调。==> 字体大小的调整，或者是否关闭虚拟按钮功能都会改变页面的数量。

@@ -2,6 +2,7 @@ package com.thmub.newbook.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.futuremind.recyclerviewfastscroll.FastScroller;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -11,6 +12,7 @@ import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.bean.event.ChapterExchangeEvent;
 import com.thmub.newbook.manager.RxBusManager;
+import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.CatalogPresenter;
 import com.thmub.newbook.presenter.contract.CatalogContract;
 import com.thmub.newbook.ui.activity.CatalogActivity;
@@ -65,11 +67,11 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
         super.initData(savedInstanceState);
         mBook = getFatherActivity().getShelfBook();
         //
-        isReversed=false;
+        isReversed = false;
         //adapter
         mAdapter = new CatalogAdapter(mContext);
         //layoutManager
-        layoutManager=new LinearLayoutManager(mContext);
+        layoutManager = new LinearLayoutManager(mContext);
     }
 
     @Override
@@ -101,7 +103,7 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
         });
         //倒叙
         fab.setOnClickListener(v -> {
-            isReversed=!isReversed;
+            isReversed = !isReversed;
             //列表再底部开始展示，反转后由上面开始展示
             layoutManager.setStackFromEnd(isReversed);
             //列表翻转
@@ -112,11 +114,9 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
     @Override
     protected void processLogic() {
         super.processLogic();
-        if (mBook.getBookChapterListSize() > 0) {
-            mAdapter.setShelfBook(mBook);
-            //置顶当前章节位置
-            rvContent.getLayoutManager().scrollToPosition(mBook.getCurChapter());
-        } else
+        if (mBook.isCollected())
+            finishLoadCatalog(BookShelfRepository.getInstance().getChapters(mBook));
+        else
             mPresenter.loadCatalog(mBook);
     }
 
@@ -134,6 +134,8 @@ public class CatalogFragment extends BaseMVPFragment<CatalogContract.Presenter>
     public void finishLoadCatalog(List<BookChapterBean> items) {
         mBook.setBookChapterList(items);
         mAdapter.setShelfBook(mBook);
+        //置顶当前章节位置
+        rvContent.getLayoutManager().scrollToPosition(mBook.getCurChapter());
     }
 
     @Override

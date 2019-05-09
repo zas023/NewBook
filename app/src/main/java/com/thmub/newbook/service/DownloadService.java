@@ -1,11 +1,9 @@
 package com.thmub.newbook.service;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -14,13 +12,10 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.widget.Toast;
 
-import com.thmub.newbook.App;
-import com.thmub.newbook.R;
 import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.DownloadBookBean;
 import com.thmub.newbook.model.DownloadTaskImpl;
 import com.thmub.newbook.model.IDownloadTask;
-import com.thmub.newbook.ui.activity.DownloadActivity;
 import com.thmub.newbook.utils.SharedPreUtils;
 
 import java.util.ArrayList;

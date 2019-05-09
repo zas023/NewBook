@@ -1,6 +1,5 @@
 package com.thmub.newbook.model.dao;
 
-import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
@@ -9,8 +8,6 @@ import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
-import org.greenrobot.greendao.query.Query;
-import org.greenrobot.greendao.query.QueryBuilder;
 
 import com.thmub.newbook.bean.BookChapterBean;
 
@@ -38,7 +35,6 @@ public class BookChapterBeanDao extends AbstractDao<BookChapterBean, String> {
         public final static Property Unreadble = new Property(8, boolean.class, "unreadble", false, "UNREADBLE");
     }
 
-    private Query<BookChapterBean> shelfBookBean_BookChapterListQuery;
 
     public BookChapterBeanDao(DaoConfig config) {
         super(config);
@@ -62,7 +58,7 @@ public class BookChapterBeanDao extends AbstractDao<BookChapterBean, String> {
                 "\"END\" INTEGER," + // 7: end
                 "\"UNREADBLE\" INTEGER NOT NULL );"); // 8: unreadble
         // Add Indexes
-        db.execSQL("CREATE INDEX " + constraint + "IDX_BOOK_CHAPTER_BEAN_BOOK_LINK ON BOOK_CHAPTER_BEAN" +
+        db.execSQL("CREATE INDEX " + constraint + "IDX_BOOK_CHAPTER_BEAN_BOOK_LINK ON \"BOOK_CHAPTER_BEAN\"" +
                 " (\"BOOK_LINK\" ASC);");
     }
 
@@ -214,18 +210,4 @@ public class BookChapterBeanDao extends AbstractDao<BookChapterBean, String> {
         return true;
     }
     
-    /** Internal query to resolve the "bookChapterList" to-many relationship of ShelfBookBean. */
-    public List<BookChapterBean> _queryShelfBookBean_BookChapterList(String bookLink) {
-        synchronized (this) {
-            if (shelfBookBean_BookChapterListQuery == null) {
-                QueryBuilder<BookChapterBean> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.BookLink.eq(null));
-                shelfBookBean_BookChapterListQuery = queryBuilder.build();
-            }
-        }
-        Query<BookChapterBean> query = shelfBookBean_BookChapterListQuery.forCurrentThread();
-        query.setParameter(0, bookLink);
-        return query.list();
-    }
-
 }

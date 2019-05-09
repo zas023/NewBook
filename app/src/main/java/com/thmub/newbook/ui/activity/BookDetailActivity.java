@@ -88,8 +88,6 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     private BookDetailBean mDetailBook;
     private ShelfBookBean mShelfBook;
 
-    private boolean isCollected;
-
     private DetailCatalogAdapter mCatalogAdapter;
     private DetailFindAdapter mFindAdapter;
 
@@ -150,7 +148,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         mTvDesc.setText("\t\t\t\t" + mShelfBook.getDesc());
 
         //Button
-        if (isCollected) {
+        if (mShelfBook.isCollected()) {
             bookDetailTvAdd.setText("移除书架");
             bookDetailTvOpen.setText("继续阅读");
         }
@@ -190,8 +188,8 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
         mShelfBook = BookShelfRepository.getInstance().getShelfBook(mDetailBook.getTitle(), mDetailBook.getAuthor());
         if (mShelfBook == null) {
             mShelfBook = mDetailBook.getShelfBook();
+            mShelfBook.setCollected(false);
         } else {
-            isCollected = true;
             mShelfBook.setCollected(true);
         }
         initBookInfo();
@@ -287,7 +285,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
     @OnClick(R.id.book_detail_tv_catalog_more)
     public void goToMoreChapter() {
         startActivity(new Intent(mContext, CatalogActivity.class)
-                .putExtra(CatalogActivity.EXTRA_BOOK, mShelfBook));
+                .putExtra(CatalogActivity.EXTRA_BOOK, new ShelfBookBean(mShelfBook)));
     }
 
     /**
@@ -304,18 +302,18 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
      */
     @OnClick(R.id.fl_add_bookcase)
     public void addToShelf() {
-        if (isCollected) {
+        if (mShelfBook.isCollected()) {
             //放弃点击
             //因为需要同时删除数据库中的章节和缓存的文件，所以采用异步的方式
             mPresenter.removeShelfBook(mShelfBook);
             bookDetailTvAdd.setText("加入书架");
             bookDetailTvOpen.setText("开始阅读");
-            isCollected = false;
+            mShelfBook.setCollected(false);
         } else {
             BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
             bookDetailTvAdd.setText("移除书架");
             bookDetailTvOpen.setText("继续阅读");
-            isCollected = true;
+            mShelfBook.setCollected(true);
         }
     }
 
@@ -324,7 +322,7 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
      */
     @OnClick(R.id.fl_open_book)
     public void goToRead() {
-        mShelfBook.setCollected(isCollected);
+        mShelfBook.setCollected(mShelfBook.isCollected());
         startActivityForResult(new Intent(mContext, ReadActivity.class)
                 .putExtra(ReadActivity.EXTRA_BOOK, mShelfBook), REQUEST_CODE_READ);
     }
@@ -344,9 +342,9 @@ public class BookDetailActivity extends BaseMVPActivity<BookDetailContract.Prese
 
             if (data == null) return;
 
-            isCollected = data.getBooleanExtra(RESULT_IS_COLLECTED, false);
+            mShelfBook.setCollected(data.getBooleanExtra(RESULT_IS_COLLECTED, false));
 
-            if (isCollected) {
+            if (mShelfBook.isCollected()) {
                 bookDetailTvAdd.setText("移除书架");
                 bookDetailTvOpen.setText("继续阅读");
             }

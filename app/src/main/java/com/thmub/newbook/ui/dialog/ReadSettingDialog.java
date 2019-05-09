@@ -1,8 +1,8 @@
 package com.thmub.newbook.ui.dialog;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.manager.ReadSettingManager;
+import com.thmub.newbook.ui.activity.FragmentActivity;
 
 import java.text.DecimalFormat;
 
@@ -286,7 +287,7 @@ public class ReadSettingDialog extends Dialog {
     @OnClick({R.id.read_setting_tv_white, R.id.read_setting_tv_yellow, R.id.read_setting_tv_green
             , R.id.read_setting_tv_blue, R.id.read_setting_tv_black, R.id.read_setting_tv_font_minus
             , R.id.read_setting_tv_font_plus, R.id.read_setting_tv_line_minus, R.id.read_setting_tv_line_plus
-            , R.id.read_setting_tv_paragraph_minus, R.id.read_setting_tv_paragraph_plus})
+            , R.id.read_setting_tv_paragraph_minus, R.id.read_setting_tv_paragraph_plus, R.id.read_setting_tv_more})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.read_setting_tv_white:  //背景选择
@@ -332,6 +333,10 @@ public class ReadSettingDialog extends Dialog {
             case R.id.read_setting_tv_paragraph_plus:
                 updateParagraphSize(mSettingManager.getParagraphSize() + 0.1f);
                 mListener.OnMarginChange();
+                break;
+            case R.id.read_setting_tv_more:
+                mActivity.startActivity(new Intent(mActivity,FragmentActivity.class)
+                        .putExtra(FragmentActivity.EXTRA_FRAGMENT_TYPE,FragmentActivity.FRAGMENT_TYPE_SETTING_READ));
                 break;
         }
     }

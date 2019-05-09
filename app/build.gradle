@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-// 应用插件
 apply plugin: 'org.greenrobot.greendao'
 
 android {
@@ -29,7 +28,7 @@ android {
 }
 
 greendao {
-    schemaVersion 1
+    schemaVersion 2
     daoPackage 'com.thmub.newbook.model.dao'
     targetGenDir 'src/main/java'
 }

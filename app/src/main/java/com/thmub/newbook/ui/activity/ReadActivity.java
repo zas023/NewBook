@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,13 +22,11 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.gyf.barlibrary.ImmersionBar;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
-import com.thmub.newbook.bean.BookChapterBean;
 import com.thmub.newbook.bean.BookDetailBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.DownloadBookBean;
 import com.thmub.newbook.bean.ShelfBookBean;
 import com.thmub.newbook.bean.event.ChapterExchangeEvent;
-import com.thmub.newbook.constant.Constant;
 import com.thmub.newbook.manager.ReadSettingManager;
 import com.thmub.newbook.manager.RxBusManager;
 import com.thmub.newbook.model.local.BookShelfRepository;
@@ -38,16 +37,12 @@ import com.thmub.newbook.ui.dialog.ReadSettingDialog;
 import com.thmub.newbook.ui.dialog.SourceExchangeDialog;
 import com.thmub.newbook.utils.BatteryUtils;
 import com.thmub.newbook.utils.NetworkUtils;
-import com.thmub.newbook.utils.StringUtils;
 import com.thmub.newbook.utils.SystemBarUtils;
 import com.thmub.newbook.utils.UiUtils;
 import com.thmub.newbook.widget.animation.PageAnimation;
 import com.thmub.newbook.widget.page.PageLoader;
 import com.thmub.newbook.widget.page.PageView;
 import com.thmub.newbook.widget.page.TxtChapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
@@ -111,7 +106,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private ReadSettingManager readSettingManager = ReadSettingManager.getInstance();
 
     private boolean isFullScreen = true;
-    private boolean isCollected;
+    //private boolean isCollected;
 
     /*************************Public Method*******************************/
 
@@ -126,15 +121,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void initData(Bundle savedInstanceState) {
         super.initData(savedInstanceState);
         mShelfBook = getIntent().getParcelableExtra(EXTRA_BOOK);
-        isCollected = mShelfBook.isCollected();
         //设置正在阅读
         mShelfBook.setReading(true);
-        //如果没有搜藏，则mShelfBook的chapterList==null
-        //在getChapterList的时候 GreenDao会报错
-        if (isCollected)
-            mShelfBook.setBookChapterList(BookShelfRepository.getInstance().getChapters(mShelfBook));
-        else
-            mShelfBook.setBookChapterList(new ArrayList<>());
         mPageLoader = pageView.getPageLoader(this, mShelfBook);
         //重置书籍更新提示状态
         mShelfBook.setIsUpdate(false);
@@ -211,18 +199,13 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             }
 
             @Override
-            public void onCategoryFinish(List<BookChapterBean> chapters) {
-                mShelfBook.setBookChapterList(chapters);
-            }
-
-            @Override
             public void onPageCountChange(int count) {
             }
 
             @Override
             public void onPageChange(int chapterIndex, int pageIndex, boolean resetReadAloud) {
-                mShelfBook.setCurChapter(chapterIndex);
-                mShelfBook.setCurChapterPage(pageIndex);
+//                mShelfBook.setCurChapter(chapterIndex);
+//                mShelfBook.setCurChapterPage(pageIndex);
             }
         });
         //pageView
@@ -409,13 +392,13 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     mSettingDialog.dismiss();
                     return true;
                 }
-                if (!isCollected) {
+                if (!mShelfBook.isCollected()) {
                     new AlertDialog.Builder(this)
                             .setTitle("加入书架")
                             .setMessage("喜欢本书就加入书架吧")
                             .setPositiveButton("确定", (dialog, which) -> {
-                                //设置为已收藏
-                                isCollected = true;
+                                //设置为已收藏=
+                                mShelfBook.setCollected(true);
                                 finish();
                             })
                             .setNegativeButton("取消", (dialog, which) -> finish())
@@ -435,9 +418,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick({R.id.read_tv_category, R.id.read_tv_setting, R.id.read_tv_pre_chapter
+    @OnClick({R.id.read_tv_setting, R.id.read_tv_pre_chapter
             , R.id.read_tv_next_chapter, R.id.read_tv_night_mode})
-    public void onClick(View view) {
+    protected void onClick(View view) {
         switch (view.getId()) {
             case R.id.read_tv_setting:  //设置
                 toggleMenu(false);
@@ -459,12 +442,15 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
      * 跳转到目录
      */
     @OnClick(R.id.read_tv_category)
-    public void goToCatalog() {
+    protected void goToCatalog() {
         //切换菜单
         toggleMenu(true);
         //跳转
+        //ShelfBookBean book=mShelfBook;
+        //book.setBookChapterList(new ArrayList<>());
+        //注意章节太大，不适合使用序列化传递
         startActivity(new Intent(mContext, CatalogActivity.class)
-                .putExtra(CatalogActivity.EXTRA_BOOK, mShelfBook));
+                .putExtra(CatalogActivity.EXTRA_BOOK, new ShelfBookBean(mShelfBook)));
     }
 
     private int selectedIndex;
@@ -473,7 +459,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
      * 下载
      */
     @OnClick(R.id.read_tv_download)
-    public void downloadBook() {
+    protected void downloadBook() {
         if (!NetworkUtils.isNetWorkAvailable()) {
             Toast.makeText(mContext, "无网络连接", Toast.LENGTH_SHORT).show();
             return;
@@ -603,21 +589,20 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //保存记录
+        mPageLoader.saveRecord();
+    }
+
     /**
      * 结束
      */
     @Override
     public void finish() {
-        if (isCollected) {
-            //设置阅读时间
-            mShelfBook.setLastRead(StringUtils.
-                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-            //阅读章节名称
-            mShelfBook.setCurChapterTitle(mShelfBook.getChapter(mShelfBook.getCurChapter()).getChapterTitle());
-            BookShelfRepository.getInstance().saveShelfBook(mShelfBook);
-        }
         //返回给BookDetail。
-        setResult(Activity.RESULT_OK, new Intent().putExtra(BookDetailActivity.RESULT_IS_COLLECTED, isCollected));
+        setResult(Activity.RESULT_OK, new Intent().putExtra(BookDetailActivity.RESULT_IS_COLLECTED, mShelfBook.isCollected()));
         super.finish();
     }
 }

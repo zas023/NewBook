@@ -9,7 +9,7 @@ import com.thmub.newbook.App;
  * Github: https://github.com/zas023
  */
 public class DaoDbHelper {
-    private static final String DB_NAME = "CocoBook_DB";
+    private static final String DB_NAME = "NewBook_DB";
 
     private static volatile DaoDbHelper sInstance;
     private SQLiteDatabase mDb;

@@ -45,8 +45,6 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
         public final static Property Version = new Property(18, int.class, "version", false, "VERSION");
     }
 
-    private DaoSession daoSession;
-
 
     public ShelfBookBeanDao(DaoConfig config) {
         super(config);
@@ -54,7 +52,6 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
     
     public ShelfBookBeanDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -254,12 +251,6 @@ public class ShelfBookBeanDao extends AbstractDao<ShelfBookBean, String> {
             stmt.bindString(18, rid);
         }
         stmt.bindLong(19, entity.getVersion());
-    }
-
-    @Override
-    protected final void attachEntity(ShelfBookBean entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
     }
 
     @Override
