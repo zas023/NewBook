@@ -204,7 +204,11 @@ public class ReadSettingManager {
         }
     }
 
+    /**
+     * 初始化文字颜色
+     */
     public void initTextDrawableIndex() {
+        //判断是否为夜间模式
         if (getIsNightTheme()) {
             textDrawableIndex = preferences.getInt("textDrawableIndexNight", 4);
         } else {
@@ -217,6 +221,9 @@ public class ReadSettingManager {
         setTextDrawable();
     }
 
+    /**
+     * 背景类型：Color or Image
+     */
     private void initPageStyle() {
         if (getBgCustom(textDrawableIndex) == 2 && getBgPath(textDrawableIndex) != null) {
             bgIsColor = false;
@@ -258,7 +265,6 @@ public class ReadSettingManager {
                 .apply();
     }
 
-    @SuppressWarnings("ConstantConditions")
     public Drawable getBgDrawable(int textDrawableIndex, Context context, int width, int height) {
         int color;
         try {
@@ -289,7 +295,6 @@ public class ReadSettingManager {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     public Drawable getDefaultBgDrawable(int textDrawableIndex, Context context) {
         if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
             return new ColorDrawable(textDrawable.get(textDrawableIndex).get("textBackground"));
@@ -318,12 +323,10 @@ public class ReadSettingManager {
                 .apply();
     }
 
-    @SuppressWarnings("ConstantConditions")
     public int getDefaultTextColor(int textDrawableIndex) {
         return textDrawable.get(textDrawableIndex).get("textColor");
     }
 
-    @SuppressWarnings("ConstantConditions")
     private int getDefaultBg(int textDrawableIndex) {
         return textDrawable.get(textDrawableIndex).get("textBackground");
     }

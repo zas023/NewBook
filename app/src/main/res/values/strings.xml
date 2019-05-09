@@ -144,6 +144,6 @@
 
     <!--设置相关-->
     <string name="pref_thread_num">pref_thread_num</string>
-    <string name="pref_night_model">pref_night_model</string>
+    <string name="pref_night_model">nightTheme</string>
 
 </resources>

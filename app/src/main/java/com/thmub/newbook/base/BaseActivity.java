@@ -109,13 +109,15 @@ public abstract class BaseActivity extends SwipeBackActivity {
      * @return 是否夜间模式
      */
     protected boolean isNightTheme() {
-        return SharedPreUtils.getInstance().getBoolean(getString(R.string.pref_night_model));
+        return SharedPreUtils.getInstance().getBoolean(getString(R.string.pref_night_model),false);
     }
 
+    /**
+     * 设置夜间模式
+     * @param isNightMode
+     */
     protected void setNightTheme(boolean isNightMode) {
         SharedPreUtils.getInstance().putBoolean(getString(R.string.pref_night_model), isNightMode);
-        if (isNightMode)
-            ReadSettingManager.getInstance().setTextDrawableIndex(4);
         initTheme();
     }
 

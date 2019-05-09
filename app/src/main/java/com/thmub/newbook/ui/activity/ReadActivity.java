@@ -46,9 +46,6 @@ import com.thmub.newbook.widget.page.PageLoader;
 import com.thmub.newbook.widget.page.PageView;
 import com.thmub.newbook.widget.page.TxtChapter;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
@@ -252,7 +249,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 }
             }
 
-
             @Override
             public void onBgChange() {
                 readSettingManager.initTextDrawableIndex();
@@ -260,8 +256,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 if (mPageLoader != null) {
                     mPageLoader.refreshUi();
                 }
-                //4号颜色为黑色
-                setNightTheme(readSettingManager.getBgColor() == 4);
             }
 
             @Override
@@ -440,7 +434,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 mPageLoader.skipToNextChapter();
                 break;
             case R.id.read_tv_night_mode:  //夜间模式
-
+                setNightTheme(!isNightTheme());
+                mPageLoader.refreshUi();
                 break;
         }
     }
