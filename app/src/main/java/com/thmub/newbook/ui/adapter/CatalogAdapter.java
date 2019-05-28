@@ -29,6 +29,7 @@ import static com.thmub.newbook.utils.UiUtils.getContext;
 /**
  * Created by Zhouas666 on 2019-03-27
  * Github: https://github.com/zas023
+ * 目录adapter
  */
 public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHolder>
         implements SectionTitleProvider, Filterable {

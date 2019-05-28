@@ -1,11 +1,21 @@
 package com.thmub.newbook.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseFragment;
+import com.thmub.newbook.base.adapter.BaseRecyclerAdapter;
+import com.thmub.newbook.bean.BookChapterBean;
+import com.thmub.newbook.bean.BookMarkBean;
 import com.thmub.newbook.bean.ShelfBookBean;
+import com.thmub.newbook.bean.event.ChapterExchangeEvent;
+import com.thmub.newbook.manager.RxBusManager;
+import com.thmub.newbook.model.local.BookMarkRepository;
 import com.thmub.newbook.ui.activity.CatalogActivity;
+import com.thmub.newbook.ui.activity.ReadActivity;
+import com.thmub.newbook.ui.adapter.BookMarkAdapter;
 import com.thmub.newbook.ui.adapter.DetailCatalogAdapter;
 import com.thmub.newbook.widget.DashlineItemDivider;
 
@@ -27,7 +37,7 @@ public class BookMarkFragment extends BaseFragment {
     RecyclerView rvContent;
     /***************************Variable*****************************/
     private ShelfBookBean mBook;
-    private DetailCatalogAdapter mAdapter;
+    private BookMarkAdapter mAdapter;
 
     /***************************Public*****************************/
     public void startSearch(String query) {
@@ -50,7 +60,7 @@ public class BookMarkFragment extends BaseFragment {
     protected void initWidget(Bundle savedInstanceState) {
         super.initWidget(savedInstanceState);
         //adapter
-        mAdapter = new DetailCatalogAdapter();
+        mAdapter = new BookMarkAdapter();
         //recycler
         rvContent.setLayoutManager(new LinearLayoutManager(mContext));
         rvContent.setAdapter(mAdapter);
@@ -58,9 +68,29 @@ public class BookMarkFragment extends BaseFragment {
     }
 
     @Override
+    protected void initClick() {
+        super.initClick();
+        //前往章节
+        mAdapter.setOnItemClickListener((view, pos) -> {
+            BookMarkBean bean=mAdapter.getItem(pos);
+            if (mBook.isReading()) {
+                RxBusManager.getInstance().post(new ChapterExchangeEvent(bean.getChapterIndex(), bean.getChapterPage()));
+                getFatherActivity().finish();
+            } else {
+                mBook.setCurChapter(bean.getChapterIndex());
+                mBook.setCurChapterPage(bean.getChapterPage());
+                startActivity(new Intent(mContext, ReadActivity.class).putExtra(ReadActivity.EXTRA_BOOK, mBook));
+                getActivity().finish();
+            }
+        });
+    }
+
+    @Override
     protected void processLogic() {
         super.processLogic();
+        mAdapter.addItems(BookMarkRepository.getInstance().getBookMarkByLink(mBook.getLink()));
     }
+
 
     private CatalogActivity getFatherActivity() {
         return (CatalogActivity) getActivity();

@@ -33,7 +33,7 @@ public class CatalogActivity extends BaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.catalog_vp)
-    ViewPager catalogVp;
+    ViewPager viewPager;
     private SearchView searchView;
 
     private ShelfBookBean mBook;
@@ -74,9 +74,9 @@ public class CatalogActivity extends BaseActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-        catalogVp.setAdapter(tabAdapter);
-        catalogVp.setOffscreenPageLimit(2);
-        catalogTab.setupWithViewPager(catalogVp);
+        viewPager.setAdapter(tabAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        catalogTab.setupWithViewPager(viewPager);
     }
 
 
@@ -97,7 +97,14 @@ public class CatalogActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                ((CatalogFragment) tabAdapter.getItem(0)).startSearch(newText);
+                switch (viewPager.getCurrentItem()){
+                    case 0:
+                        ((CatalogFragment) tabAdapter.getItem(0)).startSearch(newText);
+                        break;
+                    case 1:
+                        ((BookMarkFragment) tabAdapter.getItem(1)).startSearch(newText);
+                        break;
+                }
                 return false;
             }
         });

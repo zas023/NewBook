@@ -22,6 +22,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookDetailBean;
+import com.thmub.newbook.bean.BookMarkBean;
 import com.thmub.newbook.bean.BookSearchBean;
 import com.thmub.newbook.bean.DownloadBookBean;
 import com.thmub.newbook.bean.ShelfBookBean;
@@ -29,6 +30,7 @@ import com.thmub.newbook.bean.event.ChapterExchangeEvent;
 import com.thmub.newbook.bean.event.DownloadEvent;
 import com.thmub.newbook.manager.ReadSettingManager;
 import com.thmub.newbook.manager.RxBusManager;
+import com.thmub.newbook.model.local.BookMarkRepository;
 import com.thmub.newbook.model.local.BookShelfRepository;
 import com.thmub.newbook.presenter.ReadPresenter;
 import com.thmub.newbook.presenter.contract.ReadContract;
@@ -355,6 +357,16 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 mPageLoader.refreshCurChapter();
                 break;
             case R.id.action_add_bookmark:  //添加书签
+                BookMarkBean bean=new BookMarkBean();
+                bean.setBookLink(mShelfBook.getLink());
+                bean.setBookTitle(mShelfBook.getTitle());
+                bean.setChapterIndex(mShelfBook.getCurChapter());
+                bean.setChapterLink(mShelfBook.getChapter(mShelfBook.getCurChapter()).getChapterLink());
+                bean.setChapterTitle(mShelfBook.getChapter(mShelfBook.getCurChapter()).getChapterTitle());
+                bean.setChapterPage(mShelfBook.getCurChapterPage());
+                bean.setContent(mPageLoader.getContent());
+                BookMarkRepository.getInstance().saveBookMark(bean);
+                ToastUtils.showSuccess(mContext,"已成功添加书签");
                 break;
             case R.id.action_copy_content:  //复制内容
                 new CopyContentDialog(this, mPageLoader.getContent()).show();

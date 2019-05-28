@@ -6,8 +6,8 @@ import android.widget.Filterable;
 import com.futuremind.recyclerviewfastscroll.SectionTitleProvider;
 import com.thmub.newbook.base.adapter.IViewHolder;
 import com.thmub.newbook.base.adapter.QuickAdapter;
-import com.thmub.newbook.bean.BookChapterBean;
-import com.thmub.newbook.ui.adapter.holder.DetailCatalogHolder;
+import com.thmub.newbook.bean.BookMarkBean;
+import com.thmub.newbook.ui.adapter.holder.BookMarkHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +16,11 @@ import java.util.List;
  * Created by Zhouas666 on 2019-04-02
  * Github: https://github.com/zas023
  * <p>
- * 书籍详情页adapter
+ * 书签adapter
  */
-public class DetailCatalogAdapter extends QuickAdapter<BookChapterBean> implements SectionTitleProvider, Filterable {
+public class BookMarkAdapter extends QuickAdapter<BookMarkBean> implements SectionTitleProvider, Filterable {
 
-    private List<BookChapterBean> mSourceList = new ArrayList<>();
+    private List<BookMarkBean> mSourceList = new ArrayList<>();
     private boolean isFirst = true;
 
     private int selectedIndex;
@@ -31,12 +31,12 @@ public class DetailCatalogAdapter extends QuickAdapter<BookChapterBean> implemen
     }
 
     @Override
-    protected IViewHolder<BookChapterBean> createViewHolder(int viewType) {
-        return new DetailCatalogHolder();
+    protected IViewHolder<BookMarkBean> createViewHolder(int viewType) {
+        return new BookMarkHolder();
     }
 
     @Override
-    public void addItems(List<BookChapterBean> values) {
+    public void addItems(List<BookMarkBean> values) {
         super.addItems(values);
         //后面还需要此接口交换数据，防止原始数据被修改
         if (isFirst) {
@@ -67,12 +67,12 @@ public class DetailCatalogAdapter extends QuickAdapter<BookChapterBean> implemen
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
-                List<BookChapterBean> mFilterList = new ArrayList<>();
+                List<BookMarkBean> mFilterList = new ArrayList<>();
                 if (charString.isEmpty()) {
                     //没有过滤的内容，则使用源数据
                     mFilterList = mSourceList;
                 } else {
-                    for (BookChapterBean chapter : mSourceList) {
+                    for (BookMarkBean chapter : mSourceList) {
                         //这里根据需求，添加匹配规则
                         if (chapter.getChapterTitle().contains(charString)) {
                             mFilterList.add(chapter);
@@ -89,7 +89,7 @@ public class DetailCatalogAdapter extends QuickAdapter<BookChapterBean> implemen
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 clear();
-                addItems((ArrayList<BookChapterBean>) results.values);
+                addItems((ArrayList<BookMarkBean>) results.values);
             }
         };
     }
