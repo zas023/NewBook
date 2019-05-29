@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            <!--书源地址-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_til_rootLink"
                 android:layout_width="match_parent"
@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:hint="书源根地址(rootLink)" />
             </com.google.android.material.textfield.TextInputLayout>
-
+            <!--书源名称-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_til_sourceName"
                 android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:hint="书源名称(sourceName)" />
             </com.google.android.material.textfield.TextInputLayout>
-
+            <!--书源类型-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_til_sourceType"
                 android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:hint="书源类型(sourceType)" />
             </com.google.android.material.textfield.TextInputLayout>
-
+            <!--书源类型-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_tile_encodeType"
                 android:layout_width="match_parent"
@@ -74,9 +74,9 @@
                     android:id="@+id/source_et_encodeType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="编码格式(encodeType)" />
+                    android:hint="书源类型(encodeType)" />
             </com.google.android.material.textfield.TextInputLayout>
-
+            <!--搜索地址-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_tile_searchLink"
                 android:layout_width="match_parent"
@@ -91,18 +91,19 @@
 
             <!--start rule-->
 
-            <!--搜索-->
+            <!--搜索规则-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/source_tile_ruleSearchBook"
+                android:id="@+id/source_tile_ruleSearchBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/source_et_ruleSearchBook"
+                    android:id="@+id/source_et_ruleSearchBooks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="搜索结果列表规则(ruleSearchBook)" />
+                    android:hint="搜索结果列表规则(ruleSearchBooks)" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_tile_ruleSearchTitle"
                 android:layout_width="match_parent"
@@ -163,28 +164,77 @@
                     android:hint="搜索结果链接规则(ruleSearchLink)" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--章节-->
+            <!--详情规则-->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/source_tile_ruleCatalogChapter"
+                android:id="@+id/source_tile_ruleDetailBook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/source_et_ruleCatalogChapter"
+                    android:id="@+id/source_et_ruleDetailBook"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="目录章节列表规则(ruleCatalogChapter)" />
+                    android:hint="书籍详情链接规则(ruleSearchLink)：用于Json数据定位" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/source_tile_ruleCatalogTitle"
+                android:id="@+id/source_tile_ruleDetailTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/source_et_ruleCatalogTitle"
+                    android:id="@+id/source_et_ruleDetailTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="目录章节名称规则(ruleCatalogTitle)" />
+                    android:hint="书籍详情名称规则(ruleDetailTitle)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleDetailAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleDetailAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="书籍详情作者规则(ruleDetailAuthor)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleDetailDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleDetailDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="书籍详情简介规则(ruleDetailDesc)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleDetailCover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleDetailCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="书籍详情封面规则(ruleDetailCover)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleFindLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleFindLink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="书籍发现地址规则(ruleFindLink)" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -196,10 +246,47 @@
                     android:id="@+id/source_et_ruleCatalogLink"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="目录章节链接规则(ruleCatalogLink)" />
+                    android:hint="书籍目录地址规则(ruleCatalogLink)" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--内容-->
+            <!--目录章节规则-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleChapters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleChapters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="目录章节列表规则(ruleChapters)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleChapterTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleChapterTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="目录章节名称规则(ruleChapterTitle)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleChapterLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleChapterLink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="目录章节地址规则(ruleChapterLink)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--章节内容规则-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/source_tile_ruleChapterContent"
                 android:layout_width="match_parent"
@@ -210,6 +297,55 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="章节内容规则(ruleChapterContent)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--发现书籍规则-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleFindBooks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleFindBooks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="发现书籍列表规则(ruleFindBooks)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleFindCover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleFindCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="发现书籍封面规则(ruleFindCover)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleFindBookLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleFindBookLink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="发现书籍地址规则(ruleFindBookLink)" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/source_tile_ruleFindBookTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/source_et_ruleFindBookTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="发现书籍名称规则(ruleFindBookTitle)" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>

@@ -20,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -37,6 +36,8 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
     public static final String EXTRA_BOOK_SOURCE = "extra_book_source";
 
     /*****************************View***********************************/
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.source_et_rootLink)
     AppCompatEditText sourceEtRootLink;
     @BindView(R.id.source_til_rootLink)
@@ -45,6 +46,10 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
     AppCompatEditText sourceEtSourceName;
     @BindView(R.id.source_til_sourceName)
     TextInputLayout sourceTilSourceName;
+    @BindView(R.id.source_et_sourceType)
+    AppCompatEditText sourceEtSourceType;
+    @BindView(R.id.source_til_sourceType)
+    TextInputLayout sourceTilSourceType;
     @BindView(R.id.source_et_encodeType)
     AppCompatEditText sourceEtEncodeType;
     @BindView(R.id.source_tile_encodeType)
@@ -53,6 +58,10 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
     AppCompatEditText sourceEtSearchLink;
     @BindView(R.id.source_tile_searchLink)
     TextInputLayout sourceTileSearchLink;
+    @BindView(R.id.source_et_ruleSearchBooks)
+    AppCompatEditText sourceEtRuleSearchBooks;
+    @BindView(R.id.source_tile_ruleSearchBooks)
+    TextInputLayout sourceTileRuleSearchBooks;
     @BindView(R.id.source_et_ruleSearchTitle)
     AppCompatEditText sourceEtRuleSearchTitle;
     @BindView(R.id.source_tile_ruleSearchTitle)
@@ -73,32 +82,66 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
     AppCompatEditText sourceEtRuleSearchLink;
     @BindView(R.id.source_tile_ruleSearchLink)
     TextInputLayout sourceTileRuleSearchLink;
-    @BindView(R.id.source_et_ruleCatalogTitle)
-    AppCompatEditText sourceEtRuleCatalogTitle;
-    @BindView(R.id.source_tile_ruleCatalogTitle)
-    TextInputLayout sourceTileRuleCatalogTitle;
+    @BindView(R.id.source_et_ruleDetailBook)
+    AppCompatEditText sourceEtRuleDetailBook;
+    @BindView(R.id.source_tile_ruleDetailBook)
+    TextInputLayout sourceTileRuleDetailBook;
+    @BindView(R.id.source_et_ruleDetailTitle)
+    AppCompatEditText sourceEtRuleDetailTitle;
+    @BindView(R.id.source_tile_ruleDetailTitle)
+    TextInputLayout sourceTileRuleDetailTitle;
+    @BindView(R.id.source_et_ruleDetailAuthor)
+    AppCompatEditText sourceEtRuleDetailAuthor;
+    @BindView(R.id.source_tile_ruleDetailAuthor)
+    TextInputLayout sourceTileRuleDetailAuthor;
+    @BindView(R.id.source_et_ruleDetailDesc)
+    AppCompatEditText sourceEtRuleDetailDesc;
+    @BindView(R.id.source_tile_ruleDetailDesc)
+    TextInputLayout sourceTileRuleDetailDesc;
+    @BindView(R.id.source_et_ruleDetailCover)
+    AppCompatEditText sourceEtRuleDetailCover;
+    @BindView(R.id.source_tile_ruleDetailCover)
+    TextInputLayout sourceTileRuleDetailCover;
+    @BindView(R.id.source_et_ruleFindLink)
+    AppCompatEditText sourceEtRuleFindLink;
+    @BindView(R.id.source_tile_ruleFindLink)
+    TextInputLayout sourceTileRuleFindLink;
     @BindView(R.id.source_et_ruleCatalogLink)
     AppCompatEditText sourceEtRuleCatalogLink;
     @BindView(R.id.source_tile_ruleCatalogLink)
     TextInputLayout sourceTileRuleCatalogLink;
+    @BindView(R.id.source_et_ruleChapters)
+    AppCompatEditText sourceEtRuleChapters;
+    @BindView(R.id.source_tile_ruleChapters)
+    TextInputLayout sourceTileRuleChapters;
+    @BindView(R.id.source_et_ruleChapterTitle)
+    AppCompatEditText sourceEtRuleChapterTitle;
+    @BindView(R.id.source_tile_ruleChapterTitle)
+    TextInputLayout sourceTileRuleChapterTitle;
+    @BindView(R.id.source_et_ruleChapterLink)
+    AppCompatEditText sourceEtRuleChapterLink;
+    @BindView(R.id.source_tile_ruleChapterLink)
+    TextInputLayout sourceTileRuleChapterLink;
     @BindView(R.id.source_et_ruleChapterContent)
     AppCompatEditText sourceEtRuleChapterContent;
     @BindView(R.id.source_tile_ruleChapterContent)
     TextInputLayout sourceTileRuleChapterContent;
-    @BindView(R.id.source_et_sourceType)
-    AppCompatEditText sourceEtSourceType;
-    @BindView(R.id.source_til_sourceType)
-    TextInputLayout sourceTilSourceType;
-    @BindView(R.id.source_et_ruleSearchBook)
-    AppCompatEditText sourceEtRuleSearchBook;
-    @BindView(R.id.source_tile_ruleSearchBook)
-    TextInputLayout sourceTileRuleSearchBook;
-    @BindView(R.id.source_et_ruleCatalogChapter)
-    AppCompatEditText sourceEtRuleCatalogChapter;
-    @BindView(R.id.source_tile_ruleCatalogChapter)
-    TextInputLayout sourceTileRuleCatalogChapter;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    @BindView(R.id.source_et_ruleFindBooks)
+    AppCompatEditText sourceEtRuleFindBooks;
+    @BindView(R.id.source_tile_ruleFindBooks)
+    TextInputLayout sourceTileRuleFindBooks;
+    @BindView(R.id.source_et_ruleFindCover)
+    AppCompatEditText sourceEtRuleFindCover;
+    @BindView(R.id.source_tile_ruleFindCover)
+    TextInputLayout sourceTileRuleFindCover;
+    @BindView(R.id.source_et_ruleFindBookLink)
+    AppCompatEditText sourceEtRuleFindBookLink;
+    @BindView(R.id.source_tile_ruleFindBookLink)
+    TextInputLayout sourceTileRuleFindBookLink;
+    @BindView(R.id.source_et_ruleFindBookTitle)
+    AppCompatEditText sourceEtRuleFindBookTitle;
+    @BindView(R.id.source_tile_ruleFindBookTitle)
+    TextInputLayout sourceTileRuleFindBookTitle;
 
 
     private BookSourceBean mBookSource;
@@ -140,41 +183,68 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
         //书源不为空，说明传值了，配置布局
         if (mBookSource != null) {
             isEdit = true;
+            //书源定义
             sourceEtRootLink.setText(mBookSource.getRootLink());
             sourceEtSourceName.setText(mBookSource.getSourceName());
             sourceEtSourceType.setText(mBookSource.getSourceType());
             sourceEtEncodeType.setText(mBookSource.getEncodeType());
             sourceEtSearchLink.setText(mBookSource.getSearchLink());
-            sourceEtRuleSearchBook.setText(mBookSource.getRuleSearchBooks());
+            //搜索规则
+            sourceEtRuleSearchBooks.setText(mBookSource.getRuleSearchBooks());
             sourceEtRuleSearchTitle.setText(mBookSource.getRuleSearchTitle());
             sourceEtRuleSearchAuthor.setText(mBookSource.getRuleSearchAuthor());
-            sourceEtRuleSearchDesc.setText(mBookSource.getRuleSearchDesc());
-            sourceEtRuleSearchCover.setText(mBookSource.getRuleSearchCover());
+            sourceEtRuleSearchDesc.setText(stringNotNull(mBookSource.getRuleSearchDesc()));//null
+            sourceEtRuleSearchCover.setText(stringNotNull(mBookSource.getRuleSearchCover()));//null
             sourceEtRuleSearchLink.setText(mBookSource.getRuleSearchLink());
-            sourceEtRuleCatalogChapter.setText(mBookSource.getRuleChapters());
-            sourceEtRuleCatalogTitle.setText(mBookSource.getRuleChapterTitle());
-            sourceEtRuleCatalogLink.setText(mBookSource.getRuleCatalogLink());
+            //详情规则
+            sourceEtRuleDetailBook.setText(stringNotNull(mBookSource.getRuleDetailBook()));//null
+            sourceEtRuleDetailTitle.setText(stringNotNull(mBookSource.getRuleDetailTitle()));//null
+            sourceEtRuleDetailAuthor.setText(stringNotNull(mBookSource.getRuleDetailAuthor()));//null
+            sourceEtRuleDetailDesc.setText(stringNotNull(mBookSource.getRuleDetailAuthor()));//null
+            sourceEtRuleDetailCover.setText(stringNotNull(mBookSource.getRuleDetailCover()));//null
+            sourceEtRuleFindLink.setText(stringNotNull(mBookSource.getRuleFindLink()));//null
+            sourceEtRuleCatalogLink.setText(stringNotNull(mBookSource.getRuleCatalogLink()));//null
+            //目录规则
+            sourceEtRuleChapters.setText(mBookSource.getRuleChapters());
+            sourceEtRuleChapterTitle.setText(mBookSource.getRuleChapterTitle());
+            sourceEtRuleChapterLink.setText(mBookSource.getRuleChapterLink());
+            //章节内容
             sourceEtRuleChapterContent.setText(mBookSource.getRuleChapterContent());
+            //发现规则
+            sourceEtRuleFindBooks.setText(stringNotNull(mBookSource.getRuleFindBooks()));//null
+            sourceEtRuleFindCover.setText(stringNotNull(mBookSource.getRuleFindCover()));//null
+            sourceEtRuleFindBookLink.setText(stringNotNull(mBookSource.getRuleFindBookLink()));//null
+            sourceEtRuleFindBookTitle.setText(stringNotNull(mBookSource.getRuleFindBookTitle()));//null
+
         } else {
             mBookSource = new BookSourceBean();
         }
     }
 
+    private String stringNotNull(String str) {
+        return str == null ? "" : str;
+    }
+
+    /**
+     * 保存书源
+     */
     private void saveBookSource() {
+        //书源地址
         if (isEmpty(trim(sourceEtRootLink.getText()))) {
-            SnackbarUtils.show(toolbar, "书源根地址不能为空");
+            //sourceTilRootLink.setError("书源根地址不能为空");
+            ToastUtils.showError(mContext, "书源根地址不能为空");
             return;
         } else
             mBookSource.setRootLink(trim(sourceEtRootLink.getText()));
         //名称
         if (isEmpty(trim(sourceEtSourceName.getText()))) {
-            SnackbarUtils.show(toolbar, "书源名称不能为空");
+            ToastUtils.showError(mContext, "书源名称不能为空");
             return;
         } else
             mBookSource.setSourceName(trim(sourceEtSourceName.getText()));
         //类型
         if (isEmpty(trim(sourceEtSourceType.getText()))) {
-            SnackbarUtils.show(toolbar, "书源类型不能为空");
+            ToastUtils.showError(mContext, "书源类型不能为空");
             return;
         } else
             mBookSource.setSourceType(trim(sourceEtSourceType.getText()));
@@ -185,71 +255,80 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
             mBookSource.setEncodeType(trim(sourceEtEncodeType.getText()));
         //
         if (isEmpty(trim(sourceEtSearchLink.getText()))) {
-            SnackbarUtils.show(toolbar, "书源搜索地址不能为空");
+            ToastUtils.showError(mContext, "书源搜索地址不能为空");
             return;
         } else
             mBookSource.setSearchLink(trim(sourceEtSearchLink.getText()));
-        //
-        if (isEmpty(trim(sourceEtRuleSearchBook.getText()))) {
-            SnackbarUtils.show(toolbar, "书源搜索结果列表规则不能为空");
+        //*******************************************************************
+        //搜索书籍列表
+        if (isEmpty(trim(sourceEtRuleSearchBooks.getText()))) {
+            ToastUtils.showError(mContext, "书源搜索结果列表规则不能为空");
             return;
         } else
-            mBookSource.setRuleSearchBooks(trim(sourceEtRuleSearchBook.getText()));
+            mBookSource.setRuleSearchBooks(trim(sourceEtRuleSearchBooks.getText()));
         //
         if (isEmpty(trim(sourceEtRuleSearchTitle.getText()))) {
-            SnackbarUtils.show(toolbar, "书源搜索结果书名规则不能为空");
+            ToastUtils.showError(mContext, "书源搜索结果书名规则不能为空");
             return;
         } else
             mBookSource.setRuleSearchTitle(trim(sourceEtRuleSearchTitle.getText()));
         //
         if (isEmpty(trim(sourceEtRuleSearchAuthor.getText()))) {
-            SnackbarUtils.show(toolbar, "书源搜索结果作者规则不能为空");
+            ToastUtils.showError(mContext, "书源搜索结果作者规则不能为空");
             return;
         } else
             mBookSource.setRuleSearchAuthor(trim(sourceEtRuleSearchAuthor.getText()));
-        //
-        if (isEmpty(trim(sourceEtRuleSearchDesc.getText()))) {
-            SnackbarUtils.show(toolbar, "书源搜索结果简介规则不能为空");
-            return;
-        } else
-            mBookSource.setRuleSearchDesc(trim(sourceEtRuleSearchDesc.getText()));
-        //
-        if (isEmpty(trim(sourceEtRuleSearchCover.getText()))) {
-            SnackbarUtils.show(toolbar, "书源搜索结果封面规则不能为空");
-            return;
-        } else
-            mBookSource.setRuleSearchCover(trim(sourceEtRuleSearchCover.getText()));
+        //搜索结果简介
+        mBookSource.setRuleSearchDesc(trim(sourceEtRuleSearchDesc.getText()));
+        //搜索结果封面
+        mBookSource.setRuleSearchCover(trim(sourceEtRuleSearchCover.getText()));
         //
         if (isEmpty(trim(sourceEtRuleSearchLink.getText()))) {
-            SnackbarUtils.show(toolbar, "书源搜索结果链接规则不能为空");
+            ToastUtils.showError(mContext, "书源搜索结果地址规则不能为空");
             return;
         } else
             mBookSource.setRuleSearchLink(trim(sourceEtRuleSearchLink.getText()));
-        //
-        if (isEmpty(trim(sourceEtRuleCatalogChapter.getText()))) {
-            SnackbarUtils.show(toolbar, "书源目录列表规则不能为空");
+        //*******************************************************************
+        //书籍详情列表
+        mBookSource.setRuleDetailBook(trim(sourceEtRuleDetailBook.getText()));
+        mBookSource.setRuleDetailTitle(trim(sourceEtRuleDetailTitle.getText()));
+        mBookSource.setRuleDetailAuthor(trim(sourceEtRuleDetailAuthor.getText()));
+        mBookSource.setRuleDetailAuthor(trim(sourceEtRuleDetailDesc.getText()));
+        mBookSource.setRuleDetailCover(trim(sourceEtRuleDetailCover.getText()));
+        mBookSource.setRuleFindLink(trim(sourceEtRuleFindLink.getText()));
+        mBookSource.setRuleCatalogLink(trim(sourceEtRuleCatalogLink.getText()));
+        //*******************************************************************
+        //书籍目录
+        if (isEmpty(trim(sourceEtRuleChapters.getText()))) {
+            ToastUtils.showError(mContext, "书源目录列表规则不能为空");
             return;
         } else
-            mBookSource.setRuleCatalogLink(trim(sourceEtRuleCatalogChapter.getText()));
+            mBookSource.setRuleCatalogLink(trim(sourceEtRuleChapters.getText()));
         //
-        if (isEmpty(trim(sourceEtRuleCatalogTitle.getText()))) {
-            SnackbarUtils.show(toolbar, "书源目录标题规则不能为空");
+        if (isEmpty(trim(sourceEtRuleChapterTitle.getText()))) {
+            ToastUtils.showError(mContext, "书源目录标题规则不能为空");
             return;
         } else
-            mBookSource.setRuleChapterTitle(trim(sourceEtRuleCatalogTitle.getText()));
+            mBookSource.setRuleChapterTitle(trim(sourceEtRuleChapterTitle.getText()));
         //
-        if (isEmpty(trim(sourceEtRuleCatalogLink.getText()))) {
-            SnackbarUtils.show(toolbar, "书源目录链接规则不能为空");
+        if (isEmpty(trim(sourceEtRuleChapterLink.getText()))) {
+            ToastUtils.showError(mContext, "书源目录地址规则不能为空");
             return;
         } else
-            mBookSource.setRuleCatalogLink(trim(sourceEtRuleCatalogLink.getText()));
-
-        //
+            mBookSource.setRuleCatalogLink(trim(sourceEtRuleChapterLink.getText()));
+        //*******************************************************************
+        //章节内容
         if (isEmpty(trim(sourceEtRuleChapterContent.getText()))) {
-            SnackbarUtils.show(toolbar, "书源章节内容规则不能为空");
+            ToastUtils.showError(mContext, "书源章节内容规则不能为空");
             return;
         } else
             mBookSource.setRuleChapterContent(trim(sourceEtRuleChapterContent.getText()));
+        //*******************************************************************
+        //书籍发现
+        mBookSource.setRuleFindBooks(trim(sourceEtRuleFindBooks.getText()));
+        mBookSource.setRuleFindCover(trim(sourceEtRuleFindCover.getText()));
+        mBookSource.setRuleFindBookLink(trim(sourceEtRuleFindBookLink.getText()));
+        mBookSource.setRuleFindBookTitle(trim(sourceEtRuleFindBookTitle.getText()));
 
         if (!isEdit) {
             //新建则添加权重

@@ -370,6 +370,10 @@ public class BookSourceBean implements Parcelable {
     }
 
     public void setRuleFindBooks(String ruleFindBooks) {
+        this.ruleFindBookLink = ruleFindBooks;
+    }
+
+    public void getRuleFindCoversetRuleFindBooks(String ruleFindBooks) {
         this.ruleFindBooks = ruleFindBooks;
     }
 
