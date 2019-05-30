@@ -1,6 +1,7 @@
 package com.thmub.newbook.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.Menu;
@@ -12,7 +13,6 @@ import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookSourceBean;
 import com.thmub.newbook.presenter.SourceEditPresenter;
 import com.thmub.newbook.presenter.contract.SourceEditContract;
-import com.thmub.newbook.utils.SnackbarUtils;
 import com.thmub.newbook.utils.ToastUtils;
 
 import org.apache.commons.lang3.StringUtils;
@@ -395,6 +395,9 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
             case R.id.action_source_test:
                 break;
             case R.id.action_source_rule:
+                Uri uri = Uri.parse("https://blog.thmub.com/2019/05/31/SourceRule/");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
                 break;
             default:
                 break;
