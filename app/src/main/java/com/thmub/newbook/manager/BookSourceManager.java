@@ -31,6 +31,26 @@ public class BookSourceManager {
     }
 
     /**
+     * 从本地导入书源
+     *
+     * @param jsonStr
+     * @return
+     */
+    public Observable<List<BookSourceBean>> importSourceFromLocal(String jsonStr) {
+        return Observable.create(emitter -> {
+            Gson gson = new Gson();
+            List<BookSourceBean> list = gson.fromJson(jsonStr, new TypeToken<List<BookSourceBean>>() {
+            }.getType());
+            if (list == null || list.size() <= 0) {
+                emitter.onError(new Throwable("格式不正确"));
+            } else {
+                emitter.onNext(list);
+                emitter.onComplete();
+            }
+        });
+    }
+
+    /**
      * 从网络导入书源
      *
      * @param url

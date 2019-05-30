@@ -205,15 +205,21 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
                 startActivityForResult(new Intent(mContext, SourceEditActivity.class), REQUEST_CODE);
                 break;
             case R.id.action_local_import:  //本地导入
-
-                break;
-            case R.id.action_net_import:  //网络导入
-                final EditText et = new EditText(this);
-                new AlertDialog.Builder(this).setTitle("请输入书源地址")
-                        .setView(et)
+                final EditText localEt = new EditText(this);
+                new AlertDialog.Builder(this).setTitle("请输入书源字符串")
+                        .setView(localEt)
                         .setPositiveButton("确定", (dialogInterface, i) -> {
                             ProgressUtils.show(mContext);
-                            mPresenter.importWebSource(et.getText().toString());
+                            mPresenter.importLocalSource(localEt.getText().toString());
+                        }).setNegativeButton("取消", null).show();
+                break;
+            case R.id.action_net_import:  //网络导入
+                final EditText NetEt = new EditText(this);
+                new AlertDialog.Builder(this).setTitle("请输入书源地址")
+                        .setView(NetEt)
+                        .setPositiveButton("确定", (dialogInterface, i) -> {
+                            ProgressUtils.show(mContext);
+                            mPresenter.importNetSource(NetEt.getText().toString());
                         }).setNegativeButton("取消", null).show();
                 break;
             case R.id.action_sort:  //智能排序

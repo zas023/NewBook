@@ -8,6 +8,12 @@
         android:title="保存书源"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_source_share"
+        android:title="分享书源" />
+    <item
+        android:id="@+id/action_source_paste"
+        android:title="粘贴书源" />
+    <item
         android:id="@+id/action_source_test"
         android:title="测试书源" />
     <item

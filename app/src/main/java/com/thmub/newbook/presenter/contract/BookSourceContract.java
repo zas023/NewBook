@@ -8,6 +8,8 @@ import java.util.List;
 /**
  * Created by Zhouas666 on 2019-03-30
  * Github: https://github.com/zas023
+ *
+ * 书源管理contract
  */
 public interface BookSourceContract {
 
@@ -18,10 +20,12 @@ public interface BookSourceContract {
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {
-        //添加到书架上
+
         void loadBookSource();
 
-        void importWebSource(String url);
+        void importNetSource(String url);
+
+        void importLocalSource(String str);
     }
 
 }

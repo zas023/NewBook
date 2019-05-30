@@ -29,8 +29,37 @@ public class BookSourcePresenter extends RxPresenter<BookSourceContract.View>
                 .getAllBookSource());
     }
 
+
     @Override
-    public void importWebSource(String url) {
+    public void importLocalSource(String str) {
+        BookSourceManager.getInstance().importSourceFromLocal(str)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<BookSourceBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(List<BookSourceBean> bookSourceBeans) {
+                        mView.finishImportBookSource(bookSourceBeans);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void importNetSource(String url) {
         BookSourceManager.getInstance().importSourceFromNet(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

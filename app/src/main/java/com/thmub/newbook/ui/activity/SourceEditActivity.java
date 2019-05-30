@@ -6,17 +6,22 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 import com.thmub.newbook.R;
 import com.thmub.newbook.base.BaseMVPActivity;
 import com.thmub.newbook.bean.BookSourceBean;
 import com.thmub.newbook.presenter.SourceEditPresenter;
 import com.thmub.newbook.presenter.contract.SourceEditContract;
+import com.thmub.newbook.utils.ProgressUtils;
+import com.thmub.newbook.utils.ShareUtils;
 import com.thmub.newbook.utils.ToastUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
@@ -183,42 +188,45 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
         //书源不为空，说明传值了，配置布局
         if (mBookSource != null) {
             isEdit = true;
-            //书源定义
-            sourceEtRootLink.setText(mBookSource.getRootLink());
-            sourceEtSourceName.setText(mBookSource.getSourceName());
-            sourceEtSourceType.setText(mBookSource.getSourceType());
-            sourceEtEncodeType.setText(mBookSource.getEncodeType());
-            sourceEtSearchLink.setText(mBookSource.getSearchLink());
-            //搜索规则
-            sourceEtRuleSearchBooks.setText(mBookSource.getRuleSearchBooks());
-            sourceEtRuleSearchTitle.setText(mBookSource.getRuleSearchTitle());
-            sourceEtRuleSearchAuthor.setText(mBookSource.getRuleSearchAuthor());
-            sourceEtRuleSearchDesc.setText(stringNotNull(mBookSource.getRuleSearchDesc()));//null
-            sourceEtRuleSearchCover.setText(stringNotNull(mBookSource.getRuleSearchCover()));//null
-            sourceEtRuleSearchLink.setText(mBookSource.getRuleSearchLink());
-            //详情规则
-            sourceEtRuleDetailBook.setText(stringNotNull(mBookSource.getRuleDetailBook()));//null
-            sourceEtRuleDetailTitle.setText(stringNotNull(mBookSource.getRuleDetailTitle()));//null
-            sourceEtRuleDetailAuthor.setText(stringNotNull(mBookSource.getRuleDetailAuthor()));//null
-            sourceEtRuleDetailDesc.setText(stringNotNull(mBookSource.getRuleDetailAuthor()));//null
-            sourceEtRuleDetailCover.setText(stringNotNull(mBookSource.getRuleDetailCover()));//null
-            sourceEtRuleFindLink.setText(stringNotNull(mBookSource.getRuleFindLink()));//null
-            sourceEtRuleCatalogLink.setText(stringNotNull(mBookSource.getRuleCatalogLink()));//null
-            //目录规则
-            sourceEtRuleChapters.setText(mBookSource.getRuleChapters());
-            sourceEtRuleChapterTitle.setText(mBookSource.getRuleChapterTitle());
-            sourceEtRuleChapterLink.setText(mBookSource.getRuleChapterLink());
-            //章节内容
-            sourceEtRuleChapterContent.setText(mBookSource.getRuleChapterContent());
-            //发现规则
-            sourceEtRuleFindBooks.setText(stringNotNull(mBookSource.getRuleFindBooks()));//null
-            sourceEtRuleFindCover.setText(stringNotNull(mBookSource.getRuleFindCover()));//null
-            sourceEtRuleFindBookLink.setText(stringNotNull(mBookSource.getRuleFindBookLink()));//null
-            sourceEtRuleFindBookTitle.setText(stringNotNull(mBookSource.getRuleFindBookTitle()));//null
-
+            initEditView();
         } else {
             mBookSource = new BookSourceBean();
         }
+    }
+
+    private void initEditView(){
+        //书源定义
+        sourceEtRootLink.setText(mBookSource.getRootLink());
+        sourceEtSourceName.setText(mBookSource.getSourceName());
+        sourceEtSourceType.setText(mBookSource.getSourceType());
+        sourceEtEncodeType.setText(mBookSource.getEncodeType());
+        sourceEtSearchLink.setText(mBookSource.getSearchLink());
+        //搜索规则
+        sourceEtRuleSearchBooks.setText(mBookSource.getRuleSearchBooks());
+        sourceEtRuleSearchTitle.setText(mBookSource.getRuleSearchTitle());
+        sourceEtRuleSearchAuthor.setText(mBookSource.getRuleSearchAuthor());
+        sourceEtRuleSearchDesc.setText(stringNotNull(mBookSource.getRuleSearchDesc()));//null
+        sourceEtRuleSearchCover.setText(stringNotNull(mBookSource.getRuleSearchCover()));//null
+        sourceEtRuleSearchLink.setText(mBookSource.getRuleSearchLink());
+        //详情规则
+        sourceEtRuleDetailBook.setText(stringNotNull(mBookSource.getRuleDetailBook()));//null
+        sourceEtRuleDetailTitle.setText(stringNotNull(mBookSource.getRuleDetailTitle()));//null
+        sourceEtRuleDetailAuthor.setText(stringNotNull(mBookSource.getRuleDetailAuthor()));//null
+        sourceEtRuleDetailDesc.setText(stringNotNull(mBookSource.getRuleDetailAuthor()));//null
+        sourceEtRuleDetailCover.setText(stringNotNull(mBookSource.getRuleDetailCover()));//null
+        sourceEtRuleFindLink.setText(stringNotNull(mBookSource.getRuleFindLink()));//null
+        sourceEtRuleCatalogLink.setText(stringNotNull(mBookSource.getRuleCatalogLink()));//null
+        //目录规则
+        sourceEtRuleChapters.setText(mBookSource.getRuleChapters());
+        sourceEtRuleChapterTitle.setText(mBookSource.getRuleChapterTitle());
+        sourceEtRuleChapterLink.setText(mBookSource.getRuleChapterLink());
+        //章节内容
+        sourceEtRuleChapterContent.setText(mBookSource.getRuleChapterContent());
+        //发现规则
+        sourceEtRuleFindBooks.setText(stringNotNull(mBookSource.getRuleFindBooks()));//null
+        sourceEtRuleFindCover.setText(stringNotNull(mBookSource.getRuleFindCover()));//null
+        sourceEtRuleFindBookLink.setText(stringNotNull(mBookSource.getRuleFindBookLink()));//null
+        sourceEtRuleFindBookTitle.setText(stringNotNull(mBookSource.getRuleFindBookTitle()));//null
     }
 
     private String stringNotNull(String str) {
@@ -389,12 +397,18 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
         switch (item.getItemId()) {
             case android.R.id.home:    //左侧返回键
 
-            case R.id.action_source_save:
+            case R.id.action_source_save:    //保存
                 saveBookSource();
                 break;
-            case R.id.action_source_test:
+            case R.id.action_source_share:    //分享
+                ShareUtils.share(this, new Gson().toJson(mBookSource));
                 break;
-            case R.id.action_source_rule:
+            case R.id.action_source_paste:    //粘贴
+                pasteSource();
+                break;
+            case R.id.action_source_test:   //测试
+                break;
+            case R.id.action_source_rule:    //规则
                 Uri uri = Uri.parse("https://blog.thmub.com/2019/05/31/SourceRule/");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
@@ -403,5 +417,21 @@ public class SourceEditActivity extends BaseMVPActivity<SourceEditContract.Prese
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 粘贴书源
+     *
+     */
+    private void pasteSource(){
+        final EditText editText = new EditText(this);
+        new AlertDialog.Builder(this).setTitle("请输入书源字符串")
+                .setView(editText)
+                .setPositiveButton("确定", (dialogInterface, i) -> {
+                    ProgressUtils.show(mContext);
+                    mBookSource=new Gson().fromJson(editText.getText().toString(), BookSourceBean.class);
+                    initEditView();
+                    ProgressUtils.dismiss();
+                }).setNegativeButton("取消", null).show();
     }
 }
