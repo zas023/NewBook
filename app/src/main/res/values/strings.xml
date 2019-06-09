@@ -23,6 +23,7 @@
     <string name="activity_source">书源管理</string>
     <string name="activity_download">下载管理</string>
     <string name="activity_replace">替换管理</string>
+    <string name="activity_qr_scan">扫一扫</string>
     <string name="activity_setting">设置</string>
     <string name="activity_about">关于</string>
     <string name="activity_book_sort">书籍分类</string>

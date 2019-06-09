@@ -2,6 +2,7 @@ package com.thmub.newbook.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +40,8 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
         BookSourceContract.View {
 
     /******************************Constant**********************************/
-    private final static int REQUEST_CODE = 1; // 返回的结果码
+    private final static int REQUEST_CODE_NEW = 1; // 返回的结果码
+    private final static int REQUEST_CODE_SCAN = 2;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -127,7 +129,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
 
     @Override
     public void finishImportBookSource(List<BookSourceBean> items) {
-
+        Log.i(TAG,items.size()+items.get(0).toString());
         BookSourceRepository.getInstance().saveBookSourceWithAsync(items);
         ProgressUtils.dismiss();
         mPresenter.loadBookSource();
@@ -135,7 +137,8 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
 
     @Override
     public void showError(Throwable e) {
-
+        ProgressUtils.dismiss();
+        ToastUtils.showError(mContext,e.getMessage());
     }
 
     @Override
@@ -166,7 +169,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
         switch (which) {
             case "编辑":
                 startActivityForResult(new Intent(mContext, SourceEditActivity.class)
-                        .putExtra(SourceEditActivity.EXTRA_BOOK_SOURCE, bean), REQUEST_CODE);
+                        .putExtra(SourceEditActivity.EXTRA_BOOK_SOURCE, bean), REQUEST_CODE_NEW);
                 break;
             case "删除":
                 BookSourceRepository.getInstance().deleteBookSource(bean);
@@ -202,7 +205,7 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
             case android.R.id.home:    //左侧返回键
                 exit();
             case R.id.action_new:   //新建书源
-                startActivityForResult(new Intent(mContext, SourceEditActivity.class), REQUEST_CODE);
+                startActivityForResult(new Intent(mContext, SourceEditActivity.class), REQUEST_CODE_NEW);
                 break;
             case R.id.action_local_import:  //本地导入
                 final EditText localEt = new EditText(this);
@@ -221,6 +224,9 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
                             ProgressUtils.show(mContext);
                             mPresenter.importNetSource(NetEt.getText().toString());
                         }).setNegativeButton("取消", null).show();
+                break;
+            case R.id.action_qr_import:  //二维码导入
+                startActivityForResult(new Intent(mContext,QRScanActivity.class),REQUEST_CODE_SCAN);
                 break;
             case R.id.action_sort:  //智能排序
                 break;
@@ -250,11 +256,19 @@ public class BookSourceActivity extends BaseMVPActivity<BookSourceContract.Prese
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_CODE) {
-                ToastUtils.showSuccess(mContext, "保存成功");
-                mAdapter.clear();
-                mPresenter.loadBookSource();
-                isChanged = true;
+
+            switch (requestCode){
+                case REQUEST_CODE_NEW:
+                    ToastUtils.showSuccess(mContext, "保存成功");
+                    mAdapter.clear();
+                    mPresenter.loadBookSource();
+                    isChanged = true;
+                    break;
+                case REQUEST_CODE_SCAN:
+                    ProgressUtils.show(mContext);
+                    Log.i(TAG,data.getStringExtra("result"));
+                    mPresenter.importLocalSource(data.getStringExtra("result"));
+                    break;
             }
         }
     }

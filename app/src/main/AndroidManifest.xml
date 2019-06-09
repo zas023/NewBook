@@ -5,8 +5,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
@@ -44,6 +46,7 @@
         <activity android:name=".ui.activity.FindBookActivity" />
         <activity android:name=".ui.activity.CatalogActivity" />
         <activity android:name=".ui.activity.BookSortActivity" />
+        <activity android:name=".ui.activity.QRScanActivity" />
         <activity android:name=".ui.activity.BookSortDetailActivity" />
         <activity android:name=".ui.activity.BookRankActivity" />
         <activity android:name=".ui.activity.BookRankDetailActivity" />

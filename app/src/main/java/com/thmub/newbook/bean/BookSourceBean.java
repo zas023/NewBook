@@ -448,4 +448,39 @@ public class BookSourceBean implements Parcelable {
         dest.writeInt(weight);
         dest.writeByte((byte) (isSelected ? 1 : 0));
     }
+
+    @Override
+    public String toString() {
+        return "BookSourceBean{" +
+                "rootLink='" + rootLink + '\'' +
+                ", sourceName='" + sourceName + '\'' +
+                ", sourceType='" + sourceType + '\'' +
+                ", encodeType='" + encodeType + '\'' +
+                ", searchLink='" + searchLink + '\'' +
+                ", ruleSearchBooks='" + ruleSearchBooks + '\'' +
+                ", ruleSearchTitle='" + ruleSearchTitle + '\'' +
+                ", ruleSearchAuthor='" + ruleSearchAuthor + '\'' +
+                ", ruleSearchDesc='" + ruleSearchDesc + '\'' +
+                ", ruleSearchCover='" + ruleSearchCover + '\'' +
+                ", ruleSearchLink='" + ruleSearchLink + '\'' +
+                ", ruleDetailBook='" + ruleDetailBook + '\'' +
+                ", ruleDetailTitle='" + ruleDetailTitle + '\'' +
+                ", ruleDetailAuthor='" + ruleDetailAuthor + '\'' +
+                ", ruleDetailDesc='" + ruleDetailDesc + '\'' +
+                ", ruleDetailCover='" + ruleDetailCover + '\'' +
+                ", ruleFindLink='" + ruleFindLink + '\'' +
+                ", ruleCatalogLink='" + ruleCatalogLink + '\'' +
+                ", ruleChapters='" + ruleChapters + '\'' +
+                ", ruleChapterLink='" + ruleChapterLink + '\'' +
+                ", ruleChapterTitle='" + ruleChapterTitle + '\'' +
+                ", ruleChapterContent='" + ruleChapterContent + '\'' +
+                ", ruleFindBooks='" + ruleFindBooks + '\'' +
+                ", ruleFindCover='" + ruleFindCover + '\'' +
+                ", ruleFindBookLink='" + ruleFindBookLink + '\'' +
+                ", ruleFindBookTitle='" + ruleFindBookTitle + '\'' +
+                ", orderNumber=" + orderNumber +
+                ", weight=" + weight +
+                ", isSelected=" + isSelected +
+                '}';
+    }
 }

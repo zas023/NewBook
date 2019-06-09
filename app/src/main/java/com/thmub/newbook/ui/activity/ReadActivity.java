@@ -2,6 +2,7 @@ package com.thmub.newbook.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ import com.thmub.newbook.widget.page.TxtChapter;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -161,6 +163,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         // Menu
         initTopMenu();
         initBottomMenu();
+        //夜间模式按钮状态
+        toggleNightMode();
     }
 
     /**
@@ -189,6 +193,22 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             readLlBottomMenu.setLayoutParams(params);
         }
     }
+
+    /**
+     * 夜间模式
+     */
+    private void toggleNightMode() {
+        if (isNightTheme()) {
+            readTvNightMode.setText("白天");
+            Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_read_menu_morning);
+            readTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+        } else {
+            readTvNightMode.setText("夜间");
+            Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_read_menu_night);
+            readTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+        }
+    }
+
 
     @Override
     protected void initClick() {
@@ -410,7 +430,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                             .setTitle("加入书架")
                             .setMessage("喜欢本书就加入书架吧")
                             .setPositiveButton("确定", (dialog, which) -> {
-                                //设置为已收藏=
+                                //设置为已收藏
                                 mShelfBook.setCollected(true);
                                 finish();
                             })
@@ -446,8 +466,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 mPageLoader.skipToNextChapter();
                 break;
             case R.id.read_tv_night_mode:  //夜间模式
+                toggleNightMode();
                 setNightTheme(!isNightTheme());
-                mPageLoader.refreshUi();
+//                readSettingManager.initTextDrawableIndex();
+//                pageView.setBackground(readSettingManager.getTextBackground(this));
+//                mPageLoader.refreshUi();
                 break;
         }
     }

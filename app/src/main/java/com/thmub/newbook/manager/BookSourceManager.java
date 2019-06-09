@@ -6,6 +6,7 @@ import com.thmub.newbook.bean.BookSourceBean;
 import com.thmub.newbook.utils.OkHttpUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -39,13 +40,28 @@ public class BookSourceManager {
     public Observable<List<BookSourceBean>> importSourceFromLocal(String jsonStr) {
         return Observable.create(emitter -> {
             Gson gson = new Gson();
-            List<BookSourceBean> list = gson.fromJson(jsonStr, new TypeToken<List<BookSourceBean>>() {
-            }.getType());
-            if (list == null || list.size() <= 0) {
-                emitter.onError(new Throwable("格式不正确"));
-            } else {
-                emitter.onNext(list);
-                emitter.onComplete();
+            List<BookSourceBean> list;
+            //Array
+            if (jsonStr.startsWith("[")){
+                list = gson.fromJson(jsonStr, new TypeToken<List<BookSourceBean>>() {
+                }.getType());
+                if (list == null || list.size() <= 0) {
+                    emitter.onError(new Throwable("格式不正确"));
+                } else {
+                    emitter.onNext(list);
+                    emitter.onComplete();
+                }
+            }else {
+                list=new ArrayList<>();
+                BookSourceBean bean=gson.fromJson(jsonStr, new TypeToken<BookSourceBean>() {
+                }.getType());
+                if (bean == null) {
+                    emitter.onError(new Throwable("格式不正确"));
+                } else {
+                    list.add(bean);
+                    emitter.onNext(list);
+                    emitter.onComplete();
+                }
             }
         });
     }

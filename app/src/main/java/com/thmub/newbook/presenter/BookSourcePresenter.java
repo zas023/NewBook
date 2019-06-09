@@ -48,7 +48,7 @@ public class BookSourcePresenter extends RxPresenter<BookSourceContract.View>
 
                     @Override
                     public void onError(Throwable e) {
-
+                        mView.showError(e);
                     }
 
                     @Override
@@ -76,7 +76,7 @@ public class BookSourcePresenter extends RxPresenter<BookSourceContract.View>
 
                     @Override
                     public void onError(Throwable e) {
-
+                        mView.showError(e);
                     }
 
                     @Override
