@@ -2,26 +2,37 @@
 <img width="5%" hight="5%" src="https://i.postimg.cc/T3d38M0S/ic-launcher.png" />  一款免费全能的阅读神器
 
 ### # 项目背景
-
 > 项目来源于本人的本科毕业设计题目——《基于Android的手机阅读软件设计与开发》。
 
-​        随着科技的进步和社会的发展，人们的需求不只满足于经济繁荣带来的物质生活，消费观也逐步向更高层次转移，更加注重精神文明建设。在此背景下，阅读似乎流行开来，涌现出一种“全民阅读”的现象。同时，移动互联网行业迅速走向成熟，移动阅读凭借自身优势改变了人们的阅读习惯，传统纸质阅读的方式不再适应当前快节奏的社会。近些年来我国移动阅读和数字内容产业迅猛发展,已经成为全球重要的电子书出版和发行国家，与此同时国内市场对于阅读应用程序的需求不断增长。
+随着科技的进步和社会的发展，人们的需求不只满足于经济繁荣带来的物质生活，消费观也逐步向更高层次转移，更加注重精神文明建设。在此背景下，阅读似乎流行开来，涌现出一种“全民阅读”的现象。同时，移动互联网行业迅速走向成熟，移动阅读凭借自身优势改变了人们的阅读习惯，传统纸质阅读的方式不再适应当前快节奏的社会。近些年来我国移动阅读和数字内容产业迅猛发展,已经成为全球重要的电子书出版和发行国家，与此同时国内市场对于阅读应用程序的需求不断增长。
 
 ---
+
+### # 书源规则
+
+- 书源规则介绍：https://blog.thmub.com/2019/05/31/SourceRule
+- 在线书源编辑：http://blog.thmub.com/editor.html
+- 书源导入地址：https://blog.thmub.com/source.txt
+
+---
+
 ### # 需求分析
-1. 用户用例
+
+#### 1. 用户用例
 ![](https://i.postimg.cc/VsXtmw9L/image.png)
-2. 功能结构
+
+#### 2. 功能结构
 ![](https://i.postimg.cc/90xCCzJn/image.png)
 
 ---
+
 ### # 总体设计
 
-1. 软件架构
+#### 1. 软件架构
 
 ![](https://i.postimg.cc/7hrT0t4k/image.png)
 
-2. 数据库设计
+#### 2. 数据库设计
 
 ![](https://i.postimg.cc/L5kgTk4Z/E-R.png)
 
@@ -29,30 +40,34 @@
 
 ### # 效果展示
 
-1. 主页
+#### 1. 主页
 <p>
 <img width="32%" src="https://i.postimg.cc/g04R9H3y/image.png" />
 <img width="32%" src="https://i.postimg.cc/j55fRnhp/image.png" />
 <img width="32%" src="https://i.postimg.cc/yN79rb3Y/image.png" />
 </p>
-2. 书城
+
+#### 2. 书城
 <p>
 <img width="32%" src="https://i.postimg.cc/Z5xjR3rn/image.png" />
 <img width="32%" src="https://i.postimg.cc/HkgBd38F/image.png" />
 <img width="32%" src="https://i.postimg.cc/pdVCnTZZ/image.png" />
 </p>
-3. 详情
+
+#### 3. 详情
 <p>
 <img width="32%" src="https://i.postimg.cc/g00y27zt/1.png" />
 <img width="32%" src="https://i.postimg.cc/zfPCbk3z/2.png" />
 </p>
-4. 阅读
+
+#### 4. 阅读
 <p>
 <img width="32%" src="https://i.postimg.cc/Y95Q8q1T/image.png" />
 <img width="32%" src="https://i.postimg.cc/J0jZFVx0/image.png" />
 <img width="32%" src="https://i.postimg.cc/85Jhhrrh/image.png" />
 </p>
-5. 管理
+
+#### 5. 管理
 <p>
 <img width="32%" src="https://i.postimg.cc/4NTz9y49/image.png" />
 <img width="32%" src="https://i.postimg.cc/02d7dvrH/image.png" />
